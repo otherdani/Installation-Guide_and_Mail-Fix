@@ -4,16 +4,53 @@ from datetime import datetime
 # Configure application
 app = Flask(__name__)
 
-
+# Configure session to use filesystem (instead of signed cookies?)
 
 @app.route('/')
 def homepage():
     return render_template("index.html", year=datetime.now().year)
 
+
 @app.route('/register')
 def register():
     return render_template("login.html")
 
-@app.route('/login')
+
+@app.route('/login', methods=["GET", "POST"])
 def login():
-    return render_template("login.html")
+    """Log user in"""
+
+    # Forget any user_id
+    session.clear()
+
+    # User reached route via POST
+    if request.method == "POST":
+        # Ensure username and password were submited
+        if not request.form.get("username"):
+            return apology("must provide username", 403)
+        
+        elif not request.form.get("password"):
+            return apology("must provide password", 403)
+        
+        # Query database for username
+
+        # Ensure username exists and password is correct
+
+        # Remember which user has logged in
+
+        # Redirect user to home page
+        return redirect("/")
+    
+    # User reached route via GET
+    else:
+        return render_template("login.html")
+    
+
+@app.route("/logout")
+def logout():
+    """Log user out"""
+    # Forget any user id
+    session.clear()
+
+    # Redirect user to login form
+    return redirect("/")
