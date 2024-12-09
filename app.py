@@ -11,9 +11,10 @@ def homepage():
     return render_template("index.html", year=datetime.now().year)
 
 
-@app.route('/register')
+@app.route('/register', methods=["GET", "POST"])
 def register():
-    return render_template("login.html")
+    """Register a new user"""
+    return render_template(".html")
 
 
 @app.route('/login', methods=["GET", "POST"])
