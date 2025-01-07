@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Flask, redirect, render_template, request, session, make_response
+from flask import Flask, redirect, render_template, request, session
 from flask_session import Session
 
 from helpers import error_message, login_required
@@ -21,16 +21,10 @@ def after_request(response):
     return response
 
 @app.route('/')
+@login_required
 def home():
     """Display homepage"""
-    # Verify if it is a new user
-    if request.cookies.get("new_user") is None:
-        # New user: show welcome message
-        return render_template("home.html", is_new_user=True)
-    else:
-        # Redirect to homepage
-        return render_template("index.html", year=datetime.now().year)
-
+    return render_template("index.html")
 
 
 @app.route('/register', methods=["GET", "POST"])
@@ -77,3 +71,8 @@ def logout():
 
     # Redirect user to login form
     return redirect("/")
+
+@app.route("/welcome")
+def welcome():
+    """Display Welcome page"""
+    return render_template("welcome.html")

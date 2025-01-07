@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PetPal</title>
+    <title>PetPal {% block title %}{% endblock %}</title>
 
     <!-- Favicon -->
     <link rel="icon" href="#"/>
@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="/static/css/styles.css"/>
 </head>
 <body>
+    {% if session["user_id"] %}
     <!-- Navbar -->
     <nav class="bg-light border navbar navbar-expand-md navbar-light">
         <div class="container-fluid">
@@ -32,7 +33,6 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbar">
-                {% if session["user_id"] %}
                     <ul class="navbar-nav me-auto mt-2">
                         <li class="nav-item"><a class="nav-link" href="/quote">Quote</a></li>
                         <li class="nav-item"><a class="nav-link" href="/buy">Buy</a></li>
@@ -41,16 +41,11 @@
                     </ul>
                     <ul class="navbar-nav ms-auto mt-2">
                         <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
-                    </ul>
-                {% else %}
-                    <ul class="navbar-nav ms-auto mt-2">
-                        <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
-                    </ul>
-                {% endif %}
+                    </ul>            
             </div>
         </div>
     </nav>
+    {% endif %}
 
     {% block body %}{% endblock %}
 
