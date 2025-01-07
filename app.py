@@ -1,4 +1,4 @@
-from flask import Flask, flash, jsonify, redirect, render_template, request, session
+from flask import Flask, flash, jsonify, redirect, render_template, request, session, make_response
 from datetime import datetime
 
 # Configure application
@@ -7,8 +7,21 @@ app = Flask(__name__)
 # Configure session to use filesystem (instead of signed cookies?)
 
 @app.route('/')
-def homepage():
-    return render_template("index.html", year=datetime.now().year)
+def home():
+    # Verify if it is a new user
+    if request.cookies.get("new_user") is None:
+        # New user: show welcome message
+        return render_template("home.html", is_new_user=True)
+    else:
+        # Redirect to homepage
+        return render_template("index.html", year=datetime.now().year)
+
+@app.route("/set-cookie")
+def set_cookie():
+    # Configurar la cookie para marcar que el usuario no es nuevo
+    response = make_response(redirect(url_for("index")))
+    response.set_cookie("new_user", "no", max_age=60*60*24*365)  # Cookie válida por 1 año
+    return response
 
 
 @app.route('/register', methods=["GET", "POST"])
