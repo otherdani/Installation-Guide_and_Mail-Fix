@@ -12,7 +12,7 @@ app = Flask(__name__)
 # Set up the database URI (SQLite in this case)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///petpal.db"
 # Disable tracking modifications for performance reasons
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False  
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Initialize SQLAlchemy
 db = SQLAlchemy(app)
@@ -37,12 +37,6 @@ def home():
     return render_template("index.html")
 
 
-@app.route('/register', methods=["GET", "POST"])
-def register():
-    """Register a new user"""
-    return render_template(".html")
-
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
@@ -52,28 +46,22 @@ def login():
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
         # Ensure username was submitted
-        if not request.form.get("username"):
-            return error_message("must provide username", 403)
+        if not request.form.get("email"):
+            return error_message("must provide email", 403)
 
         # Ensure password was submitted
         if not request.form.get("password"):
             return error_message("must provide password", 403)
 
         # Query database for username
-        rows = db.execute(
-            "SELECT * FROM users WHERE username = ?", request.form.get("username")
-        )
-
-        print(rows)
+        user = User.query.filter_by(email=request.form.get("email")).first()
 
         # Ensure username exists and password is correct
-        if len(rows) != 1 or not check_password_hash(
-            rows[0]["hash"], request.form.get("password")
-        ):
-            return error_message("invalid username and/or password", 403)
+        if not user or not check_password_hash(user.hash, request.form.get("password")):
+            return error_message("invalid email and/or password", 403)
 
         # Remember which user has logged in
-        session["user_id"] = rows[0]["id"]
+        session["user_id"] = user.id
 
         # Redirect user to home page
         return redirect("/")
@@ -90,6 +78,56 @@ def logout():
 
     # Redirect user to login form
     return redirect("/")
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    """Register user"""
+    # Forget any user_id
+    session.clear()
+
+    # User reached route via POST
+    if request.method == "POST":
+        username = request.form.get("username")
+        email = request.form.get("email")
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
+
+        # Ensure username was submitted
+        if not username:
+            return error_message("must provide username", 400)
+        
+        if not email:
+            return error_message("must provide email", 400)
+
+        # Ensure password was submitted
+        if not password:
+            return error_message("must provide password", 400)
+
+        # Reconfirm the password
+        if not confirmation:
+            return error_message("must provide password", 400)
+
+        # Check matching passwords
+        if not password == confirmation:
+            return error_message("passwords must match", 400)
+
+        # Check if username is already taken
+        existing_user = db.execute("SELECT * FROM users WHERE email = ?", email)
+        if existing_user:
+            return error_message("You already have an account", 400)
+
+        else:
+            # Hash user password
+            hash = generate_password_hash(password)
+
+            # Insert user in database
+            db.execute("INSERT INTO users (username, email, hash) VALUES(?, ?, ?)", username, email, hash)
+
+            # Redirect user to home page
+            return redirect('/')
+
+    else:
+        return render_template("register.html")
 
 @app.route("/welcome")
 def welcome():
