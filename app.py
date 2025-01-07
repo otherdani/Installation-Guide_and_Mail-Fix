@@ -2,11 +2,20 @@ from datetime import datetime
 from flask import Flask, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
+from flask_sqlalchemy import SQLAlchemy
 
 from helpers import error_message, login_required
 
 # Configure application
 app = Flask(__name__)
+
+# Set up the database URI (SQLite in this case)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///petpal.db"
+# Disable tracking modifications for performance reasons
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False  
+
+# Initialize SQLAlchemy
+db = SQLAlchemy(app)
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
