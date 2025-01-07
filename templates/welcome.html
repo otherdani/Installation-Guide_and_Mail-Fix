@@ -5,22 +5,31 @@
 {% endblock %}
 
 {% block body %}
-    <img src="/images/favicon.png" alt="logo">
-    <h1>Welcome to PetPal</h1>
-    <p>
-        🐾 Your trusted companion for keeping your pets happy and healthy. 
-        Manage schedules, track health, and create memories—all in one place. 
-        Let’s make pet care smarter, easier, and more fun.
-    </p>
 
-    <a href="/tutorial">
-        <button class="btn btn-primary btn-lg">Get Started!</button>
-    </a>
-    <a href="/login">
-        <button class="btn btn-primary btn-lg">I have an Account</button>
-    </a>
-    <a href="/register">
-        <button class="btn btn-primary btn-lg">Create an Account</button>
-    </a>
-
+    <div class="container-fluid welcome_page">
+        <img src="/static/images/favicon.png" alt="logo" class="welcome_logo">
+        <h1>Welcome to PetPal</h1>
+        <p>
+            🐾 Your trusted companion for keeping your pets happy and healthy.
+        </p>
+        <p>
+            Manage schedules, track health, and create memories—all in one place.
+        </p>
+        <p>
+            Let’s make pet care smarter, easier, and more fun.
+        </p>
+        <div class="mb-3 btn dark_btn"
+            <a href="/tutorial">Get Started!</a>
+        </div>
+        <br>
+        <div class="mb-3 btn dark_btn">
+            <a href="/login">I have an Account</a>
+        </div>
+        <br>
+        <div class="mb-3 btn dark_btn">
+            <a href="/register">Create an Account</a>
+        </div>
+    </div>
+    <a href=""></a>
+    
 {% endblock %}

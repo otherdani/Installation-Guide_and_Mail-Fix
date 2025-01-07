@@ -4,4 +4,34 @@ body{
     font-optical-sizing: auto;
     font-weight: 200;
     font-style: normal;
+    text-align: center;
+}
+footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.welcome_page{
+    margin-top: 50px;
+}
+.welcome_logo{
+    height: auto;
+    width: 15%;
+}
+.welcome_page .div{
+    position: static;
+}
+
+.dark_btn{
+    background-color: #0F5E49;
+    border-color: #0F5E49;
+}
+.dark_btn:hover{
+    background-color: #4BD3A3;
+    border-color: #0F5E49;
+}
+.dark_btn a{
+    color: white;
+    text-decoration: none;
 }
