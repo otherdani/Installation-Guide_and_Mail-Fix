@@ -1,6 +1,10 @@
 {% extends "layout.html" %}
 
-{% block body %}
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
     <form action="/login" method="post">
         <div class="mb-3">
             <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" placeholder="Username" type="text">
