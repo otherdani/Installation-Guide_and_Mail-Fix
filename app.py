@@ -55,7 +55,7 @@ app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
 
-# Crear un objeto de serialización
+# Create a secret token
 s = Serializer(app.config['SECRET_TOKEN'])
 
 @app.after_request
@@ -79,7 +79,7 @@ def login():
     # Forget any user_id
     session.clear()
 
-    # User reached route via POST (as by submitting a form via POST)
+    # User reached route via POST
     if request.method == "POST":
         # Ensure email was submitted
         if not request.form.get("email"):
@@ -95,7 +95,6 @@ def login():
         # Ensure username exists and password is correct
         if not user or not check_password_hash(user.pw_hash, request.form.get("password")):
             return error_message("Invalid email &/or password", 403)
-
         
         # Remember which user has logged in
         else:
@@ -105,7 +104,7 @@ def login():
             flash("Login successful", "success")
             return redirect("/")
 
-    # User reached route via GET (as by clicking a link or via redirect)
+    # User reached route via GET
     return render_template("login.html")
     
 
@@ -115,7 +114,7 @@ def logout():
     # Forget any user id
     session.clear()
 
-    # Redirect user to login form
+    # Redirect user to welcome page
     return redirect("/")
 
 @app.route("/register", methods=["GET", "POST"])
@@ -153,7 +152,7 @@ def register():
         # Hash the user's password
         pw_hash = generate_password_hash(password)
 
-        # Store username temporarily in session for confirmation
+        # Store username and hashed pw temporarily in session for confirmation
         session['username'] = username
         session['password'] = pw_hash
 
@@ -163,7 +162,7 @@ def register():
         # Create the confirmation URL
         confirm_url = url_for('confirm_email', token=token, _external=True)
         html = render_template('email_confirmation.html', confirm_url=confirm_url)
-        subject = "Please confirm your email"
+        subject = "Confirm your email"
 
         # Send the confirmation email
         msg = Message(subject, sender='your_email@gmail.com', recipients=[email])
