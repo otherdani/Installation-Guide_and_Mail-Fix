@@ -93,7 +93,7 @@ def login():
         # Ensure username exists and password is correct
         if not user or not check_password_hash(user.pw_hash, request.form.get("password")):
             return error_message("Invalid email &/or password", 403)
-        
+      
         # Remember which user has logged in
         else:
             session["user_id"] = user.id
@@ -104,7 +104,7 @@ def login():
 
     # User reached route via GET
     return render_template("login.html")
-    
+ 
 
 @app.route("/logout")
 def logout():
