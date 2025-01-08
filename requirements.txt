@@ -3,3 +3,4 @@ Flask-Session
 requests
 flask-sqlalchemy
 authlib
+python-dotenv

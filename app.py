@@ -1,17 +1,25 @@
+import os
 from flask import Flask, redirect, render_template, request, session
 from flask_session import Session
+from dotenv import load_dotenv
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_sqlalchemy import SQLAlchemy
-# from authlib.integrations.flask_client import OAuth
+from authlib.integrations.flask_client import OAuth
 
 from helpers import error_message, login_required
 
 # Configure application
+load_dotenv() #Load variables .env
 app = Flask(__name__)
-# app.secret_key = 'your_secret_key'
+app.secret_key = os.getenv("SECRET_KEY")
+
+# Verify if secret key is correctly loaded
+if not app.secret_key:
+    raise ValueError("No SECRET_KEY found in environment")
 
 # Set up the database URI (SQLite in this case)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///petpal.db"
+
 # Disable tracking modifications for performance reasons
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -24,7 +32,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Configure OAuth
-# oauth = OAuth(app)
+oauth = OAuth(app)
 
 @app.after_request
 def after_request(response):
@@ -96,18 +104,13 @@ def register():
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
 
-        # Ensure username was submitted
+        # Ensure username, email and password were submitted
         if not username:
             return error_message("must provide username", 400)
-        
         if not email:
             return error_message("must provide email", 400)
-
-        # Ensure password was submitted
         if not password:
             return error_message("must provide password", 400)
-
-        # Reconfirm the password
         if not confirmation:
             return error_message("must provide password", 400)
 
