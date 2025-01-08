@@ -1,5 +1,6 @@
 # Entornos virtuales
 venv/
+.venv/
 .env/
 *.env
 
@@ -8,6 +9,7 @@ pycache/
 *.py[cod]
 *.pyo
 *.pyd
+*.pyc
 *.sqlite3
 instance/
 *.db
@@ -27,8 +29,6 @@ Thumbs.db
 # Archivos generados por el editor/IDE
 .vscode/
 .idea/
-*.sublime-workspace
-*.sublime-project
 
 # Dependencias
 *.egg-info/
@@ -44,3 +44,4 @@ build/
 
 # Despliegue
 *.pid
+
