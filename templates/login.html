@@ -1,17 +1,39 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Log In
+    Login
 {% endblock %}
 
-{% block main %}
-    <form action="/login" method="post">
-        <div class="mb-3">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" placeholder="Username" type="text">
-        </div>
-        <div class="mb-3">
-            <input class="form-control mx-auto w-auto" name="password" placeholder="Password" type="password">
-        </div>
-        <button class="btn btn-primary" type="submit">Log In</button>
-    </form>
+{% block body %}
+    <div class="vertical_padding">
+        <img src="/static/images/favicon.png" alt="logo" class="welcome_logo">
+        <h3>Login with social media</h3>
+    </div>
+    <div class="vertical_padding">
+        <a href="/login/google"><button class="btn"><i class="fab fa-google fa-2x"></i></button></a>
+        <a href="/login/facebook"><button class="btn"><i class="fab fa-facebook fa-2x"></i></button></a>
+        <a href="/login/apple"><button class="btn"><i class="fab fa-apple fa-2x"></i></button></a>
+    </div>
+    <div class="vertical_padding">
+        <h4>Or</h4>
+    </div>
+    <div class="vertical_padding">
+        <form action="/login" method="post">
+            <div class="mb-3">
+                <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" placeholder="Username" type="text">
+            </div>
+            <div class="mb-3">
+                <input class="form-control mx-auto w-auto" name="password" placeholder="Password" type="password">
+            </div>
+            <button class="btn dark_btn" type="submit">Login</button>
+        </form>
+    </div>
+    <div class="vertical_padding">
+        <a href="">Forgot your password?</a> <br>
+    </div>
+    <div class="vertical_padding">
+        <a href="/register">Don't have an account?</a>
+    </div>
+    
+
 {% endblock %}

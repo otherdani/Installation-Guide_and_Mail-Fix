@@ -50,7 +50,13 @@
     {% block body %}{% endblock %}
 
     <footer>
-        <p>Copyright © {{ year }}. All rights reserved.</p>
+        <p>Copyright © <span id="year"></span>. All rights reserved.</p>
     </footer>
+    <script>
+        // Generate current year for copyright
+        const yearSpan = document.getElementById("year");
+        const currentYear = new Date().getFullYear();
+        yearSpan.textContent = currentYear;
+    </script>    
 </body>
 </html>

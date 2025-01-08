@@ -1,13 +1,14 @@
-from datetime import datetime
 from flask import Flask, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_sqlalchemy import SQLAlchemy
+# from authlib.integrations.flask_client import OAuth
 
 from helpers import error_message, login_required
 
 # Configure application
 app = Flask(__name__)
+# app.secret_key = 'your_secret_key'
 
 # Set up the database URI (SQLite in this case)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///petpal.db"
@@ -21,6 +22,9 @@ db = SQLAlchemy(app)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+
+# Configure OAuth
+# oauth = OAuth(app)
 
 @app.after_request
 def after_request(response):

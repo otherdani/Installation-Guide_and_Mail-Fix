@@ -2,8 +2,9 @@ body{
     background-color: #F6EACB;
     font-family: "Nunito", sans-serif;
     font-optical-sizing: auto;
-    font-weight: 200;
+    font-weight: 500;
     font-style: normal;
+    letter-spacing: 2px;
     text-align: center;
 }
 footer{
@@ -11,7 +12,25 @@ footer{
     bottom: 0;
     width: 100%;
 }
-
+h1, h2, h3{
+    font-family: "Atma", serif;
+    font-size: 500%;
+}
+a{
+    color: black;
+}
+a:hover{
+    color: #0F5E49;
+}
+.btn i{
+    margin: 0 3.2rem;
+}
+i:hover{
+    color: #0F5E49;
+}
+.vertical_padding{
+    padding-top: 1%;
+}
 .welcome_page{
     margin-top: 50px;
 }
@@ -26,9 +45,11 @@ footer{
 .dark_btn{
     background-color: #0F5E49;
     border-color: #0F5E49;
+    color: white;
+    width: 250px;
 }
 .dark_btn:hover{
-    background-color: #4BD3A3;
+    background-color: #19a37e;
     border-color: #0F5E49;
 }
 .dark_btn a{
