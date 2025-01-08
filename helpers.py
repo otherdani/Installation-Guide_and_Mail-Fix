@@ -2,6 +2,7 @@ from functools import wraps
 import re
 from flask import redirect, session, render_template
 import dns.resolver
+from itsdangerous import URLSafeTimedSerializer as Serializer
 
 
 def login_required(f):
@@ -63,4 +64,3 @@ def has_valid_dns(domain):
         return True
     except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN):
         return False
-

@@ -49,14 +49,12 @@ oauth = OAuth(app)
 # Configure Flask-Mail
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'your_email@gmail.com'
-app.config['MAIL_PASSWORD'] = 'your_email_password'
+app.config['MAIL_USERNAME'] = os.getenv("PETPAL_EMAIL")
+app.config['MAIL_PASSWORD'] = os.getenv("PETPAL_EMAIL_PW")
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
 
-# Create a secret token
-s = Serializer(app.config['SECRET_TOKEN'])
 
 @app.after_request
 def after_request(response):
@@ -147,7 +145,7 @@ def register():
         # Check if email already exists
         existing_user = User.query.filter_by(email=email).first()
         if existing_user:
-            return error_message("This email is already in use", 400)
+            return error_message("This email is already registered.", 400)
 
         # Hash the user's password
         pw_hash = generate_password_hash(password)
@@ -156,21 +154,28 @@ def register():
         session['username'] = username
         session['password'] = pw_hash
 
-        # Generate verification token
-        token = s.dumps(email, salt='email-confirm')
+        try:
+            # Generate token and send email
+            s = Serializer(app.secret_key)
+            token = s.dumps(email, salt='email-confirm')
 
-        # Create the confirmation URL
-        confirm_url = url_for('confirm_email', token=token, _external=True)
-        html = render_template('email_confirmation.html', confirm_url=confirm_url)
-        subject = "Confirm your email"
+            # Create the confirmation URL
+            confirm_url = url_for('confirm_email', token=token, _external=True)
+            html = render_template('email_confirmation.html', confirm_url=confirm_url)
+            subject = "Confirm your email"
 
-        # Send the confirmation email
-        msg = Message(subject, sender='your_email@gmail.com', recipients=[email])
-        msg.html = html
-        mail.send(msg)
+            # Send the confirmation email
+            msg = Message(subject, sender=os.getenv("PETPAL_EMAIL"), recipients=[email])
+            msg.html = html
+            mail.send(msg)
 
-        flash("A confirmation email has been sent. Please check your inbox.", "info")
-        return redirect("/")
+            flash("A confirmation email has been sent. Please check your inbox and your spam folder.", "info")
+            return redirect("/")
+
+        except (KeyError, ValueError) as e:
+            app.logger.error("Error during email sending or token generation: %s", e)
+            session.clear()  # Clean up session on failure
+            return error_message("An error occurred. Please try again.", 500)
 
     # User reached route via GET
     return render_template("register.html")
@@ -180,20 +185,20 @@ def register():
 def confirm_email(token):
     """Validate email"""
     try:
-        # Decrypt the token to get the email
-        email = s.loads(token, salt='email-confirm', max_age=3600)  # Token expires after 1 hour
-    except (BadSignature, SignatureExpired):
-        flash("The confirmation link is invalid or has expired.", "danger")
+        # Deserialize token
+        s = Serializer(app.secret_key)
+        email = s.loads(token, salt='email-confirm', max_age=3600)
+    except (BadSignature, SignatureExpired) as e:
+        app.logger.error("Token error: %s", e)
+        flash("The confirmation link is invalid or has expired. Please request a new confirmation email.", "danger")
         return redirect("/register")
 
-    # Check if email is already registered
-    user = User.query.filter_by(email=email).first()
-
-    if user:
+    # Verify user doesn't already exist
+    if User.query.filter_by(email=email).first():
         flash("This email has already been confirmed.", "info")
         return redirect("/login")
 
-    # Retrieve username and hashed password from session
+    # Create new user from session-stored data
     username = session.pop('username', None)
     password = session.pop('password', None)
 
@@ -201,16 +206,14 @@ def confirm_email(token):
         flash("Error: Missing user information.", "danger")
         return redirect("/register")
 
-    # Create new user
     new_user = User(username=username, email=email, pw_hash=password)
     db.session.add(new_user)
     db.session.commit()
 
-    # Automatically log in the user after registration
+    # Log in user
     session["user_id"] = new_user.id
-
     flash("Registration successful!", "success")
-    return redirect('/')
+    return redirect("/")
 
 
 @app.route("/welcome")
