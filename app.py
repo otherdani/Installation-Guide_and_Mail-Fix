@@ -1,5 +1,5 @@
 import os
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_session import Session
 from dotenv import load_dotenv
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -7,7 +7,7 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from authlib.integrations.flask_client import OAuth
 from flask_mail import Mail, Message
-from itsdangerous import URLSafeTimedSerializer as Serializer
+from itsdangerous import URLSafeTimedSerializer as Serializer, BadSignature, SignatureExpired
 
 from helpers import error_message, login_required, is_valid_email
 
@@ -31,6 +31,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 class User(db.Model):
+    """User for database"""
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(120), nullable=False)
@@ -132,25 +133,29 @@ def register():
 
         # Ensure username, email and password were submitted
         if not username:
-            return error_message("must provide username", 400)
+            return error_message("Must provide username", 400)
         if not is_valid_email(email):
-            return error_message("must provide a valid email", 400)
+            return error_message("Must provide a valid email", 400)
         if not password:
-            return error_message("must provide password", 400)
+            return error_message("Must provide password", 400)
         if not confirmation:
-            return error_message("must provide password", 400)
+            return error_message("Must provide password confirmation", 400)
 
         # Check matching passwords
-        if not password == confirmation:
-            return error_message("passwords must match", 400)
+        if password != confirmation:
+            return error_message("Passwords must match", 400)
 
-        # Check if username is already taken
+        # Check if email already exists
         existing_user = User.query.filter_by(email=email).first()
         if existing_user:
-            return error_message("This user already exists", 400)
+            return error_message("This email is already in use", 400)
 
         # Hash the user's password
         pw_hash = generate_password_hash(password)
+
+        # Store username temporarily in session for confirmation
+        session['username'] = username
+        session['password'] = pw_hash
 
         # Generate verification token
         token = s.dumps(email, salt='email-confirm')
@@ -158,7 +163,7 @@ def register():
         # Create the confirmation URL
         confirm_url = url_for('confirm_email', token=token, _external=True)
         html = render_template('email_confirmation.html', confirm_url=confirm_url)
-        subject = "Please, confirm your email"
+        subject = "Please confirm your email"
 
         # Send the confirmation email
         msg = Message(subject, sender='your_email@gmail.com', recipients=[email])
@@ -167,31 +172,38 @@ def register():
 
         flash("A confirmation email has been sent. Please check your inbox.", "info")
         return redirect("/")
-    
-    #User reach route via GET
+
+    # User reached route via GET
     return render_template("register.html")
-        
+
+
 @app.route("/confirm/<token>")
 def confirm_email(token):
     """Validate email"""
     try:
         # Decrypt the token to get the email
         email = s.loads(token, salt='email-confirm', max_age=3600)  # Token expires after 1 hour
-    except:
+    except (BadSignature, SignatureExpired):
         flash("The confirmation link is invalid or has expired.", "danger")
         return redirect("/register")
 
-    # If the token is valid, create the user
+    # Check if email is already registered
     user = User.query.filter_by(email=email).first()
 
     if user:
         flash("This email has already been confirmed.", "info")
         return redirect("/login")
 
-    # Hash user's password and create a new user
-    password = request.args.get("password")
-    pw_hash = generate_password_hash(password)
-    new_user = User(username=username, email=email, pw_hash=pw_hash)
+    # Retrieve username and hashed password from session
+    username = session.pop('username', None)
+    password = session.pop('password', None)
+
+    if not username or not password:
+        flash("Error: Missing user information.", "danger")
+        return redirect("/register")
+
+    # Create new user
+    new_user = User(username=username, email=email, pw_hash=password)
     db.session.add(new_user)
     db.session.commit()
 

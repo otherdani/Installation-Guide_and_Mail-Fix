@@ -7,3 +7,4 @@ authlib
 python-dotenv
 requests
 Flask-Mail
+dnspython
