@@ -1,0 +1,78 @@
+html{
+    display: flex;
+    flex-direction: column;
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    letter-spacing: 2px;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    text-align: center;
+}
+body{
+    background-color: #F6EACB;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin: 0;
+    padding: 30px 0; 
+}
+main{
+    flex: 1;
+    margin-bottom: 50px;
+}
+
+footer{
+    margin-top: auto;
+}
+h1, h2{
+    font-family: "Atma", serif;
+}
+a{
+    color: black;
+}
+a:hover{
+    color: #0F5E49;
+}
+input:focus {
+    outline: none !important; 
+    border: 0.125rem solid #0F5E49 !important;
+    box-shadow: 0 0 0.4rem #19a37e !important;
+    /* transition: border-color 0.3s ease, box-shadow 0.3s ease; */
+}
+.btn i{
+    margin: 0 2rem;
+}
+i:hover{
+    color: #0F5E49;
+}
+.vertical_padding{
+    padding-top: 1%;
+}
+.welcome_page{
+    margin-top: 50px;
+}
+.welcome_logo{
+    height: auto;
+    width: 15%;
+}
+.welcome_page .div{
+    position: static;
+}
+
+.dark_btn{
+    background-color: #0F5E49;
+    border-color: #0F5E49;
+    color: white;
+    width: 250px;
+}
+.dark_btn:hover{
+    background-color: #19a37e;
+    border-color: #0F5E49;
+}
+.dark_btn a{
+    color: white;
+    text-decoration: none;
+}
