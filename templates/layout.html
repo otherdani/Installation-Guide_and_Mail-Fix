@@ -25,52 +25,98 @@
     </head>
     <body>
         {% if session["user_id"] %}
-        <!-- Navbar -->
-        <nav class="bg-light border navbar navbar-expand-md navbar-light">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/">PETPAL</a>
-                <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbar">
-                        <ul class="navbar-nav me-auto mt-2">
-                            <li class="nav-item"><a class="nav-link" href="/quote">Quote</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/buy">Buy</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/sell">Sell</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/history">History</a></li>
-                        </ul>
-                        <ul class="navbar-nav ms-auto mt-2">
-                            <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
-                        </ul>            
+        <!-- Sidebar -->
+        <div id="sidebar" class="collapsed">
+            <div class="p-3">
+                <h5></h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a href="#" class="nav-link">General Data</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Trackers</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Gallery</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Documents</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Log Records</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Calendar</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Articles</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="content" class="sidebar-collapsed">
+            <!-- Top Navbar -->
+            <nav id="top_navbar" class="navbar navbar-expand-md navbar-light sticky-top">
+                <div class="container-fluid">
+                    <button class="sidebar_btn" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-expanded="false" aria-controls="sidebar">
+                        <img src="/static/images/favicon.png" alt="Logo" width="60" height="auto" class="d-inline-block">
+                    </button>
+                    <h1 class="navbar_name">PetPal</h1>
+
+                    <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbar">
+                            <ul class="navbar-nav ms-auto mt-2">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Pets
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#">All Pets</a></li>
+
+                                        {% for pet in pets %}
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="#">{{ pet }}</a></li>
+                                        {% endfor %}
+
+                                    </ul>
+                                </li>
+                                <li class="nav-item"><a class="nav-link" href="#">Calendar</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#">Settings</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
+                            </ul>          
+                    </div>
                 </div>
-            </div>
-        </nav>
-        {% endif %}
+            </nav>
+            {% endif %}
 
-        {% if get_flashed_messages() %}
-        <header>
-            <div class="alert alert-primary alert-dismissible fade show mb-0 text-center" role="alert">
-                {{ get_flashed_messages() | join(" ") }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        </header>
-        {% endif %}
-        
+            {% if get_flashed_messages() %}
+            <header>
+                <div class="alert alert-primary alert-dismissible fade show mb-0 text-center" role="alert">
+                    {{ get_flashed_messages() | join(" ") }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </header>
+            {% endif %}
+            
 
-        <main>
-        {% block main %}{% endblock %}
-        </main>
-
+            <main>
+            {% block main %}{% endblock %}
+            </main>
+        </div>
         <footer>
             <p>Copyright © <span id="year"></span>. All rights reserved.</p>
         </footer>
     </body>
 
-
     <script>
-        // Generate current year for copyright
+        // Generate current year
         const yearSpan = document.getElementById("year");
         const currentYear = new Date().getFullYear();
         yearSpan.textContent = currentYear;
-    </script>    
+    
+        // Toggle sidebar
+        const sidebar = document.getElementById('sidebar');
+        const content = document.getElementById('content');
+        const navbar = document.querySelector('.navbar');
+        const toggleButton = document.querySelector('[data-bs-toggle="collapse"]');
+    
+        toggleButton.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            content.classList.toggle('sidebar-expanded');
+            navbar.classList.toggle('sidebar-expanded');
+        });
+    </script>
+    
+    
+    
+    
 </html>
