@@ -1,0 +1,100 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    New Pet
+{% endblock %}
+
+{% block main %}
+
+    <h1>Add your pet data</h1>
+    <form id="newPet" action="/new_pet" method="post" class="vertical_padding">
+        <!-- Step 1 -->
+        <div id="step1" class="step">
+            <h2>Basic Information</h2>
+            <label class="vertical_padding" for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="Pet name" required><br><br>
+
+            <label for="birth_date">Birth date:</label>
+            <input type="date" id="birth_date" name="birth_date"><br><br>
+
+            <label for="adoption_date">Adoption date:</label>
+            <input type="date" id="adoption_date" name="adoption_date"><br><br>
+
+            <label for="sex">Sex:</label>
+            <select id="sex" name="sex" required>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+            </select><br><br>
+
+            <label for="species">Specie:</label>
+            <select id="species" name="species" required>
+                <option value="" disabled selected>Select specie</option>
+                {% for specie in species %}
+                    <option value="{{ specie.id }}">{{ specie.name }}</option>
+                {% endfor %}
+            </select><br><br>
+
+            <div id="breed-container">
+                <label for="breed">Breed:</label>
+                <select id="breed" name="breed" required>
+                    <option value="" disabled selected>Select a breed</option>
+                    {% for breed in breeds %}
+                    <option value="{{ breed.id }}">{{ breed.name }}</option>
+                    {% endfor %}
+                </select>
+            </div><br><br>
+
+                <button type="button" id="nextButton" class="continue-btn dark_btn">Continue</button>
+        </div>
+
+        <!-- Step 2 -->
+        <div id="step2" class="step" style="display: none;">
+            <h2>Health Data</h2>
+            <label for="sterilized">Sterilized:</label>
+            <select id="sterilized" name="sterilized" required>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select><br><br>
+
+            <label for="microchip">Microchip (opcional):</label>
+            <input type="text" id="microchip" name="microchip" placeholder="Microchip number"><br><br>
+
+            <label for="insurance_company">Insurance Company (opcional):</label>
+            <input type="text" id="insurance_company" name="insurance_company" placeholder="Insurance Company"><br><br>
+
+            <label for="insurance_number">Insurance No.(opcional):</label>
+            <input type="text" id="insurance_number" name="insurance_number" placeholder="Insurance No."><br><br>
+
+            <button type="submit" class="submit-btn">Register Pet</button>
+        </div>
+    </form>
+
+    <script>
+        // Cambiar entre pasos
+        $(document).ready(function() {
+            // Mostrar/ocultar las razas dependiendo de la especie
+            $('#species').change(function() {
+                var species_id = $(this).val();
+                $.ajax({
+                    url: '/get_breeds/' + species_id,  // Debes crear esta ruta para enviar las razas de la especie seleccionada
+                    method: 'GET',
+                    success: function(data) {
+                        var breedSelect = $('#breed');
+                        breedSelect.empty();
+                        breedSelect.append('<option value="" disabled selected>Seleccionar raza</option>');
+                        $.each(data, function(index, breed) {
+                            breedSelect.append('<option value="' + breed.id + '">' + breed.name + '</option>');
+                        });
+                    }
+                });
+            });
+
+            // Avanzar al siguiente paso
+            $('#nextButton').click(function() {
+                $('#step1').hide();
+                $('#step2').show();
+            });
+        });
+    </script>
+
+{% endblock %}

@@ -1,19 +1,16 @@
 import os
-from flask import Flask, flash, redirect, render_template, request, session, url_for
-from flask_session import Session
+from datetime import datetime
+from flask import Flask, flash, redirect, render_template, request, session, url_for, jsonify
 from dotenv import load_dotenv
 from werkzeug.security import check_password_hash, generate_password_hash
-from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
-from authlib.integrations.flask_client import OAuth
-from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer as Serializer, BadSignature, SignatureExpired
 
+from extensions import db, migrate, session as session_ext, oauth, mail, Message
 from helpers import error_message, login_required, is_valid_email
 from models import User, Breed, Species, Pet
 
 # Configure application
-load_dotenv() #Load variables .env
+load_dotenv() #Load variables from .env
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
 
@@ -27,17 +24,17 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///petpal.db"
 # Disable tracking modifications for performance reasons
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-# Initialize SQLAlchemy
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+# Initialize db
+db.init_app(app)
+migrate.init_app(app, db)
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
+session_ext.init_app(app)  # Initialize session
 
-# Configure OAuth
-oauth = OAuth(app)
+# Initialize OAuth
+oauth.init_app(app)
 
 # Configure Flask-Mail
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -46,7 +43,7 @@ app.config['MAIL_USERNAME'] = os.getenv("PETPAL_EMAIL")
 app.config['MAIL_PASSWORD'] = os.getenv("PETPAL_EMAIL_PW")
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
-mail = Mail(app)
+mail.init_app(app)  # Initialize Flask-Mail
 
 
 @app.after_request
@@ -62,7 +59,7 @@ def after_request(response):
 def home():
     """Display homepage"""
     pets = Pet.query.filter_by(user_id=session["user_id"]).all()
-    return render_template('home.html', pets=pets)
+    return render_template("index.html", pets=pets)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -98,7 +95,7 @@ def login():
 
     # User reached route via GET
     return render_template("login.html")
- 
+
 
 @app.route("/logout")
 def logout():
@@ -214,3 +211,48 @@ def confirm_email(token):
 def welcome():
     """Display Welcome page"""
     return render_template("welcome.html")
+
+@app.route("/new_pet", methods=["GET", "POST"])
+@login_required
+def new_pet():
+    """Add new pet to database"""
+    if request.method == 'POST':
+        # Get pet data
+        pet_name = request.form.get('name')
+        birth_date = request.form.get('birth_date')
+        adoption_date = request.form.get('adoption_date')
+        sex = request.form.get('sex')
+        species = request.form.get('species')
+        breed = request.form.get('breed')
+        sterilized = request.form.get('sterilized') == 'yes'
+        microchip = request.form.get('microchip') if request.form.get('microchip') else None
+        insurance_company = request.form.get('insurance_company') if request.form.get('insurance_company') else None
+        insurance_number = request.form.get('insurance_number') if request.form.get('insurance_number') else None
+
+        # Convert dates
+        birth_date = datetime.strptime(birth_date, '%Y-%m-%d')
+        adoption_date = datetime.strptime(adoption_date, '%Y-%m-%d')
+
+        # Save pet data in database
+        new_pet_data = Pet(name=pet_name, birth_date=birth_date, adoption_date=adoption_date,
+                      sex=sex, species_id=species, breed_id=breed,
+                      sterilized=sterilized, microchip=microchip,
+                      insurance_company=insurance_company, insurance_number=insurance_number)
+        db.session.add(new_pet_data)
+        db.session.commit()
+
+        # Redirect to homepage
+        return redirect("/")
+    
+    # User reached route via GET
+    species = Species.query.all()  # Obtain species
+    return render_template('new_pet.html', species=species)
+
+
+@app.route('/get_breeds/<int:species_id>', methods=['GET'])
+@login_required
+def get_breeds(species_id):
+    """Show breed list"""
+    breeds = Breed.query.filter_by(species_id=species_id).all()
+    breed_data = [{"id": breed.id, "name": breed.name} for breed in breeds]
+    return jsonify(breed_data)
