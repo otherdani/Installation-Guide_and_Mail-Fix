@@ -246,6 +246,7 @@ def new_pet():
     
     # User reached route via GET
     species = Species.query.all()  # Obtain species
+    print(species)
     return render_template('new_pet.html', species=species)
 
 

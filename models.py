@@ -12,6 +12,12 @@ class User(db.Model):
 
     pets = db.relationship('Pet', backref='owner', lazy=True)
 
+class Species(db.Model):
+    """Pet species"""
+    __tablename__ = 'species'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True, nullable=False)
+
 class Breed(db.Model):
     """Pet breed"""
     __tablename__ = 'breeds'
@@ -20,12 +26,6 @@ class Breed(db.Model):
     name = db.Column(db.String(100), nullable=False)
 
     species = db.relationship('Species', backref=db.backref('breeds', lazy=True))
-
-class Species(db.Model):
-    """Pet species"""
-    __tablename__ = 'species'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=True, nullable=False)
 
 class Pet(db.Model):
     """Pet data"""
@@ -43,8 +43,8 @@ class Pet(db.Model):
     insurance_company = db.Column(db.String(100), nullable=True)
     insurance_number = db.Column(db.String(50), nullable=True)
 
-    breed = db.relationship('Breed', backref=db.backref('pets', lazy=True))
-    species = db.relationship('Species', backref=db.backref('pets', lazy=True))
+    breed = db.relationship('Breed', backref=db.backref('pets', lazy='joined'))
+    species = db.relationship('Species', backref=db.backref('pets', lazy='joined'))
 
     __table_args__ = (
         CheckConstraint("sex IN ('Male', 'Female')", name='check_sex'),

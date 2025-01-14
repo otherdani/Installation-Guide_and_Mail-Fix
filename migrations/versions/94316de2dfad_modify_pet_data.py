@@ -7,7 +7,8 @@ Create Date: 2025-01-14 16:36:45.835542
 """
 from alembic import op
 import sqlalchemy as sa
-
+from app import db
+from models import Species, Breed
 
 # revision identifiers, used by Alembic.
 revision = '94316de2dfad'
@@ -38,6 +39,203 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
     op.drop_table('pet')
+
+     # Insert species data
+    species_data = ['Cat', 'Dog']
+    for specie in species_data:
+        if not Species.query.filter_by(name=specie).first():
+            db.session.add(Species(name=specie))
+    
+    # Insert breed data
+    dog_breeds = [
+        "Mixed",
+        "Affenpinscher",
+        "Afghan Hound",
+        "Airedale Terrier",
+        "Akita",
+        "Alaskan Malamute",
+        "American Bulldog",
+        "American Cocker Spaniel",
+        "American Eskimo Dog",
+        "American Foxhound",
+        "American Staffordshire Terrier",
+        "American Water Spaniel",
+        "Anatolian Shepherd Dog",
+        "Australian Cattle Dog",
+        "Australian Shepherd",
+        "Australian Terrier",
+        "Basenji",
+        "Basset Hound",
+        "Beagle",
+        "Bearded Collie",
+        "Beauceron",
+        "Bedlington Terrier",
+        "Belgian Malinois",
+        "Belgian Sheepdog",
+        "Belgian Tervuren",
+        "Bernese Mountain Dog",
+        "Bichon Frise",
+        "Black and Tan Coonhound",
+        "Black Russian Terrier",
+        "Border Collie",
+        "Border Terrier",
+        "Borzoi",
+        "Boston Terrier",
+        "Bouvier des Flandres",
+        "Boxer",
+        "Boykin Spaniel",
+        "Briard",
+        "Brittany",
+        "Bull Terrier",
+        "Bulldog",
+        "Bullmastiff",
+        "Cairn Terrier",
+        "Cavalier King Charles Spaniel",
+        "Chesapeake Bay Retriever",
+        "Chihuahua",
+        "Chinese Crested",
+        "Chinese Shar-Pei",
+        "Chow Chow",
+        "Clumber Spaniel",
+        "Cockapoo",
+        "Cocker Spaniel",
+        "Collie",
+        "Coonhound",
+        "Corgi",
+        "Cotton de Tulear",
+        "Curly-Coated Retriever",
+        "Dachshund",
+        "Dalmatian",
+        "Dandie Dinmont Terrier",
+        "Doberman Pinscher",
+        "Dogo Argentino",
+        "Dutch Shepherd",
+        "English Bulldog",
+        "English Cocker Spaniel",
+        "English Setter",
+        "English Springer Spaniel",
+        "Field Spaniel",
+        "Finnish Lapphund",
+        "Finnish Spitz",
+        "Flat-Coated Retriever",
+        "French Bulldog",
+        "German Pinscher",
+        "German Shepherd Dog",
+        "German Shorthaired Pointer",
+        "German Wirehaired Pointer",
+        "Giant Schnauzer",
+        "Glen of Imaal Terrier",
+        "Goldador",
+        "Golden Retriever",
+        "Goldendoodle",
+        "Gordon Setter",
+        "Great Dane",
+        "Great Pyrenees",
+        "Greater Swiss Mountain Dog",
+        "Havanese",
+        "Irish Setter",
+        "Irish Terrier",
+        "Irish Water Spaniel",
+        "Irish Wolfhound",
+        "Italian Greyhound",
+        "Jack Russell Terrier",
+        "Japanese Chin",
+        "Keeshond",
+        "Kerry Blue Terrier",
+        "King Charles Spaniel",
+        "Klee Kai",
+        "Labrador Retriever",
+        "Lagotto Romagnolo",
+        "Lhasa Apso",
+        "Maltese",
+        "Manchester Terrier",
+        "Maremma Sheepdog",
+        "Mastiff",
+        "Miniature American Shepherd",
+        "Miniature Bull Terrier",
+        "Miniature Schnauzer",
+        "Neapolitan Mastiff",
+        "Newfoundland",
+        "Norfolk Terrier",
+        "Norwegian Buhund",
+        "Norwegian Elkhound",
+        "Norwegian Lundehund",
+        "Old English Sheepdog",
+        "Otterhound",
+        "Papillon",
+        "Parson Russell Terrier",
+        "Pekingese",
+        "Pembroke Welsh Corgi",
+        "Petit Basset Griffon Vendéen",
+        "Pharaoh Hound",
+        "Plott",
+        "Pointer",
+        "Polish Lowland Sheepdog",
+        "Pomeranian",
+        "Poodle",
+        "Portuguese Water Dog",
+        "Rat Terrier",
+        "Redbone Coonhound",
+        "Rhodesian Ridgeback",
+        "Rottweiler",
+        "Saint Bernard",
+        "Saluki",
+        "Samoyed",
+        "Schipperke",
+        "Schnauzer",
+        "Scottish Deerhound",
+        "Scottish Terrier",
+        "Sealyham Terrier",
+        "Shetland Sheepdog",
+        "Shiba Inu",
+        "Shih Tzu",
+        "Siberian Husky",
+        "Silky Terrier",
+        "Skye Terrier",
+        "Sloughi",
+        "Soft-Coated Wheaten Terrier",
+        "Spanish Water Dog",
+        "Spinone Italiano",
+        "Staffordshire Bull Terrier",
+        "Standard Schnauzer",
+        "Sussex Spaniel",
+        "Swedish Vallhund",
+        "Tibetan Mastiff",
+        "Tibetan Spaniel",
+        "Tibetan Terrier",
+        "Toy Fox Terrier",
+        "Vizsla",
+        "Weimaraner",
+        "Welsh Springer Spaniel",
+        "Welsh Terrier",
+        "West Highland White Terrier",
+        "Whippet",
+        "Wire Fox Terrier",
+        "Wirehaired Pointing Griffon",
+        "Xoloitzcuintli",
+        "Yorkshire Terrier"
+    ]
+
+    for breed in dog_breeds:
+        if not Breed.query.filter_by(name=breed).first():
+            db.session.add(Breed(species_id=2, name=breed))
+
+    # Insert cat breeds
+    cat_breeds = [
+        "Abyssinian", "American Bobtail", "American Curl", "American Shorthair", "American Wirehair",
+        "Balinese", "Bengal", "Birman", "Bombay", "British Shorthair", "Burmese", "Burmilla",
+        "Chartreux", "Colorpoint Shorthair", "Cornish Rex", "Devon Rex", "Egyptian Mau", "European Burmese", "Exotic",
+        "Havana Brown", "Japanese Bobtail", "Khao Manee", "Korat", "LaPerm", "Lykoi",
+        "Maine Coon", "Manx", "Norwegian Forest Cat", "Ocicat", "Oriental", "Persian", "Ragamuffin", "Ragdoll", "Russian Blue",
+        "Scottish Fold", "Selkirk Rex", "Siamese", "Siberian", "Singapura", "Somali", "Sphynx",
+        "Toybob", "Tonkinese", "Turkish Angora", "Turkish Van"
+    ]
+
+    for breed in cat_breeds:
+        if not Breed.query.filter_by(name=breed).first():
+            db.session.add(Breed(species_id=1, name=breed))
+
+    db.session.commit()
     # ### end Alembic commands ###
 
 
@@ -57,4 +255,8 @@ def downgrade():
     sa.PrimaryKeyConstraint('id')
     )
     op.drop_table('pets')
+    db.session.query(Species).filter(Species.name.in_(['Cat', 'Dog'])).delete()
+    db.session.query(Breed).filter(Breed.name.in_(dog_breeds)).delete()
+    db.session.query(Breed).filter(Breed.name.in_(cat_breeds)).delete()
+    db.session.commit()
     # ### end Alembic commands ###

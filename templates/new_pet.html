@@ -38,9 +38,6 @@
                 <label for="breed">Breed:</label>
                 <select id="breed" name="breed" required>
                     <option value="" disabled selected>Select a breed</option>
-                    {% for breed in breeds %}
-                    <option value="{{ breed.id }}">{{ breed.name }}</option>
-                    {% endfor %}
                 </select>
             </div><br><br>
 
