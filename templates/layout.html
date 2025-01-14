@@ -26,26 +26,26 @@
     <body>
         {% if session["user_id"] %}
         <!-- Sidebar -->
-        <div id="sidebar" class="collapsed">
+        <div id="sidebar" class="collapsed box_shadow">
             <div class="p-3">
                 <h5></h5>
                 <ul class="nav flex-column">
-                    <li class="nav-item"><a href="#" class="nav-link">General Data</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Trackers</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Gallery</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Documents</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Log Records</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Calendar</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Articles</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-bone"></i> General Data</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-chart-line"></i> Trackers</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-images"></i> Gallery</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-file-medical-alt"></i> Documents</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-book"></i> Log Records</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-calendar-alt"></i> Calendar</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-newspaper"></i> Articles</a></li>
                 </ul>
             </div>
         </div>
 
         <div id="content" class="sidebar-collapsed">
             <!-- Top Navbar -->
-            <nav id="top_navbar" class="navbar navbar-expand-md navbar-light sticky-top">
+            <nav id="top_navbar" class="navbar navbar-expand-md navbar-light sticky-top box_shadow">
                 <div class="container-fluid">
-                    <button class="sidebar_btn" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-expanded="false" aria-controls="sidebar">
+                    <button class="toggle_sidebar" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-expanded="false" aria-controls="sidebar">
                         <img src="/static/images/favicon.png" alt="Logo" width="60" height="auto" class="d-inline-block">
                     </button>
                     <h1 class="navbar_name">PetPal</h1>
@@ -57,7 +57,7 @@
                             <ul class="navbar-nav ms-auto mt-2">
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Pets
+                                        <i class="fas fa-paw fa-2x"></i>
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="#">All Pets</a></li>
@@ -69,9 +69,9 @@
 
                                     </ul>
                                 </li>
-                                <li class="nav-item"><a class="nav-link" href="#">Calendar</a></li>
-                                <li class="nav-item"><a class="nav-link" href="#">Settings</a></li>
-                                <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-calendar fa-2x"></i></a></li>
+                                <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-cog fa-2x"></i></a></li>
+                                <li class="nav-item"><a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt fa-2x"></i></a></li>
                             </ul>          
                     </div>
                 </div>
@@ -86,15 +86,15 @@
                 </div>
             </header>
             {% endif %}
-            
 
-            <main>
+            <main class="container-fluid text-center">
             {% block main %}{% endblock %}
             </main>
+        
+            <footer class="text-center">
+                <p>Copyright © <span id="year"></span>. All rights reserved.</p>
+            </footer>
         </div>
-        <footer>
-            <p>Copyright © <span id="year"></span>. All rights reserved.</p>
-        </footer>
     </body>
 
     <script>

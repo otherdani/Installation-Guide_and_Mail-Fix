@@ -10,6 +10,7 @@ from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer as Serializer, BadSignature, SignatureExpired
 
 from helpers import error_message, login_required, is_valid_email
+from models import User, Breed, Species, Pet
 
 # Configure application
 load_dotenv() #Load variables .env
@@ -29,14 +30,6 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 # Initialize SQLAlchemy
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-
-class User(db.Model):
-    """User for database"""
-    __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(120), nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    pw_hash = db.Column(db.String(120), nullable=False)
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
@@ -68,7 +61,8 @@ def after_request(response):
 @login_required
 def home():
     """Display homepage"""
-    return render_template("index.html")
+    pets = Pet.query.filter_by(user_id=session["user_id"]).all()
+    return render_template('home.html', pets=pets)
 
 
 @app.route("/login", methods=["GET", "POST"])

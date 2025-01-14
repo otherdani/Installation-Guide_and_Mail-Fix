@@ -5,28 +5,33 @@
 {% endblock %}
 
 {% block main %}
+    <div class="pet-cards-container">
+        {% for pet in pets %}
+        <!-- Pet card -->
+        <div class="pet-card">
+            <div class="pet-photo">
+                <img src="{{ pet.photo_url }}" alt="{{ pet.name }}" class="img-fluid rounded-circle">
+            </div>
+            <div class="pet-details">
+                <h3>{{ pet.name }}</h3>
+                <p>{{ pet.breed.name }} - {{ pet.species.name }}</p>
+                <p>Age: {{ pet.age() }} years</p>
+                <p>Sex: 
+                    {% if pet.sex == 'Male' %}
+                        <i class="fas fa-mars"></i>
+                    {% elif pet.sex == 'Female' %}
+                        <i class="fas fa-venus"></i>
+                    {% else %}
+                        <i class="fas fa-question"></i>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <form action="/new_pet" method="post">
+        <button class="dark_btn btn_plus box_shadow"><i class="fas fa-plus"></i></button>
+    </form>
 
-    <h1>Homepage</h1>
-    <p>bnchsdjasjdskajslaxskjxkljskjckasdjklsdkjsnfjsnfkjsfkljasfjfcjsfjsfscjlscnzlcnmzzkcczklcjkm,zczcjkljcksjzkjckjz</p>
-    <h1>kldckljcdlsjxc;l</h1>
-    <h1>kldckljcdlsjxc;l</h1>
-    <h1>kldckljcdlsjxc;l</h1>
-    <h1>kldckljcdlsjxc;l</h1>
-    <h1>kldckljcdlsjxc;l</h1>
-    <h1>kldckljcdlsjxc;l</h1>
-    <h1>kldckljcdlsjxc;l</h1>
-    <h1>kldckljcdlsjxc;l</h1>
-    <h1>kldckljcdlsjxc;l</h1>
-    <h1>kldckljcdlsjxc;l</h1><h1>kldckljcdlsjxc;l</h1>
-    <h1>kldckljcdlsjxc;l</h1>
-    <h1>kldckljcdlsjxc;l</h1>
-    <h1>kldckljcdlsjxc;l</h1>
-    <h1>kldckljcdlsjxc;l</h1>
-    <h1>kldckljcdlsjxc;l</h1>
-
-    <h1>kldckljcdlsjxc;l</h1>
-    <h1>kldckljcdlsjxc;l</h1><h1>kldckljcdlsjxc;l</h1><h1>kldckljcdlsjxc;l</h1><h1>kldckljcdlsjxc;l</h1><h1>kldckljcdlsjxc;l</h1>
-    <h1>kldckljcdlsjxc;l</h1><h1>kldckljcdlsjxc;l</h1><h1>kldckljcdlsjxc;l</h1>
-    <h1>kldckljcdlsjxc;l</h1><h1>kldckljcdlsjxc;l</h1><h1>kldckljcdlsjxc;l</h1>
-    <h1>kldckljcdlsjxc;l</h1><h1>kldckljcdlsjxc;l</h1><h1>kldckljcdlsjxc;l</h1>
 {% endblock %}
