@@ -57,3 +57,11 @@ class Pet(db.Model):
                 age -= 1
             return age
         return None
+    
+    def days_to_birthday(self, birthdate):
+        """Calculate days to birthday"""
+        today = datetime.today().date()
+        next_birthday = birthdate.replace(year=today.year)
+        if next_birthday < today:
+            next_birthday = next_birthday.replace(year=today.year + 1)
+        return (next_birthday - today).days

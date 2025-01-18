@@ -61,10 +61,9 @@
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="#">All Pets</a></li>
-
                                         {% for pet in pets %}
                                             <li><hr class="dropdown-divider"></li>
-                                            <li><a class="dropdown-item" href="#">{{ pet }}</a></li>
+                                            <li><a class="dropdown-item" href="#">{{ pet.name }}</a></li>
                                         {% endfor %}
 
                                     </ul>
@@ -91,7 +90,7 @@
             {% block main %}{% endblock %}
             </main>
         
-            <footer class="text-center">
+            <footer class="text-center align-items-end">
                 <p>Copyright © <span id="year"></span>. All rights reserved.</p>
             </footer>
         </div>

@@ -23,7 +23,7 @@ footer {
     padding: 20px;
 }
 
-h1, h2, h3{
+h1, h2, h3, h4{
     font-family: "Atma", serif;
 }
 
@@ -141,42 +141,17 @@ input:focus {
 }
 
 /* Pet card */
-.pet-card {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1rem;
+.pet_card {
     padding: 1rem;
     background-color: #F6EACB;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 }
-
-.pet-card-content {
-    display: flex;
-    align-items: center;
-}
-
-.pet-info {
-    margin-right: 15px;
-}
-
-.pet-photo {
+.pet-photo{
+    height: auto;
+    width: 100%;
     position: relative;
 }
 
-.pet-photo-img {
-    width: 10%;
-    height: auto;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 2px solid #0F5E49;
-}
-
-.pet-info h4 {
-    font-size: 1.2rem;
-    font-weight: bold;
-}
-
-.pet-info p {
-    margin: 0.2rem 0;
+.card_name{
+    display: inline-block;
 }
