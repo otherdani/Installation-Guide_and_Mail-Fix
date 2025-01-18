@@ -7,7 +7,7 @@
 {% block main %}
 
     <h1>Add your pet data</h1>
-    <form id="newPet" action="/new_pet" method="post" class="vertical_padding">
+    <form id="newPet" action="/new_pet" method="post" class="vertical_padding" enctype="multipart/form-data">
         {{ form.hidden_tag() }} 
         <!-- Step 1 -->
         <div id="step1" class="step">
@@ -34,7 +34,7 @@
             <div id="breed-container">
                 <label for="breed">Breed:</label>
                 {{ form.breed() }}
-            </div>
+            </div>            
             <br><br>
             <button type="button" id="nextButton" class="continue-btn dark_btn btn">Continue</button>
         </div>

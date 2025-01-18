@@ -1,6 +1,5 @@
 import os
 import logging
-from datetime import datetime
 from flask import Flask, flash, redirect, render_template, request, session, url_for, jsonify
 from flask_mail import Mail, Message
 from authlib.integrations.flask_client import OAuth
@@ -8,6 +7,7 @@ from dotenv import load_dotenv
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 from itsdangerous import URLSafeTimedSerializer as Serializer, BadSignature, SignatureExpired
+from flask_wtf.csrf import CSRFProtect
 
 
 from extensions import db, migrate, session as session_ext
@@ -19,6 +19,7 @@ from models import User, Breed, Species, Pet
 load_dotenv() #Load variables from .env
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
+csrf = CSRFProtect(app)
 
 # Verify if secret key is correctly loaded
 if not app.secret_key:
@@ -234,54 +235,59 @@ def new_pet():
     form = PetForm()
 
     # Populate species list for the dropdown
-    form.species.choices = [(species.id, species.name) for species in Species.query.all()]
-    if form.species.data:
-        form.breed.choices = [(breed.id, breed.name) for breed in Breed.query.filter_by(species_id=form.species.data).all()]
-    
+    species = Species.query.all()
+    form.species.choices = [(specie.id, specie.name) for specie in species]
+
     # User reached route via POST
-    if form.validate_on_submit():
-        pet_name = form.name.data
-        birth_date = form.birth_date.data
-        adoption_date = form.adoption_date.data
-        sex = form.sex.data
-        species_id = form.species.data
-        breed_id = form.breed.data
-        sterilized = form.sterilized.data
-        microchip_number = form.microchip_number.data
-        insurance_company = form.insurance_company.data
-        insurance_number = form.insurance_number.data
+    if request.method == 'POST':
+        # Check if species is selected and populate breed choices accordingly
+        if form.species.data:
+            form.breed.choices = [(breed.id, breed.name) for breed in Breed.query.filter_by(species_id=form.species.data).all()]
+
+        if form.validate_on_submit():
+            pet_name = form.name.data
+            birth_date = form.birth_date.data
+            adoption_date = form.adoption_date.data
+            sex = form.sex.data
+            species_id = form.species.data
+            breed_id = form.breed.data
+            sterilized = form.sterilized.data
+            microchip_number = form.microchip_number.data
+            insurance_company = form.insurance_company.data
+            insurance_number = form.insurance_number.data
+            
+            # Handling image upload
+            if form.pet_profile_photo.data:
+                photo = form.pet_profile_photo.data
+                filename = secure_filename(photo.filename)
+                pet_profile_photo = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                photo.save(pet_profile_photo)
+            else:
+                pet_profile_photo = None
+
+            # Save pet data in database
+            new_pet = Pet(user_id=session["user_id"],
+                        pet_profile_photo=pet_profile_photo,
+                        name=pet_name,
+                        birth_date=birth_date,
+                        adoption_date=adoption_date,
+                        sex=sex,
+                        species_id=species_id,
+                        breed_id=breed_id,
+                        sterilized=sterilized,
+                        microchip_number=microchip_number,
+                        insurance_company=insurance_company,
+                        insurance_number=insurance_number)
+            db.session.add(new_pet)
+            db.session.commit()
+
+            flash('Pet registered successfully!', 'success')
+            return redirect("/")
         
-        # Handling image upload
-        if form.photo.data:
-            photo = form.photo.data
-            filename = secure_filename(photo.filename)
-            pet_profile_photo = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            photo.save(pet_profile_photo)
         else:
-            photo_path = None
-
-        # Save pet data in database
-        new_pet = Pet(user_id=session["user_id"],
-                      name=pet_name,
-                      birth_date=birth_date,
-                      adoption_date=adoption_date,
-                      sex=sex,
-                      species_id=species_id,
-                      breed_id=breed_id,
-                      sterilized=sterilized,
-                      microchip_number=microchip_number,
-                      insurance_company=insurance_company,
-                      insurance_number=insurance_number,
-                      pet_profile_photo=pet_profile_photo)
-
-        db.session.add(new_pet)
-        db.session.commit()
-
-        flash('Pet registered successfully!', 'success')
-        return redirect("/")
+            return error_message("An error occurred. Please try again.", form.errors)
     
     # User reached route via GET
-    species = Species.query.all()  # Obtain species
     return render_template('new_pet.html', form=form)
 
 
