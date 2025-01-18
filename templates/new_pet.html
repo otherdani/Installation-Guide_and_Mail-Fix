@@ -41,7 +41,7 @@
                 </select>
             </div><br><br>
 
-                <button type="button" id="nextButton" class="continue-btn dark_btn">Continue</button>
+                <button type="button" id="nextButton" class="continue-btn dark_btn btn">Continue</button>
         </div>
 
         <!-- Step 2 -->
@@ -53,8 +53,8 @@
                 <option value="no">No</option>
             </select><br><br>
 
-            <label for="microchip">Microchip (opcional):</label>
-            <input type="text" id="microchip" name="microchip" placeholder="Microchip number"><br><br>
+            <label for="microchip_number">Microchip (opcional):</label>
+            <input type="text" id="microchip_number" name="microchip_number" placeholder="Microchip number"><br><br>
 
             <label for="insurance_company">Insurance Company (opcional):</label>
             <input type="text" id="insurance_company" name="insurance_company" placeholder="Insurance Company"><br><br>
@@ -62,36 +62,47 @@
             <label for="insurance_number">Insurance No.(opcional):</label>
             <input type="text" id="insurance_number" name="insurance_number" placeholder="Insurance No."><br><br>
 
-            <button type="submit" class="submit-btn">Register Pet</button>
+            <button type="submit" class="submit-btn dark_btn btn">Register Pet</button>
         </div>
     </form>
 
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <script>
-        // Cambiar entre pasos
+        // Steps management
         $(document).ready(function() {
-            // Mostrar/ocultar las razas dependiendo de la especie
+            // Show breeds depending on selected specie
             $('#species').change(function() {
                 var species_id = $(this).val();
+                var breedSelect = $('#breed');
+                breedSelect.empty();
+                breedSelect.append('<option value="" disabled selected>Loading breeds...</option>');
+
                 $.ajax({
-                    url: '/get_breeds/' + species_id,  // Debes crear esta ruta para enviar las razas de la especie seleccionada
+                    url: '/get_breeds/' + species_id,
                     method: 'GET',
                     success: function(data) {
-                        var breedSelect = $('#breed');
+                        console.log(data); // Log data for debugging
                         breedSelect.empty();
-                        breedSelect.append('<option value="" disabled selected>Seleccionar raza</option>');
+                        breedSelect.append('<option value="" disabled selected>Select a breed</option>');
                         $.each(data, function(index, breed) {
                             breedSelect.append('<option value="' + breed.id + '">' + breed.name + '</option>');
                         });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error fetching breeds:", error);
+                        alert("Failed to load breeds. Please try again.");
                     }
                 });
             });
 
-            // Avanzar al siguiente paso
             $('#nextButton').click(function() {
                 $('#step1').hide();
                 $('#step2').show();
             });
         });
     </script>
+
 
 {% endblock %}
