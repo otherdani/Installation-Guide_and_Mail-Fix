@@ -1,11 +1,15 @@
 import os
 from datetime import datetime
 from flask import Flask, flash, redirect, render_template, request, session, url_for, jsonify
+import logging
+from flask_mail import Mail, Message
+from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
 from werkzeug.security import check_password_hash, generate_password_hash
 from itsdangerous import URLSafeTimedSerializer as Serializer, BadSignature, SignatureExpired
 
-from extensions import db, migrate, session as session_ext, oauth, mail, Message
+
+from extensions import db, migrate, session as session_ext
 from helpers import error_message, login_required, is_valid_email
 from models import User, Breed, Species, Pet
 
@@ -33,17 +37,18 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 session_ext.init_app(app)  # Initialize session
 
-# Initialize OAuth
-oauth.init_app(app)
+# Configure OAuth
+oauth = OAuth(app)
 
 # Configure Flask-Mail
+# Sentitive data is in a .env file to improve security
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = os.getenv("PETPAL_EMAIL")
 app.config['MAIL_PASSWORD'] = os.getenv("PETPAL_EMAIL_PW")
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
-mail.init_app(app)  # Initialize Flask-Mail
+mail = Mail(app)
 
 
 @app.after_request
@@ -155,6 +160,7 @@ def register():
             html = render_template('email_confirmation.html', confirm_url=confirm_url)
             subject = "Confirm your email"
 
+            logging.basicConfig(level=logging.DEBUG)
             # Send the confirmation email
             msg = Message(subject, sender=os.getenv("PETPAL_EMAIL"), recipients=[email])
             msg.html = html
@@ -219,13 +225,13 @@ def new_pet():
     if request.method == 'POST':
         # Get pet data
         pet_name = request.form.get('name')
-        birth_date = request.form.get('birth_date')
-        adoption_date = request.form.get('adoption_date')
+        birth_date = request.form.get('birth_date') if request.form.get('birth_date') else None
+        adoption_date = request.form.get('adoption_date') if request.form.get('adoption_date') else None
         sex = request.form.get('sex')
         species = request.form.get('species')
         breed = request.form.get('breed')
         sterilized = request.form.get('sterilized') == 'yes'
-        microchip = request.form.get('microchip') if request.form.get('microchip') else None
+        microchip_number = request.form.get('microchip_number') if request.form.get('microchip_number') else None
         insurance_company = request.form.get('insurance_company') if request.form.get('insurance_company') else None
         insurance_number = request.form.get('insurance_number') if request.form.get('insurance_number') else None
 
@@ -234,9 +240,9 @@ def new_pet():
         adoption_date = datetime.strptime(adoption_date, '%Y-%m-%d')
 
         # Save pet data in database
-        new_pet_data = Pet(name=pet_name, birth_date=birth_date, adoption_date=adoption_date,
+        new_pet_data = Pet(user_id = session["user_id"],name=pet_name, birth_date=birth_date, adoption_date=adoption_date,
                       sex=sex, species_id=species, breed_id=breed,
-                      sterilized=sterilized, microchip=microchip,
+                      sterilized=sterilized, microchip_number=microchip_number,
                       insurance_company=insurance_company, insurance_number=insurance_number)
         db.session.add(new_pet_data)
         db.session.commit()
@@ -257,3 +263,7 @@ def get_breeds(species_id):
     breeds = Breed.query.filter_by(species_id=species_id).all()
     breed_data = [{"id": breed.id, "name": breed.name} for breed in breeds]
     return jsonify(breed_data)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)

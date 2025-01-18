@@ -35,7 +35,7 @@ class Pet(db.Model):
     name = db.Column(db.String(80), nullable=False)
     birth_date = db.Column(db.Date, nullable=True)
     adoption_date = db.Column(db.Date, nullable=True)
-    sex = db.Column(db.String(6), nullable=False)
+    sex = db.Column(db.String, db.CheckConstraint("sex IN ('M', 'F')"), nullable=False)
     species_id = db.Column(db.Integer, db.ForeignKey('species.id'), nullable=False)
     breed_id = db.Column(db.Integer, db.ForeignKey('breeds.id'), nullable=True)
     sterilized = db.Column(db.Boolean, nullable=False, default=False)
@@ -46,12 +46,9 @@ class Pet(db.Model):
     breed = db.relationship('Breed', backref=db.backref('pets', lazy='joined'))
     species = db.relationship('Species', backref=db.backref('pets', lazy='joined'))
 
-    __table_args__ = (
-        CheckConstraint("sex IN ('Male', 'Female')", name='check_sex'),
-    )
 
-    # Determine pet age
     def age(self):
+        """Determine pet age"""
         if self.birth_date:
             today = datetime.today()
             age = today.year - self.birth_date.year
