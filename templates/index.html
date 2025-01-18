@@ -17,9 +17,9 @@
                 <p>{{ pet.breed.name }} - {{ pet.species.name }}</p>
                 <p>Age: {{ pet.age() }} years</p>
                 <p>Sex: 
-                    {% if pet.sex == 'Male' %}
+                    {% if pet.sex == 'M' %}
                         <i class="fas fa-mars"></i>
-                    {% elif pet.sex == 'Female' %}
+                    {% elif pet.sex == 'F' %}
                         <i class="fas fa-venus"></i>
                     {% else %}
                         <i class="fas fa-question"></i>

@@ -28,7 +28,7 @@ class Breed(db.Model):
     species = db.relationship('Species', backref=db.backref('breeds', lazy=True))
 
 class Pet(db.Model):
-    """Pet data"""
+    """Pet general data"""
     __tablename__ = 'pets'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)

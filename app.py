@@ -1,7 +1,7 @@
 import os
+import logging
 from datetime import datetime
 from flask import Flask, flash, redirect, render_template, request, session, url_for, jsonify
-import logging
 from flask_mail import Mail, Message
 from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
