@@ -1,5 +1,4 @@
 from datetime import datetime
-from sqlalchemy import CheckConstraint
 from extensions import db
 
 class User(db.Model):
@@ -19,7 +18,7 @@ class Species(db.Model):
     name = db.Column(db.String(100), unique=True, nullable=False)
 
 class Breed(db.Model):
-    """Pet breed"""
+    """Pet breeds"""
     __tablename__ = 'breeds'
     id = db.Column(db.Integer, primary_key=True)
     species_id = db.Column(db.Integer, db.ForeignKey('species.id'), nullable=False)
@@ -32,6 +31,7 @@ class Pet(db.Model):
     __tablename__ = 'pets'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    pet_profile_photo = db.Column(db.String(200), nullable=True)
     name = db.Column(db.String(80), nullable=False)
     birth_date = db.Column(db.Date, nullable=True)
     adoption_date = db.Column(db.Date, nullable=True)

@@ -8,3 +8,5 @@ python-dotenv
 requests
 Flask-Mail
 dnspython
+flask-wtf
+wtforms 

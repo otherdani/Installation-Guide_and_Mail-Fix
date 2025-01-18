@@ -8,64 +8,55 @@
 
     <h1>Add your pet data</h1>
     <form id="newPet" action="/new_pet" method="post" class="vertical_padding">
+        {{ form.hidden_tag() }} 
         <!-- Step 1 -->
         <div id="step1" class="step">
+            <!-- Renderize using Flask-WTF -->
             <h2>Basic Information</h2>
-            <label class="vertical_padding" for="name">Name:</label>
-            <input type="text" id="name" name="name" placeholder="Pet name" required autocomplete="off"><br><br>
-
+            <label class="vertical_padding" for="photo">Photo:</label>
+            {{ form.pet_profile_photo() }}
+            <br><br>
+            <label  for="name">Name:</label>
+            {{ form.name() }}  
+            <br><br>
             <label for="birth_date">Birth date:</label>
-            <input type="date" id="birth_date" name="birth_date"><br><br>
-
+            {{ form.birth_date() }}  
+            <br><br>
             <label for="adoption_date">Adoption date:</label>
-            <input type="date" id="adoption_date" name="adoption_date"><br><br>
-
+            {{ form.adoption_date() }}  
+            <br><br>
             <label for="sex">Sex:</label>
-            <select id="sex" name="sex" required>
-                <option value="M">Male</option>
-                <option value="F">Female</option>
-            </select><br><br>
-
+            {{ form.sex() }}  
+            <br><br>
             <label for="species">Specie:</label>
-            <select id="species" name="species" required>
-                <option value="" disabled selected>Select specie</option>
-                {% for specie in species %}
-                    <option value="{{ specie.id }}">{{ specie.name }}</option>
-                {% endfor %}
-            </select><br><br>
-
+            {{ form.species() }}
+            <br><br>
             <div id="breed-container">
                 <label for="breed">Breed:</label>
-                <select id="breed" name="breed" required>
-                    <option value="" disabled selected>Select a breed</option>
-                </select>
-            </div><br><br>
-
-                <button type="button" id="nextButton" class="continue-btn dark_btn btn">Continue</button>
+                {{ form.breed() }}
+            </div>
+            <br><br>
+            <button type="button" id="nextButton" class="continue-btn dark_btn btn">Continue</button>
         </div>
 
         <!-- Step 2 -->
         <div id="step2" class="step" style="display: none;">
             <h2>Health Data</h2>
             <label for="sterilized">Sterilized:</label>
-            <select id="sterilized" name="sterilized" required>
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
-            </select><br><br>
-
-            <label for="microchip_number">Microchip (opcional):</label>
-            <input type="text" id="microchip_number" name="microchip_number" placeholder="Microchip number"><br><br>
-
-            <label for="insurance_company">Insurance Company (opcional):</label>
-            <input type="text" id="insurance_company" name="insurance_company" placeholder="Insurance Company"><br><br>
-
-            <label for="insurance_number">Insurance No.(opcional):</label>
-            <input type="text" id="insurance_number" name="insurance_number" placeholder="Insurance No."><br><br>
-
+            {{ form.sterilized() }}
+            <br><br>
+            <label for="microchip_number">Microchip (optional):</label>
+            {{ form.microchip_number() }}
+            <br><br>
+            <label for="insurance_company">Insurance Company (optional):</label>
+            {{ form.insurance_company() }}
+            <br><br>
+            <label for="insurance_number">Insurance No. (optional):</label>
+            {{ form.insurance_number() }}
+            <br><br>
             <button type="submit" class="submit-btn dark_btn btn">Register Pet</button>
         </div>
     </form>
-
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
