@@ -1,7 +1,5 @@
 from functools import wraps
-import re
 from flask import redirect, session, render_template
-import dns.resolver
 
 
 def login_required(f):
@@ -42,24 +40,3 @@ def error_message(message, code=400):
         return s
 
     return render_template("error.html", top=code, bottom=escape(message)), code
-
-
-def is_valid_email(email):
-    """Validate email format with regex"""
-    email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    if not re.match(email_regex, email):
-        return False
-
-    # Extraer el dominio después del "@"
-    domain = email.split('@')[1]
-
-    # Validar que el dominio tenga registros DNS MX
-    return has_valid_dns(domain)
-
-def has_valid_dns(domain):
-    """Validate email domain"""
-    try:
-        dns.resolver.resolve(domain, 'MX')
-        return True
-    except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN):
-        return False

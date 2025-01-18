@@ -7,6 +7,6 @@ authlib
 python-dotenv
 requests
 Flask-Mail
-dnspython
 flask-wtf
-wtforms 
+wtforms
+email-validator

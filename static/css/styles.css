@@ -41,7 +41,7 @@ input:focus {
 
 /* Custom classes */
 .vertical_padding{
-    padding-top: 1%;
+    margin-top: 1%;
 }
 
 .container-fluid{
@@ -138,4 +138,45 @@ input:focus {
 }
 .welcome_page .div{
     position: static;
+}
+
+/* Pet card */
+.pet-card {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: #F6EACB;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.pet-card-content {
+    display: flex;
+    align-items: center;
+}
+
+.pet-info {
+    margin-right: 15px;
+}
+
+.pet-photo {
+    position: relative;
+}
+
+.pet-photo-img {
+    width: 10%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #0F5E49;
+}
+
+.pet-info h4 {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.pet-info p {
+    margin: 0.2rem 0;
 }

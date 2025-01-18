@@ -19,11 +19,14 @@
     </div>
     <div class="vertical_padding">
         <form action="/login" method="post">
+            {{ form.hidden_tag() }}
             <div class="mb-3">
-                <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="email" placeholder="Email" type="email">
+                <label for="email">Email</label>
+                {{ form.email(class="form-control mx-auto w-auto", placeholder="Enter your email") }}
             </div>
             <div class="mb-3">
-                <input class="form-control mx-auto w-auto" name="password" placeholder="Password" type="password">
+                <label for="password">Password</label>
+                {{ form.password(class="form-control mx-auto w-auto", placeholder="Enter your password") }}
             </div>
             <button class="btn dark_btn" type="submit">Login</button>
         </form>

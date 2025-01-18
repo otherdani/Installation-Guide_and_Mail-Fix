@@ -17,17 +17,22 @@
     <div class="vertical_padding">
         <h4>Or</h4>
         <form action="/register" method="post">
+            {{ form.hidden_tag() }}
             <div class="mb-3">
-                <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" placeholder="Username" type="text">
+                <label for="email">Username</label>
+                {{ form.username(class="form-control mx-auto w-auto", placeholder="Username") }}
             </div>
             <div class="mb-3">
-                <input autocomplete="off" class="form-control mx-auto w-auto" name="email" placeholder="Email" type="email">
+                <label for="email">Email</label>
+                {{ form.email(class="form-control mx-auto w-auto", placeholder="Enter your email") }}
             </div>
             <div class="mb-3">
-                <input class="form-control mx-auto w-auto" name="password" placeholder="Password" type="password">
+                <label for="password">Password</label>
+                {{ form.password(class="form-control mx-auto w-auto", placeholder="Enter your password") }}
             </div>
             <div class="mb-3">
-                <input class="form-control mx-auto w-auto" name="confirmation" placeholder="Confirm password" type="password">
+                <label for="password">Password Confirmation</label>
+                {{ form.confirmation(class="form-control mx-auto w-auto", placeholder="Confirm password") }}
             </div>
             <button class="btn dark_btn" type="submit">Register</button>
         </form>

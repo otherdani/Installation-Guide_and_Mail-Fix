@@ -7,19 +7,17 @@ from dotenv import load_dotenv
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 from itsdangerous import URLSafeTimedSerializer as Serializer, BadSignature, SignatureExpired
-from flask_wtf.csrf import CSRFProtect
 
 
-from extensions import db, migrate, session as session_ext
-from helpers import error_message, login_required, is_valid_email
-from forms import PetForm
+from extensions import db, migrate, session as session_ext, csrf
+from helpers import error_message, login_required
+from forms import RegisterForm, LoginForm, PetForm
 from models import User, Breed, Species, Pet
 
 # Configure application
 load_dotenv() #Load variables from .env
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
-csrf = CSRFProtect(app)
 
 # Verify if secret key is correctly loaded
 if not app.secret_key:
@@ -47,6 +45,9 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 session_ext.init_app(app)  # Initialize session
 
+# Initialize CSRF protection with the app
+csrf.init_app(app)
+
 # Configure OAuth
 oauth = OAuth(app)
 
@@ -59,7 +60,6 @@ app.config['MAIL_PASSWORD'] = os.getenv("PETPAL_EMAIL_PW")
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
-
 
 @app.after_request
 def after_request(response):
@@ -82,34 +82,27 @@ def login():
     """Log user in"""
     # Forget any user_id
     session.clear()
+    form = LoginForm()
 
     # User reached route via POST
-    if request.method == "POST":
-        # Ensure email was submitted
-        if not request.form.get("email"):
-            return error_message("Must provide a valid email", 403)
-
-        # Ensure password was submitted
-        if not request.form.get("password"):
-            return error_message("Must provide a password", 403)
-
-        # Query database for username
-        user = User.query.filter_by(email=request.form.get("email")).first()
+    if request.method == "POST" and form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
+        user = User.query.filter_by(email=email).first()
 
         # Ensure username exists and password is correct
         if not user or not check_password_hash(user.pw_hash, request.form.get("password")):
             return error_message("Invalid email &/or password", 403)
       
         # Remember which user has logged in
-        else:
-            session["user_id"] = user.id
+        session["user_id"] = user.id
 
-            # Redirect user to home page
-            flash("Login successful", "success")
-            return redirect("/")
+        # Redirect user to home page
+        flash("Login successful", "success")
+        return redirect("/")
 
     # User reached route via GET
-    return render_template("login.html")
+    return render_template("login.html", form=form)
 
 
 @app.route("/logout")
@@ -126,27 +119,14 @@ def register():
     """Register user"""
     # Forget any user_id
     session.clear()
+    form = RegisterForm()
 
     # User reached route via POST
-    if request.method == "POST":
-        username = request.form.get("username")
-        email = request.form.get("email")
-        password = request.form.get("password")
-        confirmation = request.form.get("confirmation")
-
-        # Ensure username, email and password were submitted
-        if not username:
-            return error_message("Must provide username", 400)
-        if not is_valid_email(email):
-            return error_message("Must provide a valid email", 400)
-        if not password:
-            return error_message("Must provide password", 400)
-        if not confirmation:
-            return error_message("Must provide password confirmation", 400)
-
-        # Check matching passwords
-        if password != confirmation:
-            return error_message("Passwords must match", 400)
+    if request.method == "POST" and form.validate_on_submit():
+        username = form.username.data
+        email = form.email.data
+        password = form.password.data
+        confirmation = form.confirmation.data
 
         # Check if email already exists
         existing_user = User.query.filter_by(email=email).first()
@@ -185,7 +165,7 @@ def register():
             return error_message("An error occurred. Please try again.", 500)
 
     # User reached route via GET
-    return render_template("register.html")
+    return render_template("register.html", form=form)
 
 
 @app.route("/confirm/<token>")
