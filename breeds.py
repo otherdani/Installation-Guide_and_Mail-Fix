@@ -181,7 +181,7 @@ for breed in dog_breeds:
 
 # Insert cat breeds
 cat_breeds = [
-    "Abyssinian", "American Bobtail", "American Curl", "American Shorthair", "American Wirehair",
+    "Mixed","Abyssinian", "American Bobtail", "American Curl", "American Shorthair", "American Wirehair",
     "Balinese", "Bengal", "Birman", "Bombay", "British Shorthair", "Burmese", "Burmilla",
     "Chartreux", "Colorpoint Shorthair", "Cornish Rex", "Devon Rex", "Egyptian Mau", "European Burmese", "Exotic",
     "Havana Brown", "Japanese Bobtail", "Khao Manee", "Korat", "LaPerm", "Lykoi",
