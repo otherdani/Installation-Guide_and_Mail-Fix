@@ -21,7 +21,7 @@ class PetForm(FlaskForm):
     name = StringField('Pet Name', validators=[DataRequired()])
     birth_date = DateField('Birth Date', format='%Y-%m-%d', validators=[Optional()])
     adoption_date = DateField('Adoption Date', format='%Y-%m-%d', validators=[Optional()])
-    sex = SelectField('Sex', choices=[('M'), ('F')], validators=[DataRequired()])
+    sex = SelectField('Sex', choices=[('M', 'Male'), ('F', 'Female')], validators=[DataRequired()])
     species = SelectField('Species', coerce=int, validators=[DataRequired()])
     breed = SelectField('Breed', coerce=int, validators=[DataRequired()])
     sterilized = BooleanField('Sterilized')
