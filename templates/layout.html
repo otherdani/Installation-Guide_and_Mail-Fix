@@ -23,7 +23,7 @@
         <!-- My CSS -->
         <link rel="stylesheet" href="/static/css/styles.css"/>
     </head>
-    <body>
+    <body class="d-flex flex-column min-vh-100">
         {% if session["user_id"] %}
         <!-- Sidebar -->
         <div id="sidebar" class="collapsed box_shadow">
@@ -89,11 +89,10 @@
             <main class="container-fluid text-center">
             {% block main %}{% endblock %}
             </main>
-        
-            <footer class="text-center align-items-end">
-                <p>Copyright © <span id="year"></span>. All rights reserved.</p>
-            </footer>
         </div>
+        <footer class="text-center mt-auto">
+            <p>Copyright © <span id="year"></span>. All rights reserved.</p>
+        </footer>
     </body>
 
     <script>

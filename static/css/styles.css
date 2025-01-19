@@ -5,7 +5,6 @@ body{
     font-optical-sizing: auto;
     font-weight: 500;
     font-style: normal;
-    height: 100%;
     letter-spacing: 2px;
     margin: 0;
 }
@@ -15,8 +14,6 @@ main{
 }
 
 footer {
-    position: absolute;
-    bottom: 0;
     width: 100%;
     background-color: #0F5E49;
     color: white;
@@ -144,7 +141,6 @@ input:focus {
 .pet_card {
     padding: 1rem;
     background-color: #F6EACB;
-    border-radius: 8px;
 }
 .pet-photo{
     height: auto;
@@ -154,4 +150,13 @@ input:focus {
 
 .card_name{
     display: inline-block;
+}
+
+/* New Pet Form */
+#image-preview {
+    max-width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    padding: 5px;
 }
