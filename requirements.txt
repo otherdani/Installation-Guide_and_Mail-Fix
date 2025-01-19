@@ -10,3 +10,4 @@ Flask-Mail
 flask-wtf
 wtforms
 email-validator
+Pillow
