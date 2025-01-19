@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, DateField, BooleanField, FileField, SelectField, PasswordField
 from wtforms.validators import DataRequired, Optional, Email, EqualTo
 from flask_wtf.file import FileAllowed
+from models import Species, Breed
 
 class RegisterForm(FlaskForm):
     """Register a new user"""
@@ -21,7 +22,7 @@ class PetForm(FlaskForm):
     name = StringField('Pet Name', validators=[DataRequired()])
     birth_date = DateField('Birth Date', format='%Y-%m-%d', validators=[Optional()])
     adoption_date = DateField('Adoption Date', format='%Y-%m-%d', validators=[Optional()])
-    sex = SelectField('Sex', choices=[('M', 'Male'), ('F', 'Female')], validators=[DataRequired()])
+    sex = SelectField('Sex', choices=[('', 'Select Sex'), ('M', 'Male'), ('F', 'Female')], validators=[DataRequired()])
     species = SelectField('Species', coerce=int, validators=[DataRequired()])
     breed = SelectField('Breed', coerce=int, validators=[DataRequired()])
     sterilized = BooleanField('Sterilized')

@@ -28,7 +28,7 @@ UPLOAD_FOLDER = 'static/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024  # Max size: 2 MB
+app.config['MAX_CONTENT_LENGTH'] = 6 * 1024 * 1024  # Max size: 6MB
 
 # Set up the database URI (SQLite in this case)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///petpal.db"
@@ -91,7 +91,7 @@ def login():
         user = User.query.filter_by(email=email).first()
 
         # Ensure username exists and password is correct
-        if not user or not check_password_hash(user.pw_hash, request.form.get("password")):
+        if not user or not check_password_hash(user.pw_hash, password):
             return error_message("Invalid email &/or password", 403)
       
         # Remember which user has logged in
@@ -214,17 +214,17 @@ def new_pet():
     """Add new pet to database"""
     form = PetForm()
 
-    # Populate species list for the dropdown
-    species = Species.query.all()
-    form.species.choices = [(specie.id, specie.name) for specie in species]
-
+    # Populate species choices dynamically
+    form.species.choices = [(species.id, species.name) for species in Species.query.all()]
+    
+    # Populate breed choices dynamically based on selected species
+    if form.species.data:
+        form.breed.choices = [(breed.id, breed.name) for breed in Breed.query.filter_by(species_id=form.species.data).all()]
+    
     # User reached route via POST
     if request.method == 'POST':
-        # Check if species is selected and populate breed choices accordingly
-        if form.species.data:
-            form.breed.choices = [(breed.id, breed.name) for breed in Breed.query.filter_by(species_id=form.species.data).all()]
-
         if form.validate_on_submit():
+            # Extract form data
             pet_name = form.name.data
             birth_date = form.birth_date.data
             adoption_date = form.adoption_date.data
@@ -235,8 +235,9 @@ def new_pet():
             microchip_number = form.microchip_number.data
             insurance_company = form.insurance_company.data
             insurance_number = form.insurance_number.data
-            
-            # Handling image upload
+            print("Data extracted")
+
+            # Handling the uploaded pet profile photo
             if form.pet_profile_photo.data:
                 photo = form.pet_profile_photo.data
                 filename = secure_filename(photo.filename)
@@ -245,28 +246,31 @@ def new_pet():
             else:
                 pet_profile_photo = None
 
-            # Save pet data in database
-            new_pet = Pet(user_id=session["user_id"],
-                        pet_profile_photo=pet_profile_photo,
-                        name=pet_name,
-                        birth_date=birth_date,
-                        adoption_date=adoption_date,
-                        sex=sex,
-                        species_id=species_id,
-                        breed_id=breed_id,
-                        sterilized=sterilized,
-                        microchip_number=microchip_number,
-                        insurance_company=insurance_company,
-                        insurance_number=insurance_number)
+            # Save pet data to the database
+            print("Trying to save in database")
+            new_pet = Pet(
+                user_id=session["user_id"],
+                pet_profile_photo=pet_profile_photo,
+                name=pet_name,
+                birth_date=birth_date,
+                adoption_date=adoption_date,
+                sex=sex,
+                species_id=species_id,
+                breed_id=breed_id,
+                sterilized=sterilized,
+                microchip_number=microchip_number,
+                insurance_company=insurance_company,
+                insurance_number=insurance_number
+            )
             db.session.add(new_pet)
             db.session.commit()
 
             flash('Pet registered successfully!', 'success')
             return redirect("/")
-        
+
         else:
             return error_message("An error occurred. Please try again.", form.errors)
-    
+        
     # User reached route via GET
     return render_template('new_pet.html', form=form)
 

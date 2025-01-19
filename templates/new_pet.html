@@ -13,29 +13,46 @@
         <div id="step1" class="step">
             <!-- Renderize using Flask-WTF -->
             <h2>Basic Information</h2>
-            <label class="vertical_padding" for="photo">Photo:</label>
-            {{ form.pet_profile_photo() }}
-            <br><br>
+            <br>
+            <div class="form-group">
+                <label class="form-label" for="photo">Photo:</label>
+                {{ form.pet_profile_photo(id="new_pet_photo", accept="image/*") }}
+                <br>
+                <small class="form-text text-muted">Upload a photo of your pet. The image will be cropped automatically to a circle.</small>
+            </div>
+            <div id="preview-container" class="mt-3" style="display: none;">
+                <p>Preview:</p>
+                <img id="image-preview" src="" alt="Preview of the uploaded image" class="img-fluid shadow pet_pfp">
+            </div>
+            <br>
+
             <label  for="name">Name:</label>
-            {{ form.name() }}  
+            {{ form.name(autocomplete="off", required=True) }}
             <br><br>
+
             <label for="birth_date">Birth date:</label>
             {{ form.birth_date() }}  
             <br><br>
+
             <label for="adoption_date">Adoption date:</label>
             {{ form.adoption_date() }}  
             <br><br>
+
             <label for="sex">Sex:</label>
-            {{ form.sex() }}  
+            {{ form.sex() }}
             <br><br>
-            <label for="species">Specie:</label>
+
+            <label for="species">Species:</label>
             {{ form.species() }}
             <br><br>
+
             <div id="breed-container">
                 <label for="breed">Breed:</label>
-                {{ form.breed() }}
-            </div>            
+                {{ form.breed() }}<br>
+                <small class="form-text text-muted">Select 'Mixed' if you can't find your breed.</small>
+            </div>
             <br><br>
+    
             <button type="button" id="nextButton" class="continue-btn dark_btn btn">Continue</button>
         </div>
 
@@ -93,6 +110,41 @@
                 $('#step2').show();
             });
         });
+
+        // Crop pet profile picture
+        document.addEventListener('DOMContentLoaded', function () {
+            const inputPhoto = document.getElementById('new_pet_photo');
+            const previewContainer = document.getElementById('preview-container');
+            const imagePreview = document.getElementById('image-preview');
+            const croppedImageData = document.getElementById('cropped-image-data');
+            const MAX_FILE_SIZE_MB = 5; // Max size 5MB
+
+            inputPhoto.addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+                    alert("The file is too large. Maximum size is " + MAX_FILE_SIZE_MB + " MB.");
+                    inputPhoto.value = "";
+                    return;
+                }
+
+                if (!file.type.startsWith('image/')) {
+                    alert("Please upload a valid image file.");
+                    inputPhoto.value = "";
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                    previewContainer.style.display = 'block';
+                };
+                
+                reader.readAsDataURL(file);
+                }
+            });
+        });
+
     </script>
 
 

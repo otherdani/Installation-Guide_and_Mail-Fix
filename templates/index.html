@@ -11,15 +11,15 @@
             <!-- Pet card -->
             <div class="col-md-6 mb-4">
                 <!-- Card container -->
-                <div class="pet_card card h-100 shadow-sm p-3">
+                <div class="pet_card card h-100 shadow p-3">
                     <div class="row align-items-center mb-3">
                         <!-- Photo -->
-                        <div class="pet_photo col-4 text-center">
-                            <img src="{{ pet.pet_profile_photo }}" alt="{{ pet.name }}" class="img-fluid rounded-circle">
+                        <div class="pet_photo col-6 text-center">
+                            <img src="{{ pet.pet_profile_photo }}" alt="{{ pet.name }}" class="img-fluid pet_pfp shadow">
                         </div>
                         <!-- Name -->
-                        <div class="col-8 text-start">
-                            <h4 class="mb-0 card_name">{{ pet.name }}</h4>
+                        <div class="col-6 text-start">
+                            <h2 class="mb-0 card_name">{{ pet.name }}</h2>
                         </div>
                     </div>
                     <!-- Breed and Specie -->
@@ -33,12 +33,22 @@
                     </div>
                     <!-- Age and Birthday -->
                     <div class="row mb-2 text-start">
-                        <div class="col">
-                            <p class="mb-0"><strong>Age:</strong> {{ pet.age() }} years</p>
-                        </div>
-                        <div class="col">
-                            <p class="mb-0"><strong>Birthday in:</strong> {{ pet.days_to_birthday(pet.birth_date) }} days</p>
-                        </div>
+                        {% if pet.birth_date is not none %}
+                            <div class="col">
+                                <p class="mb-0"><strong>Age:</strong> {{ pet.age() }} years</p>
+                            </div>
+                            <div class="col">
+                                <p class="mb-0"><strong>Birthday in:</strong> {{ pet.days_to_birthday(pet.birth_date) }} days</p>
+                            </div>
+                        {% else %}
+                            <div class="col">
+                                <p class="mb-0"><strong>Age:</strong> Unknown</p>
+                            </div>
+                            <div class="col">
+                                <p class="mb-0"><strong>Birthday in:</strong> ? days</p>
+                            </div>
+                        {% endif %}
+
                     </div>
                     <!-- Sex and Sterilized -->
                     <div class="row text-start">
