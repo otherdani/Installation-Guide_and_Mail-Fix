@@ -97,9 +97,17 @@
             {% endfor %}
         </div>
     </div>
+
+    {% if pets | length == 0%}
+        <div class="d-flex flex-column justify-content-center">
+            <h2 class="vertical_padding">It looks like you haven't added any pets yet.</h2>
+            <br>
+            <h2>Click the + button to add your first one!</h2>
+        </div>
+    {% endif %}
     
     <!-- Add new pet button -->
-    <a href="/new_pet" class="text-center mt-4 fixed-bottom fixed-end mb-3 dark_btn btn_plus"><i class="fas fa-plus"></i></a>
+    <a href="/new_pet" id="addPetBtn" class="dark_btn btn_plus d-flex align-items-center justify-content-center"><i class="fas fa-plus fa-2x"></i></a>
 
     <script>
         function confirmDelete(event, url) {
