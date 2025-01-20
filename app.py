@@ -219,10 +219,8 @@ def new_pet():
     """Add new pet to database"""
     form = PetForm()
 
-    # Populate species choices dynamically
+    # Populate species and breed choices dynamically
     form.species.choices = [(species.id, species.name) for species in Species.query.all()]
-    
-    # Populate breed choices dynamically based on selected species
     if form.species.data:
         form.breed.choices = [(breed.id, breed.name) for breed in Breed.query.filter_by(species_id=form.species.data).all()]
     
@@ -308,9 +306,12 @@ def edit_pet(pet_id):
     """Edit pet info"""
     pet = Pet.query.get_or_404(pet_id)
     form = PetForm(obj=pet)
-    # Populate species choices dynamically
-    form.species.choices = [(species.id, species.name) for species in Species.query.all()]
 
+    # Populate species and breed choices dynamically
+    form.species.choices = [(species.id, species.name) for species in Species.query.all()]
+    if form.species.data:
+        form.breed.choices = [(breed.id, breed.name) for breed in Breed.query.filter_by(species_id=form.species.data).all()]
+    
     if form.validate_on_submit():
         try:
             pet.name = form.name.data
@@ -326,7 +327,7 @@ def edit_pet(pet_id):
             if form.pet_profile_photo.data:
                 # Delete old photo if it exists
                 if pet.pet_profile_photo:
-                    old_photo_path = os.path.join(app.config['UPLOAD_FOLDER'], pet.profile_photo)
+                    old_photo_path = os.path.join(app.config['UPLOAD_FOLDER'], pet.pet_profile_photo)
                     if os.path.exists(old_photo_path):
                         os.remove(old_photo_path)
                 
