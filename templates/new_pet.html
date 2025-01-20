@@ -16,7 +16,7 @@
             <br>
             <div class="form-group">
                 <label class="form-label" for="photo">Photo:</label>
-                {{ form.pet_profile_photo(id="new_pet_photo", accept="image/*") }}
+                {{ form.pet_profile_photo(id="new_pet_photo", accept="image/*", class="form-control mx-auto w-auto d-inline-block") }}
                 <br>
                 <small class="form-text text-muted">Upload a photo of your pet. The image will be cropped automatically to a circle.</small>
             </div>
@@ -27,15 +27,15 @@
             <br>
 
             <label  for="name">Name:</label>
-            {{ form.name(autocomplete="off", required=True) }}
+            {{ form.name(autocomplete="off", required=True, class="form-control mx-auto w-auto d-inline-block", autofocus=True) }}
             <br><br>
 
             <label for="birth_date">Birth date:</label>
-            {{ form.birth_date() }}  
+            {{ form.birth_date(class="form-control mx-auto w-auto d-inline-block") }}  
             <br><br>
 
             <label for="adoption_date">Adoption date:</label>
-            {{ form.adoption_date() }}  
+            {{ form.adoption_date(class="form-control mx-auto w-auto d-inline-block") }}  
             <br><br>
 
             <label for="sex">Sex:</label>
@@ -44,7 +44,7 @@
 
             <label for="sex">Specie:</label>
             <select id="species" name="species" required>
-                <option value="" disabled selected>Select specie</option>
+                <option value="" disabled selected >Select specie</option>
                 {% for value, label in form.species.choices %}
                     <option value="{{ value }}">{{ label }}</option>
                 {% endfor %}
@@ -57,7 +57,7 @@
                     {% if form.breed.choices %}
                         <option value="" disabled selected>Select a breed</option>
                         {% for breed in form.breed.choices %}
-                            <option>{{ breed }}</option>
+                            <option class="mx-auto w-auto">{{ breed }}</option>
                         {% endfor %}
                     {% else %}
                         <option value="" disabled selected>Select a specie first</option>
@@ -66,7 +66,8 @@
                 <small class="form-text text-muted">Select 'Mixed' if you can't find your breed.</small>
             </div>
             <br><br>
-    
+
+            <button onclick="window.history.back()" class="btn btn-secondary">Cancel</button>
             <button type="button" id="nextButton" class="continue-btn dark_btn btn">Continue</button>
         </div>
 
@@ -77,14 +78,16 @@
             {{ form.sterilized() }}
             <br><br>
             <label for="microchip_number">Microchip (optional):</label>
-            {{ form.microchip_number() }}
+            {{ form.microchip_number(class="form-control mx-auto w-auto d-inline-block", autocomplete=False) }}
             <br><br>
             <label for="insurance_company">Insurance Company (optional):</label>
-            {{ form.insurance_company() }}
+            {{ form.insurance_company(class="form-control mx-auto w-auto d-inline-block") }}
             <br><br>
             <label for="insurance_number">Insurance No. (optional):</label>
-            {{ form.insurance_number() }}
+            {{ form.insurance_number(class="form-control mx-auto w-auto d-inline-block") }}
             <br><br>
+
+            <button onclick="window.location.href='/'" class="btn btn-secondary">Cancel</button>
             <button type="submit" class="submit-btn dark_btn btn">Register Pet</button>
         </div>
     </form>

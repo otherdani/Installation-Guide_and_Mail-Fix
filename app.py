@@ -94,7 +94,7 @@ def login():
         # Ensure username exists and password is correct
         if not user or not check_password_hash(user.pw_hash, password):
             return error_message("Invalid email &/or password", 403)
-      
+
         # Remember which user has logged in
         session["user_id"] = user.id
 
@@ -297,6 +297,7 @@ def delete_pet(pet_id):
         flash('Pet deleted successfully!', 'success')
     except Exception as e:
         db.session.rollback()
+        app.logger.error(f"Error deleting pet: {str(e)}")
         flash(f'Error deleting pet: {str(e)}', 'danger')
     return redirect('/')
 
