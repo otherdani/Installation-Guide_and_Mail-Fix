@@ -42,13 +42,27 @@
             {{ form.sex() }}
             <br><br>
 
-            <label for="species">Species:</label>
-            {{ form.species() }}
+            <label for="sex">Specie:</label>
+            <select id="species" name="species" required>
+                <option value="" disabled selected>Select specie</option>
+                {% for value, label in form.species.choices %}
+                    <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </select>
             <br><br>
 
             <div id="breed-container">
                 <label for="breed">Breed:</label>
-                {{ form.breed() }}<br>
+                <select id="breed" name="breed">
+                    {% if form.breed.choices %}
+                        <option value="" disabled selected>Select a breed</option>
+                        {% for breed in form.breed.choices %}
+                            <option>{{ breed }}</option>
+                        {% endfor %}
+                    {% else %}
+                        <option value="" disabled selected>Select a specie first</option>
+                    {% endif %}
+                </select><br>
                 <small class="form-text text-muted">Select 'Mixed' if you can't find your breed.</small>
             </div>
             <br><br>
