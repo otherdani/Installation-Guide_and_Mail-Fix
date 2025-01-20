@@ -45,10 +45,18 @@ input:focus {
     padding: 0% 9%;
 }
 
-.box_shadow{
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.dropdown-menu{
+    background-color: #22BF8A;
 }
 
+.animate-dropdown {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 /* Custom buttons */
 .btn_plus {
     width: 70px;
@@ -70,30 +78,6 @@ input:focus {
 .dark_btn a{
     color: white;
     text-decoration: none;
-}
-
-/* Sidebar */
-#sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 250px;
-    background-color: #22BF8A;
-    transition: transform 0.3s ease-in-out;
-    z-index: 1040;
-}
-
-#sidebar.collapsed {
-    transform: translateX(-250px);
-}
-
-#content {
-    transition: margin-left 0.3s ease-in-out;
-}
-
-#content.sidebar-expanded {
-    margin-left: 250px;
 }
 
 /* Top Navbar  */
@@ -118,11 +102,6 @@ input:focus {
 }
 .navbar_name{
     margin: 0;
-}
-.nav, li a{
-    --bs-nav-link-color: white;
-    --bs-nav-link-hover-color: black;
-    order: -1;
 }
 
 /* Welcome Page  */
@@ -152,6 +131,9 @@ input:focus {
     display: inline-block;
 }
 
+.card_menu{
+    background-color: #F6EACB;
+}
 #addPetBtn{
     position: fixed;
     right: 9%;

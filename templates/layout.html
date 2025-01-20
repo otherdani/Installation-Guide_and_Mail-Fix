@@ -28,29 +28,10 @@
     </head>
     <body class="d-flex flex-column min-vh-100">
         {% if session["user_id"] %}
-        <!-- Sidebar -->
-        <div id="sidebar" class="collapsed box_shadow">
-            <div class="p-3">
-                <h5></h5>
-                <ul class="nav flex-column">
-                    <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-bone"></i> General Data</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-chart-line"></i> Trackers</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-images"></i> Gallery</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-file-medical-alt"></i> Documents</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-book"></i> Log Records</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-calendar-alt"></i> Calendar</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-newspaper"></i> Articles</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div id="content" class="sidebar-collapsed">
             <!-- Top Navbar -->
-            <nav id="top_navbar" class="navbar navbar-expand-md navbar-light sticky-top box_shadow">
+            <nav id="top_navbar" class="navbar navbar-expand-md sticky-top shadow" data-bs-theme="dark">
                 <div class="container-fluid">
-                    <button class="toggle_sidebar" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-expanded="false" aria-controls="sidebar">
-                        <img src="/static/images/favicon.png" alt="Logo" width="60" height="auto" class="d-inline-block">
-                    </button>
+                    <img src="/static/images/favicon.png" alt="Logo" width="60" height="auto" class="d-inline-block">
                     <h1 class="navbar_name">PetPal</h1>
 
                     <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
@@ -62,7 +43,7 @@
                                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="fas fa-paw fa-2x"></i>
                                     </a>
-                                    <ul class="dropdown-menu">
+                                    <ul class="dropdown-menu animate-dropdown">
                                         <li><a class="dropdown-item" href="#">All Pets</a></li>
                                         {% for pet in pets %}
                                             <li><hr class="dropdown-divider"></li>
@@ -103,18 +84,6 @@
         const yearSpan = document.getElementById("year");
         const currentYear = new Date().getFullYear();
         yearSpan.textContent = currentYear;
-    
-        // Toggle sidebar
-        const sidebar = document.getElementById('sidebar');
-        const content = document.getElementById('content');
-        const navbar = document.querySelector('.navbar');
-        const toggleButton = document.querySelector('[data-bs-toggle="collapse"]');
-    
-        toggleButton.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-            content.classList.toggle('sidebar-expanded');
-            navbar.classList.toggle('sidebar-expanded');
-        });
     </script>
     
     
