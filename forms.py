@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, DateField, BooleanField, FileField, SelectField, PasswordField
-from wtforms.validators import DataRequired, Optional, Email, EqualTo
+from wtforms import StringField, DateField, BooleanField, FileField, SelectField, PasswordField, SubmitField
+from wtforms.validators import DataRequired, Optional, Email, EqualTo, Length
 from flask_wtf.file import FileAllowed
 
 class RegisterForm(FlaskForm):
@@ -14,6 +14,16 @@ class LoginForm(FlaskForm):
     """Login an existing user"""
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
+
+class RestorePasswordForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Send Reset Link')
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('New Password', validators=[DataRequired(), Length(min=8)])
+    confirm_password = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Reset Password')
+
 
 class PetForm(FlaskForm):
     """Add a new pet"""

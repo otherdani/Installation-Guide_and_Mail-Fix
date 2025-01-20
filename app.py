@@ -11,7 +11,7 @@ from itsdangerous import URLSafeTimedSerializer as Serializer, BadSignature, Sig
 
 from extensions import db, migrate, session as session_ext, csrf
 from helpers import error_message, login_required
-from forms import RegisterForm, LoginForm, PetForm
+from forms import RegisterForm, LoginForm, ResetPasswordForm, RestorePasswordForm, PetForm
 from models import User, Breed, Species, Pet
 
 # Configure application
@@ -207,6 +207,73 @@ def confirm_email(token):
     flash("Registration successful!", "success")
     return redirect("/")
 
+@app.route("/restore_password", methods=["GET", "POST"])
+def restore_password():
+    """Request password reset"""
+    form = RestorePasswordForm()
+
+    if request.method == "POST" and form.validate_on_submit():
+        email = form.email.data
+        user = User.query.filter_by(email=email).first()
+
+        if not user:
+            return error_message("This email is not registered.", 404)
+
+        # Generate reset token
+        s = Serializer(app.secret_key)
+        token = s.dumps(email, salt='password-reset')
+
+        # Create the reset URL
+        reset_url = url_for('reset_password', token=token, _external=True)
+        html = render_template('password_reset_email.html', reset_url=reset_url)
+        subject = "Password Reset Request"
+
+        try:
+            # Send the password reset email
+            msg = Message(subject, sender=os.getenv("PETPAL_EMAIL"), recipients=[email])
+            msg.html = html
+            mail.send(msg)
+
+            flash("A password reset link has been sent to your email address. Please check your inbox.", "info")
+            return redirect("/")
+
+        except Exception as e:
+            app.logger.error("Error sending password reset email: %s", e)
+            return error_message("An error occurred while sending the email. Please try again.", 500)
+
+    return render_template("restore_password.html", form=form)
+
+@app.route("/reset_password/<token>", methods=["GET", "POST"])
+def reset_password(token):
+    """Reset password using token"""
+    try:
+        # Deserialize token
+        s = Serializer(app.secret_key)
+        email = s.loads(token, salt='password-reset', max_age=3600)
+    except (BadSignature, SignatureExpired) as e:
+        app.logger.error("Token error: %s", e)
+        flash("The reset link is invalid or has expired. Please request a new link.", "danger")
+        return redirect("/restore_password")
+
+    # Handle password reset
+    form = ResetPasswordForm()
+
+    if request.method == "POST" and form.validate_on_submit():
+        new_password = form.password.data
+        user = User.query.filter_by(email=email).first()
+
+        if not user:
+            flash("No user found with this email.", "danger")
+            return redirect("/restore_password")
+
+        # Update password hash
+        user.pw_hash = generate_password_hash(new_password)
+        db.session.commit()
+
+        flash("Your password has been reset successfully!", "success")
+        return redirect("/login")
+
+    return render_template("reset_password.html", form=form)
 
 @app.route("/welcome")
 def welcome():
@@ -291,6 +358,13 @@ def get_breeds(species_id):
 def delete_pet(pet_id):
     """Delete a pet from db"""
     pet = Pet.query.get_or_404(pet_id)
+    print(pet)
+    app.logger.info(pet)
+    # Delete pet photo
+    if pet.pet_profile_photo:
+                    old_photo_path = os.path.join(app.config['UPLOAD_FOLDER'], pet.pet_profile_photo)
+                    if os.path.exists(old_photo_path):
+                        os.remove(old_photo_path)
     try:
         db.session.delete(pet)
         db.session.commit()
@@ -333,9 +407,11 @@ def edit_pet(pet_id):
                         os.remove(old_photo_path)
                 
                 # Save new photo
-                filename = secure_filename(form.pet_profile_photo.data.filename)
-                form.pet_profile_photo.data.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                photo = form.pet_profile_photo.data
+                filename = secure_filename(photo.filename)
                 pet.pet_profile_photo = filename
+                photo_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                photo.save(photo_path)
 
             db.session.commit()
             flash('Pet information updated successfully!', 'success')
