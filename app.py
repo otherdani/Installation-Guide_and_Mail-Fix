@@ -307,6 +307,8 @@ def edit_pet(pet_id):
     """Edit pet info"""
     pet = Pet.query.get_or_404(pet_id)
     form = PetForm(obj=pet)
+    # Populate species choices dynamically
+    form.species.choices = [(species.id, species.name) for species in Species.query.all()]
 
     if form.validate_on_submit():
         try:

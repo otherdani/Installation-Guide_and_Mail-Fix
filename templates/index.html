@@ -74,7 +74,7 @@
                         </div>
                     </div>
                     <a href="{{ url_for('edit_pet', pet_id=pet.id) }}" class="btn btn-success">✏️</a>
-                    <a class="btn btn-danger" onclick="confirmDelete(event, '{{ url_for('delete_pet', pet_id=pet.id)}}')">🗑️</a>
+                    <a href="#" class="btn btn-danger" onclick="confirmDelete(event, '{{ url_for('delete_pet', pet_id=pet.id)}}')">🗑️</a>
                     <div class="modal" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
