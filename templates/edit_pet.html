@@ -6,7 +6,7 @@
   <form method="POST" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     <div class="form-group">
-        <label for="pet_profile_photo">Profile Photo</label>
+        <label for="pet_profile_photo">Choose a new photo</label>
         {{ form.pet_profile_photo() }} 
         {% if pet.pet_profile_photo %}
           <img src="{{ pet.pet_profile_photo }} alt="Current profile photo" class="img-fluid shadow pet_pfp">
