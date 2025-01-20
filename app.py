@@ -240,19 +240,19 @@ def new_pet():
             microchip_number = form.microchip_number.data
             insurance_company = form.insurance_company.data
             insurance_number = form.insurance_number.data
-            print("Data extracted")
 
             # Handling the uploaded pet profile photo
             if form.pet_profile_photo.data:
                 photo = form.pet_profile_photo.data
                 filename = secure_filename(photo.filename)
-                pet_profile_photo = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                photo.save(pet_profile_photo)
+                pet_profile_photo = filename
+                photo_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                photo.save(photo_path)
+                
             else:
                 pet_profile_photo = None
 
             # Save pet data to the database
-            print("Trying to save in database")
             new_pet = Pet(
                 user_id=session["user_id"],
                 pet_profile_photo=pet_profile_photo,

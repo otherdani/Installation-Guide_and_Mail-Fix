@@ -1,5 +1,10 @@
 {% extends "layout.html" %}
 
+{% block title %}
+    Edit Pet
+{% endblock %}
+
+
 {% block main %}
   <h1>Edit Pet Information</h1>
 
@@ -9,7 +14,10 @@
         <label for="pet_profile_photo">Choose a new photo</label>
         {{ form.pet_profile_photo() }} 
         {% if pet.pet_profile_photo %}
-          <img src="{{ pet.pet_profile_photo }} alt="Current profile photo" class="img-fluid shadow pet_pfp">
+        <img src="{{ url_for('static', filename='uploads/' + pet.pet_profile_photo.replace('\\', '/')) }}" 
+        alt="Current profile photo" class="img-fluid shadow pet_pfp">
+        {% else %}
+            <p>No profile photo available.</p>
         {% endif %}
     
     </div>

@@ -15,7 +15,7 @@
                     <div class="row align-items-center mb-3">
                         <!-- Photo -->
                         <div class="pet_photo col-6 text-center">
-                            <img src="{{ pet.pet_profile_photo }}" alt="{{ pet.name }}" class="img-fluid pet_pfp shadow">
+                            <img src="{{ url_for('static', filename='uploads/' + pet.pet_profile_photo.replace('\\', '/')) }}" alt="{{ pet.name }}" class="img-fluid pet_pfp shadow">
                         </div>
                         <!-- Name -->
                         <div class="col-6 text-start">
