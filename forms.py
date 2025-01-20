@@ -2,7 +2,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, DateField, BooleanField, FileField, SelectField, PasswordField
 from wtforms.validators import DataRequired, Optional, Email, EqualTo
 from flask_wtf.file import FileAllowed
-from models import Species, Breed
 
 class RegisterForm(FlaskForm):
     """Register a new user"""

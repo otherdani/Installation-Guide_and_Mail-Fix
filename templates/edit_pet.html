@@ -7,9 +7,13 @@
     {{ form.hidden_tag() }}
     <div class="form-group">
         <label for="pet_profile_photo">Profile Photo</label>
-        {{ form.pet_profile_photo() }}
-      </div>
-      <br><br>
+        {{ form.pet_profile_photo() }} 
+        {% if pet.pet_profile_photo %}
+          <img src="{{ pet.pet_profile_photo }} alt="Current profile photo" class="img-fluid shadow pet_pfp">
+        {% endif %}
+    
+    </div>
+    <br>
     <div class="form-group">
       <label for="name">Pet Name</label>
       {{ form.name() }}
@@ -66,30 +70,39 @@
 
   <script>
     $(document).ready(function() {
-            // Show breeds depending on selected specie
-            $('#species').change(function() {
-                var species_id = $(this).val();
+    function loadBreeds(species_id, callback) {
+        $.ajax({
+            url: '/get_breeds/' + species_id,
+            method: 'GET',
+            success: function(data) {
                 var breedSelect = $('#breed');
                 breedSelect.empty();
-                breedSelect.append('<option value="" disabled selected>Loading breeds...</option>');
-
-                $.ajax({
-                    url: '/get_breeds/' + species_id,
-                    method: 'GET',
-                    success: function(data) {
-                        console.log(data); // Log data for debugging
-                        breedSelect.empty();
-                        breedSelect.append('<option value="" disabled selected>Select a breed</option>');
-                        $.each(data, function(index, breed) {
-                            breedSelect.append('<option value="' + breed.id + '">' + breed.name + '</option>');
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Error fetching breeds:", error);
-                        alert("Failed to load breeds. Please try again.");
-                    }
+                breedSelect.append('<option value="" disabled selected>Select a breed</option>');
+                $.each(data, function(index, breed) {
+                    breedSelect.append('<option value="' + breed.id + '">' + breed.name + '</option>');
                 });
-            });
+                if (callback) callback();
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching breeds:", error);
+                alert("Failed to load breeds. Please try again.");
+            }
+        });
+    }
+
+    // Load breeds for the current species and select the current breed
+    var currentSpeciesId = $('#species').val();
+    var currentBreedId = '{{ pet.breed_id }}';
+    loadBreeds(currentSpeciesId, function() {
+        $('#breed').val(currentBreedId);
     });
+
+    // Handle species change
+    $('#species').change(function() {
+        var species_id = $(this).val();
+        loadBreeds(species_id);
+    });
+});
+
   </script>
 {% endblock %}

@@ -1,7 +1,6 @@
 import os
 import logging
 from flask import Flask, flash, redirect, render_template, request, session, url_for, jsonify
-from flask_mail import Mail, Message
 from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -28,6 +27,7 @@ UPLOAD_FOLDER = 'static/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOADED_PHOTOS_DEST'] = app.config['UPLOAD_FOLDER']
 app.config['MAX_CONTENT_LENGTH'] = 6 * 1024 * 1024  # Max size: 6MB
 
 # Set up the database URI (SQLite in this case)
@@ -323,17 +323,38 @@ def edit_pet(pet_id):
             pet.insurance_company = form.insurance_company.data
             pet.insurance_number = form.insurance_number.data
             if form.pet_profile_photo.data:
-                pet.profile_photo = form.pet_profile_photo.data
+                # Delete old photo if it exists
+                if pet.pet_profile_photo:
+                    old_photo_path = os.path.join(app.config['UPLOAD_FOLDER'], pet.profile_photo)
+                    if os.path.exists(old_photo_path):
+                        os.remove(old_photo_path)
+                
+                # Save new photo
+                filename = secure_filename(form.pet_profile_photo.data.filename)
+                form.pet_profile_photo.data.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                pet.pet_profile_photo = filename
 
             db.session.commit()
             flash('Pet information updated successfully!', 'success')
             return redirect('/')
         except Exception as e:
             db.session.rollback()
+            app.logger.error(f"Error updating pet: {str(e)}")
             flash(f'Error updating pet: {str(e)}', 'danger')
 
+    # User reached route via GET
+    if request.method == 'GET':
+        form.name.data = pet.name
+        form.birth_date.data = pet.birth_date
+        form.adoption_date.data = pet.adoption_date
+        form.sex.data = pet.sex
+        form.species.data = pet.species_id
+        form.breed.data = pet.breed_id
+        form.sterilized.data = pet.sterilized
+        form.microchip_number.data = pet.microchip_number
+        form.insurance_company.data = pet.insurance_company
+        form.insurance_number.data = pet.insurance_number
     return render_template('edit_pet.html', form=form, pet=pet)
-
 
 if __name__ == "__main__":
     app.run(debug=True)
