@@ -131,7 +131,11 @@ def register():
         # Check if email already exists
         existing_user = User.query.filter_by(email=email).first()
         if existing_user:
-            return error_message("This email is already registered.", 400)
+            return error_message("This email is already registered. Try to login", 400)
+        
+        # Check password = confirmation
+        if password != confirmation:
+            return error_message("Passwords must match.", 400)
 
         # Hash the user's password
         pw_hash = generate_password_hash(password)
@@ -282,6 +286,51 @@ def get_breeds(species_id):
     breeds = Breed.query.filter_by(species_id=species_id).all()
     breed_data = [{"id": breed.id, "name": breed.name} for breed in breeds]
     return jsonify(breed_data)
+
+@app.route('/delete_pet/<int:pet_id>', methods=['GET'])
+@login_required
+def delete_pet(pet_id):
+    """Delete a pet from db"""
+    pet = Pet.query.get_or_404(pet_id)
+    try:
+        db.session.delete(pet)
+        db.session.commit()
+        flash('Pet deleted successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error deleting pet: {str(e)}', 'danger')
+    return redirect('/')
+
+@app.route('/edit_pet/<int:pet_id>', methods=['GET', 'POST'])
+@login_required
+def edit_pet(pet_id):
+    """Edit pet info"""
+    pet = Pet.query.get_or_404(pet_id)
+    form = PetForm(obj=pet)
+
+    if form.validate_on_submit():
+        try:
+            pet.name = form.name.data
+            pet.birth_date = form.birth_date.data
+            pet.adoption_date = form.adoption_date.data
+            pet.sex = form.sex.data
+            pet.species_id = form.species.data
+            pet.breed_id = form.breed.data
+            pet.sterilized = form.sterilized.data
+            pet.microchip_number = form.microchip_number.data
+            pet.insurance_company = form.insurance_company.data
+            pet.insurance_number = form.insurance_number.data
+            if form.pet_profile_photo.data:
+                pet.profile_photo = form.pet_profile_photo.data
+
+            db.session.commit()
+            flash('Pet information updated successfully!', 'success')
+            return redirect('/')
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error updating pet: {str(e)}', 'danger')
+
+    return render_template('edit_pet.html', form=form, pet=pet)
 
 
 if __name__ == "__main__":

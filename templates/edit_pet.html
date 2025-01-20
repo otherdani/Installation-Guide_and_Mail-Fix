@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% block main %}
+  <h1>Edit Pet Information</h1>
+
+  <form method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        <label for="pet_profile_photo">Profile Photo</label>
+        {{ form.pet_profile_photo() }}
+      </div>
+      <br><br>
+    <div class="form-group">
+      <label for="name">Pet Name</label>
+      {{ form.name() }}
+    </div>
+    <br><
+    <div class="form-group">
+      <label for="birth_date">Birth Date</label>
+      {{ form.birth_date() }}
+    </div>
+    <br><
+    <div class="form-group">
+      <label for="adoption_date">Adoption Date</label>
+      {{ form.adoption_date() }}
+    </div>
+    <br><
+    <div class="form-group">
+      <label for="sex">Sex</label>
+      {{ form.sex() }}
+    </div>
+    <br>
+    <div class="form-group">
+      <label for="species">Species</label>
+      {{ form.species() }}
+    </div>
+    <br>
+    <div class="form-group">
+      <label for="breed">Breed</label>
+      {{ form.breed() }}
+    </div>
+    <br>
+    <div class="form-group">
+      <label for="sterilized">Sterilized</label>
+      {{ form.sterilized() }}
+    </div>
+    <br>
+    <div class="form-group">
+      <label for="microchip_number">Microchip Number</label>
+      {{ form.microchip_number() }}
+    </div>
+    <br>
+    <div class="form-group">
+      <label for="insurance_company">Insurance Company</label>
+      {{ form.insurance_company() }}
+    </div>
+    <br>
+    <div class="form-group">
+      <label for="insurance_number">Insurance Number</label>
+      {{ form.insurance_number() }}
+    </div>
+    <br><br>
+    <button type="submit" class="btn dark_btn">Update Pet</button>
+  </form>
+{% endblock %}
