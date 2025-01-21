@@ -28,7 +28,7 @@ class ResetPasswordForm(FlaskForm):
 
 
 class PetForm(FlaskForm):
-    """Add a new pet"""
+    """Add new pet"""
     pet_profile_photo = FileField('Upload Photo', validators=[FileAllowed(['jpg', 'jpeg', 'png'], 'Images only!'), Optional()])
     name = StringField('Pet Name', validators=[DataRequired()])
     birth_date = DateField('Birth Date', format='%Y-%m-%d', validators=[Optional()])
@@ -40,3 +40,9 @@ class PetForm(FlaskForm):
     microchip_number = StringField('Microchip Number', validators=[Optional()])
     insurance_company = StringField('Insurance Company', validators=[Optional()])
     insurance_number = StringField('Insurance Number', validators=[Optional()])
+
+class PhotoForm(FlaskForm):
+    """Pet Photos"""
+    title = StringField('Título', validators=[Length(max=100)])  # Título opcional
+    image = FileField('Imagen', validators=[DataRequired()])  # Imagen requerida
+    date_uploaded = DateField('Fecha', format='%Y-%m-%d', validators=[DataRequired()])

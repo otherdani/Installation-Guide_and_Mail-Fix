@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Gallery
+{% endblock %}
+
+{% block main %}
+
+    <h1>{{ pet.name }}'s Gallery</h1>
+
+    {% if photos %}
+        <div class="photo-gallery">
+            {% for photo in photos %}
+                <div class="photo-card">
+                    <img src="{{ photo['image_url'] }}" alt="Photo of {{ photo['title'] or 'pet' }}" />
+                    <h3>{{ photo['title'] or 'Sin Título' }}</h3>
+                    <p>Fecha subida: {{ photo['date_uploaded'] }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="d-flex flex-column justify-content-center">
+            <h2 class="vertical_padding">It looks like you haven't added any photos yet.</h2>
+            <br>
+            <h2>Click the + button to add your first one!</h2>
+        </div>
+    {% endif %}
+    
+    <!-- Add new photo button -->
+    <a href="{{ url_for('gallery.upload_photo', pet_id=pet.id) }}" id="addPetBtn" class="dark_btn btn_plus d-flex align-items-center justify-content-center"><i class="fas fa-plus fa-2x"></i></a>
+
+
+{% endblock %}

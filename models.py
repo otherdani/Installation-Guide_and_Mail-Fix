@@ -65,3 +65,20 @@ class Pet(db.Model):
         if next_birthday < today:
             next_birthday = next_birthday.replace(year=today.year + 1)
         return (next_birthday - today).days
+
+class Photo(db.Model):
+    """Pet Photo"""
+    id = db.Column(db.Integer, primary_key=True)
+    pet_id = db.Column(db.Integer, nullable=False)
+    image_url = db.Column(db.String(255), nullable=False)
+    title = db.Column(db.String(100))
+    date_uploaded = db.Column(db.Date, nullable=False)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "image_url": self.image_url,
+            "title": self.title,
+            "date_uploaded": self.date_uploaded.strftime('%Y-%m-%d')
+        }

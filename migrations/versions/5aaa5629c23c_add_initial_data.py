@@ -7,8 +7,10 @@ Create Date: 2025-01-14 18:50:59.040100
 """
 from alembic import op
 import sqlalchemy as sa
-from app import db
+from flask import current_app
 from models import Species, Breed
+
+db = current_app.extensions['sqlalchemy']
 
 # revision identifiers, used by Alembic.
 revision = '63d7c63fec92'
