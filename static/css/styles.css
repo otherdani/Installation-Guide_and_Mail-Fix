@@ -151,7 +151,7 @@ input:focus {
     border-radius: 50%;
 }
 
-.pet_photo{
+.gallery_photo{
     height: auto;
     width: 300px;
     border: 1px solid #ddd;
