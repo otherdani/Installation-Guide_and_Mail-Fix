@@ -9,11 +9,11 @@
     <h1>{{ pet.name }}'s Gallery</h1>
 
     {% if photos %}
-        <div class="photo-gallery">
+        <div class="photo-gallery row">
             {% for photo in photos %}
-                <div class="photo-card">
+                <div class="photo-card col-md-3 mb-4">
                     <img src="{{ photo['image_url'] }}" alt="Photo of {{ photo['title'] or 'pet' }}" />
-                    <h3>{{ photo['title'] or 'Sin Título' }}</h3>
+                    <h5>{{ photo['title'] or 'Sin Título' }}</h5>
                     <p>Fecha subida: {{ photo['date_uploaded'] }}</p>
                 </div>
             {% endfor %}
