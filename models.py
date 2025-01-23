@@ -68,9 +68,10 @@ class Pet(db.Model):
 
 class Photo(db.Model):
     """Pet Photo"""
+    __tablename__ = 'photos'
     id = db.Column(db.Integer, primary_key=True)
     pet_id = db.Column(db.Integer, db.ForeignKey('pets.id'), nullable=False)
-    image_url = db.Column(db.String(255), nullable=False)
+    image_url = db.Column(db.String(200), nullable=False)
     title = db.Column(db.String(100))
     date_uploaded = db.Column(db.Date, nullable=False)
 

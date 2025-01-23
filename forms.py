@@ -43,6 +43,6 @@ class PetForm(FlaskForm):
 
 class PhotoForm(FlaskForm):
     """Pet Photos"""
-    title = StringField('Título', validators=[Length(max=100)])  # Título opcional
-    image = FileField('Imagen', validators=[DataRequired()])  # Imagen requerida
+    title = StringField('Título', validators=[Length(max=100)])
+    image = FileField('Imagen', validators=[DataRequired()])
     date_uploaded = DateField('Fecha', format='%Y-%m-%d', validators=[DataRequired()])
