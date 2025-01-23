@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, render_template, request, flash, redirect, current_app
+from flask import Blueprint, render_template, request, flash, redirect, current_app, url_for
 from werkzeug.utils import secure_filename
 
 from models import Pet, Photo
@@ -54,7 +54,7 @@ def upload_photo(pet_id):
             db.session.commit()
 
             flash('Pet photo added!', 'success')
-            return redirect("url_for('gallery.gallery', pet_id=pet.id)")
+            return redirect(url_for('gallery.gallery', pet_id=pet.id))
 
     #User reaches via get
     return render_template('upload_photo.html', pet=pet, form=form)
