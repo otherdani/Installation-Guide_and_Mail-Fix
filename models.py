@@ -78,7 +78,7 @@ class Photo(db.Model):
     def to_dict(self):
         return {
             "id": self.id,
-            "user_id": self.user_id,
+            "pet_id": self.pet_id,
             "image_url": self.image_url,
             "title": self.title,
             "date_uploaded": self.date_uploaded.strftime('%Y-%m-%d')

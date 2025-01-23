@@ -10,11 +10,14 @@
     {% if photos %}
         <div class="photo-gallery row">
             {% for photo in photos %}
-                <div class="photo-card col-md-3 mb-4">
-                    <img src="{{ photo['image_url'] }}" alt="Photo of {{ photo['title'] or 'pet' }}" />
-                    <h5>{{ photo['title'] or 'Sin Título' }}</h5>
-                    <p>Fecha subida: {{ photo['date_uploaded'] }}</p>
+            <div class="card col-md-3 mb-4">
+                
+                <img src="{{ url_for('static', filename='uploads/' + photo.image_url.replace('\\', '/')) }}" alt="Photo of {{ pet.name or 'pet' }}" />
+                <div class="card-body">
+                  <h5 class="card-title">{{ photo.title or Untitled}}</h5>
+                  <h6 class="card-subtitle mb-2 text-body-secondary">Date: {{ photo.date_uploaded }}</h6>
                 </div>
+              </div>
             {% endfor %}
         </div>
     {% else %}

@@ -29,11 +29,11 @@ def upload_photo(pet_id):
     if request.method == 'POST':
         if form.validate_on_submit():
             # Extract form data
-            title = form.title
-            date_uploaded = form.date_uploaded
+            title = form.title.data
+            date_uploaded = form.date_uploaded.data
 
             # Handling the uploaded pet photo
-            if form.image and allowed_photo_file(form.image.filename):
+            if form.image.data and allowed_photo_file(form.image.data.filename):
                 image = form.image.data
                 filename = secure_filename(image.filename)
                 image_url = filename
@@ -54,7 +54,7 @@ def upload_photo(pet_id):
             db.session.commit()
 
             flash('Pet photo added!', 'success')
-            return redirect("/gallery/<int:pet_id>")
+            return redirect("url_for('gallery.gallery', pet_id=pet.id)")
 
     #User reaches via get
     return render_template('upload_photo.html', pet=pet, form=form)
