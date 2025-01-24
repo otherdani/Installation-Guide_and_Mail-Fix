@@ -1,0 +1,13 @@
+<!-- pet_dropdown_menu.html -->
+<div class="dropdown">
+    <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-ellipsis-v fa-lg"></i>
+    </button>
+    <ul class="dropdown-menu card_menu dropdown-menu-end animate-dropdown" aria-labelledby="dropdownMenuButton">
+        <li><a href="{{ url_for('pet.general_data', pet_id=pet.id) }}" class="dropdown-item"><i class="fas fa-bone"></i> General Data</a></li>
+        <li><a href="#" class="dropdown-item"><i class="fas fa-chart-line"></i> Trackers</a></li>
+        <li><a href="{{ url_for('gallery.gallery', pet_id=pet.id) }}" class="dropdown-item"><i class="fas fa-images"></i> Gallery</a></li>
+        <li><a href="#" class="dropdown-item"><i class="fas fa-file-medical-alt"></i> Documents</a></li>
+        <li><a href="#" class="dropdown-item"><i class="fas fa-book"></i> Log Records</a></li>
+    </ul>
+</div>
