@@ -1,0 +1,130 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{ pet.name }}'s Info:
+{% endblock %}
+
+{% block main %}
+
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="text-start">
+        <h1 class="mb-4 text-center">{{ pet.name }}'s Info:</h1>
+        <div class="text-center mb-4">
+            <img class="pet_pfp rounded-circle" src="{{ url_for('static', filename='uploads/' + pet.pet_profile_photo.replace('\\', '/')) }}" alt="Pet Photo">
+        </div>
+
+        <div class="row mb-2">
+            <div class="col">
+                <h5>Name:</h5>
+            </div>
+            <div class="col">
+                {{ pet.name }}
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col">
+                <h5>Sex:</h5>
+            </div>
+            <div class="col">
+                {{ pet.sex }}
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col">
+                <h5>Specie:</h5>
+            </div>
+            <div class="col">
+                {{ pet.species.name }}
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col">
+                <h5>Breed:</h5>
+            </div>
+            <div class="col">
+                {{ pet.breed.name if pet.breed else 'No especificada' }}
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col">
+                <h5>Age:</h5>
+            </div>
+            <div class="col">
+                {{ pet.age() }}
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col">
+                <h5>Birth Date:</h5>
+            </div>
+            <div class="col">
+                {{ pet.birth_date }}
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col">
+                <h5>Days to birthday:</h5>
+            </div>
+            <div class="col">
+                {{ pet.days_to_birthday(pet.birth_date) }} days
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col">
+                <h5>Adoption date:</h5>
+            </div>
+            <div class="col">
+                {{ pet.adoption_date }}
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col">
+                <h5>Sterilized:</h5>
+            </div>
+            <div class="col">
+                {% if pet.sterilized %}
+                    <p>YES</p>
+                {% else %}
+                    <p>NO</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col">
+                <h5>Microchip No.</h5>
+            </div>
+            <div class="col">
+                {{ pet.microchip_number or "-" }}
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col">
+                <h5>Insurance Company:</h5>
+            </div>
+            <div class="col">
+                {{ pet.insurance_company or "-" }}
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col">
+                <h5>Insurance No.</h5>
+            </div>
+            <div class="col">
+                {{ pet.insurance_number or "-" }}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

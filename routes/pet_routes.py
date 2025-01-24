@@ -170,3 +170,10 @@ def get_breeds(species_id):
     breeds = Breed.query.filter_by(species_id=species_id).all()
     breed_data = [{"id": breed.id, "name": breed.name} for breed in breeds]
     return jsonify(breed_data)
+
+@pet_bp.route("/general_data/<int:pet_id>", methods=["GET"])
+@login_required
+def general_data(pet_id):
+    """Shows general data related to a pet"""
+    pet = Pet.query.get_or_404(pet_id)
+    return render_template('general_data.html', pet=pet)
