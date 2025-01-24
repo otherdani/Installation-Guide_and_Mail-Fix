@@ -4,12 +4,13 @@ from werkzeug.utils import secure_filename
 
 from models import Pet, Photo
 from forms import PhotoForm
-from helpers import login_required, allowed_photo_file
+from helpers import allowed_photo_file, inject_pets, login_required
 
 gallery_bp = Blueprint('gallery', __name__)
 
 @gallery_bp.route("/gallery/<int:pet_id>", methods=['GET'])
 @login_required
+@inject_pets
 def gallery(pet_id):
     """Display pet gallery"""
     pet = Pet.query.get_or_404(pet_id)

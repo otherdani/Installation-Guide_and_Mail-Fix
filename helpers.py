@@ -1,5 +1,6 @@
 from functools import wraps
-from flask import redirect, session, render_template
+from flask import redirect, session, render_template, g
+from models import Pet
 
 PHOTO_ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
@@ -15,6 +16,15 @@ def login_required(f):
             return redirect("/welcome")
         return f(*args, **kwargs)
 
+    return decorated_function
+
+def inject_pets(f):
+    """Obtain pets related to a user"""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        pets = Pet.query.filter_by(user_id=session.get("user_id")).all()
+        g.pets = pets
+        return f(*args, **kwargs)
     return decorated_function
 
 

@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 
 from models import Pet, Breed, Species
 from forms import PetForm
-from helpers import error_message, login_required, allowed_photo_file
+from helpers import error_message, allowed_photo_file, inject_pets, login_required
 
 pet_bp = Blueprint('pet', __name__)
 
@@ -173,7 +173,9 @@ def get_breeds(species_id):
 
 @pet_bp.route("/general_data/<int:pet_id>", methods=["GET"])
 @login_required
+@inject_pets
 def general_data(pet_id):
     """Shows general data related to a pet"""
+    pets = Pet.query.filter_by(user_id=session["user_id"]).all()
     pet = Pet.query.get_or_404(pet_id)
-    return render_template('general_data.html', pet=pet)
+    return render_template('general_data.html', pet=pet, pets=pets)

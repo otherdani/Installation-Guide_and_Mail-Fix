@@ -45,9 +45,9 @@
                                     </a>
                                     <ul class="dropdown-menu animate-dropdown">
                                         <li><a class="dropdown-item" href="/">All Pets</a></li>
-                                        {% for pet in pets %}
+                                        {% for pet in g.pets %}
                                             <li><hr class="dropdown-divider"></li>
-                                            <li><a class="dropdown-item" href="#">{{ pet.name }}</a></li>
+                                            <li><a class="dropdown-item" href="{{ url_for('pet.general_data', pet_id=pet.id) }}">{{ pet.name }}</a></li>
                                         {% endfor %}
 
                                     </ul>

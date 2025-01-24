@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, session
+from flask import Blueprint, render_template
+from flask_login import login_required
 
-from models import Pet
-from helpers import login_required
+from helpers import login_required, inject_pets
 
 home_bp = Blueprint('home', __name__)
 
@@ -12,7 +12,7 @@ def welcome():
 
 @home_bp.route('/')
 @login_required
+@inject_pets
 def home():
     """Display homepage"""
-    pets = Pet.query.filter_by(user_id=session["user_id"]).all()
-    return render_template("index.html", pets=pets)
+    return render_template("index.html")

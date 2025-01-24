@@ -7,7 +7,7 @@
 {% block main %}
     <div class="container">
         <div class="row">
-            {% for pet in pets %}
+            {% for pet in g.pets %}
             <!-- Pet card -->
             <div class="col-md-6 mb-4">
                 <!-- Card container -->
@@ -116,7 +116,7 @@
         </div>
     </div>
 
-    {% if pets | length == 0%}
+    {% if g.pets | length == 0%}
         <div class="d-flex flex-column justify-content-center">
             <h4 class="vertical_padding">It looks like you haven't added any pets yet.</h4>
             <br>
