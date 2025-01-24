@@ -7,7 +7,7 @@ from flask_mail import Message
 
 from models import User
 from forms import LoginForm, RegisterForm, ResetPasswordForm, RestorePasswordForm
-from helpers import error_message, login_required
+from helpers import error_message
 
 
 auth_bp = Blueprint('auth', __name__)
