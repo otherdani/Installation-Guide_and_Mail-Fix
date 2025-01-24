@@ -11,6 +11,10 @@ class User(db.Model):
 
     pets = db.relationship('Pet', backref='owner', lazy=True)
 
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
+
 class Species(db.Model):
     """Pet species"""
     __tablename__ = 'species'
@@ -21,30 +25,35 @@ class Breed(db.Model):
     """Pet breeds"""
     __tablename__ = 'breeds'
     id = db.Column(db.Integer, primary_key=True)
-    species_id = db.Column(db.Integer, db.ForeignKey('species.id'), nullable=False)
+    species_id = db.Column(db.Integer, db.ForeignKey('species.id', ondelete='CASCADE'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
 
-    species = db.relationship('Species', backref=db.backref('breeds', lazy=True))
+    species = db.relationship('Species', back_populates='breeds', lazy='select')
 
 class Pet(db.Model):
     """Pet general data"""
     __tablename__ = 'pets'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
     pet_profile_photo = db.Column(db.String(200), nullable=True)
     name = db.Column(db.String(80), nullable=False)
     birth_date = db.Column(db.Date, nullable=True)
     adoption_date = db.Column(db.Date, nullable=True)
-    sex = db.Column(db.String, db.CheckConstraint("sex IN ('M', 'F')"), nullable=False)
-    species_id = db.Column(db.Integer, db.ForeignKey('species.id'), nullable=False)
-    breed_id = db.Column(db.Integer, db.ForeignKey('breeds.id'), nullable=True)
+    sex = db.Column(db.String(1), db.CheckConstraint("sex IN ('M', 'F')"), nullable=False)
+    species_id = db.Column(db.Integer, db.ForeignKey('species.id', ondelete='CASCADE'), nullable=False, index=True)
+    breed_id = db.Column(db.Integer, db.ForeignKey('breeds.id', ondelete='SET NULL'), nullable=True, index=True)
     sterilized = db.Column(db.Boolean, nullable=False, default=False)
-    microchip_number = db.Column(db.String(50), nullable=True)
+    microchip_number = db.Column(db.String(50), unique=True, nullable=True)
     insurance_company = db.Column(db.String(100), nullable=True)
     insurance_number = db.Column(db.String(50), nullable=True)
 
-    breed = db.relationship('Breed', backref=db.backref('pets', lazy='joined'))
-    species = db.relationship('Species', backref=db.backref('pets', lazy='joined'))
+    species = db.relationship('Species', lazy='joined')
+    breed = db.relationship('Breed', lazy='joined')
+
+    # Inverse relationships
+    Species.breeds = db.relationship('Breed', back_populates='species', lazy='select')
+    Breed.pets = db.relationship('Pet', back_populates='breed', lazy='select')
+    Species.pets = db.relationship('Pet', back_populates='species', lazy='select')
 
 
     def age(self):
