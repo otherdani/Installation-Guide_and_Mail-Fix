@@ -54,7 +54,7 @@ input:focus {
 }
 
 .bg_img{
-    height: 60vh;
+    max-height: 60vh;
     width: auto;
     object-fit: contain;
 }
