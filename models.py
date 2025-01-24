@@ -11,10 +11,6 @@ class User(db.Model):
 
     pets = db.relationship('Pet', backref='owner', lazy=True)
 
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
-
 class Species(db.Model):
     """Pet species"""
     __tablename__ = 'species'
