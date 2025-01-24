@@ -2,7 +2,7 @@ import os
 from flask import Blueprint, render_template, request, redirect, flash, current_app, session, jsonify
 from werkzeug.utils import secure_filename
 
-from models import Pet, Breed, Species
+from models import Pet, Breed, Species, Photo
 from forms import PetForm
 from helpers import error_message, allowed_photo_file, inject_pets, login_required
 
@@ -79,6 +79,19 @@ def delete_pet(pet_id):
     """Delete a pet from db"""
     pet = Pet.query.get_or_404(pet_id)
     db = current_app.extensions['sqlalchemy']
+
+    # Delete gallery photos associated with the pet
+    if pet.photos:
+        for photo in pet.photos:
+            if photo.image_url:
+                photo_path = os.path.join(current_app.config['UPLOAD_FOLDER'], photo.image_url)
+                if os.path.exists(photo_path):
+                    try:
+                        os.remove(photo_path)
+                        current_app.logger.info(f"Deleted photo: {photo_path}")
+                    except Exception as e:
+                        current_app.logger.error(f"Error deleting photo {photo_path}: {e}")
+            db.session.delete(photo)
     
     # Delete pet photo
     if pet.pet_profile_photo:
@@ -176,6 +189,5 @@ def get_breeds(species_id):
 @inject_pets
 def general_data(pet_id):
     """Shows general data related to a pet"""
-    pets = Pet.query.filter_by(user_id=session["user_id"]).all()
     pet = Pet.query.get_or_404(pet_id)
-    return render_template('general_data.html', pet=pet, pets=pets)
+    return render_template('general_data.html', pet=pet)

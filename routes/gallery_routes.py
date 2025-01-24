@@ -59,3 +59,25 @@ def upload_photo(pet_id):
 
     #User reaches via get
     return render_template('upload_photo.html', pet=pet, form=form)
+
+@gallery_bp.route("/delete_photo/<int:photo_id>", methods=['GET'])
+@login_required
+def delete_photo(photo_id):
+    """Delete photo of a pet"""
+    photo = Photo.query.get_or_404(photo_id)
+    db = current_app.extensions['sqlalchemy']
+
+    if photo.image_url:
+        try:
+            photo_path = os.path.join(current_app.config['UPLOAD_FOLDER'], photo.image_url)
+            os.remove(photo_path)
+        except FileNotFoundError:
+            flash('Photo file not found.', 'danger')
+            return redirect(url_for('gallery.gallery', pet_id=photo.pet_id))
+    
+    # Delete from database
+    db.session.delete(photo)
+    db.session.commit()
+
+    flash('Photo deleted successfully.', 'success')
+    return redirect(url_for('gallery.gallery', pet_id=photo.pet_id))

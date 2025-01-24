@@ -46,6 +46,7 @@ class Pet(db.Model):
 
     species = db.relationship('Species', lazy='joined')
     breed = db.relationship('Breed', lazy='joined')
+    photos = db.relationship('Photo', backref='pet', lazy=True)
 
     # Inverse relationships
     Species.breeds = db.relationship('Breed', back_populates='species', lazy='select')
