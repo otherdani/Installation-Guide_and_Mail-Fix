@@ -15,6 +15,7 @@
         <div class="photo-gallery row">
             {% for photo in photos %}
             <div class="card col-md-3 col-sm-6 mb-4 photo-card" data-photo-url="{{ url_for('static', filename='uploads/' + photo.image_url.replace('\\', '/')) }}">
+                <!-- Attribution: <a href="https://www.vecteezy.com/free-vector/social">Social Vectors by Vecteezy</a> -->
                 <img src="{{ url_for('static', filename='uploads/' + photo.image_url.replace('\\', '/')) }}" alt="Photo of {{ pet.name or 'pet' }}" class="img-fluid gallery_img"/>
                 <div class="card-body text-center">
                     <h5 class="card-title">{{ photo.title or 'Untitled' }}</h5>
