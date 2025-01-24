@@ -31,12 +31,13 @@
     </form>
 
     <script>
-            // Crop pet profile picture
+            // Show photo preview
             document.addEventListener('DOMContentLoaded', function () {
                 const inputPhoto = document.getElementById('new_photo');
                 const previewContainer = document.getElementById('preview-container');
                 const imagePreview = document.getElementById('image-preview');
                 const croppedImageData = document.getElementById('cropped-image-data');
+                const validExtensions = ['jpg', 'jpeg', 'png', 'gif']; // Valid extensions
                 const MAX_FILE_SIZE_MB = 5; // Max size 5MB
 
                 inputPhoto.addEventListener('change', function (event) {
@@ -48,8 +49,8 @@
                         return;
                     }
 
-                    if (!file.type.startsWith('image/')) {
-                        alert("Please upload a valid image file.");
+                    if (!file.type.startsWith('image/') || !validExtensions.includes(fileExtension)) {
+                        alert("Please upload a valid image file(jpeg, jpg, png, gif).");
                         inputPhoto.value = "";
                         return;
                     }
