@@ -27,7 +27,7 @@
             <br>
 
             <label  for="name">Name:</label>
-            {{ form.name(autocomplete="off", required=True, class="form-control mx-auto w-auto d-inline-block", autofocus=True) }}
+            {{ form.name(autocomplete="off", required=True, class="form-control mx-auto w-auto d-inline-block", autofocus=True, id="name") }}
             <br><br>
 
             <label for="birth_date">Birth date:</label>
@@ -39,7 +39,7 @@
             <br><br>
 
             <label for="sex">Sex:</label>
-            {{ form.sex() }}
+            {{ form.sex(id="sex", required=True) }}
             <br><br>
 
             <label for="sex">Specie:</label>
@@ -92,6 +92,7 @@
         </div>
     </form>
 
+
     <script>
         // Steps management
         $(document).ready(function() {
@@ -121,6 +122,33 @@
             });
 
             $('#nextButton').click(function() {
+                // Validate if the name, sex, species, and breed are provided
+                var name = $('#name').val().trim();
+                var sex = $('#sex').val();
+                var species = $('#species').val();
+                var breed = $('#breed').val();
+
+                if (name === "") {
+                    showAlert("Please enter a name for your pet before proceeding.");
+                    return; // Don't proceed if name is empty
+                }
+
+                if (sex === "" || sex === null) {
+                    showAlert("Please select a sex for your pet.");
+                    return; // Don't proceed if sex is not selected
+                }
+
+                if (species === "" || species === null) {
+                    showAlert("Please select a species for your pet.");
+                    return; // Don't proceed if species is not selected
+                }
+
+                if (breed === "" || breed === null) {
+                    showAlert("Please select a breed for your pet.");
+                    return; // Don't proceed if breed is not selected
+                }
+
+                // If all validations pass, show step 2
                 $('#step1').hide();
                 $('#step2').show();
             });

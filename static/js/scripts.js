@@ -11,3 +11,20 @@ function confirmDelete(event, url) {
         window.location.href = url;
     }
 }
+
+// Automatically close the alert message after 5 seconds
+setTimeout(function() {
+    var alert = document.getElementById('flashedMessage');
+    if (alert) {
+        alert.classList.remove('show');
+        alert.classList.add('fade');
+    }
+}, 5000);
+
+function showAlert(message) {
+    $('#alertMessage').text(message);
+    $('#customAlert').show();
+    setTimeout(function() {
+        $('#customAlert').fadeOut();
+    }, 5000);
+}
