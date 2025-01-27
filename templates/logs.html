@@ -24,6 +24,7 @@
             </div>
             <!-- Edit and delete buttons -->
             <div class="d-flex justify-content-end mt-2">
+                <a href="{{ url_for('logs.edit_entry', entry_id=entry.id) }}" class="btn btn-success ms-2">✏️</a>
                 <a href="#" class="btn btn-danger ms-2" onclick="confirmDelete(event, '{{ url_for('logs.delete_entry', entry_id=entry.id)}}')">🗑️</a>
             </div>
             <hr>

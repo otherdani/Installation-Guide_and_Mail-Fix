@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Edit Entry
+{% endblock %}
+
+{% block main %}
+
+    <h1>New Entry</h1>
+    <form action="{{ url_for('logs.edit_entry', pet_id=pet.id) }}" method="POST" class="text-start" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="mt-4">
+            <label for="date" class="fw-bold">Date</label>
+            {{ form.date_uploaded(autocomplete="off") }}
+        </div>
+        <div class="mt-4">
+            <label  for="title" class="fw-bold">Title (optional):</label>
+            {{ form.title(autocomplete="off", class="form-control d-inline-block", autofocus=True, placeholder="Title") }}
+        </div>
+        <div class="mt-4">
+            <label for="entry" class="mt-4 fw-bold">Entry</label>
+            {{ form.content(class="form-control", rows="10", placeholder="Write something here") }}
+        </div>
+
+        <button onclick="window.location.href='/'" class="btn btn-secondary mt-4">Cancel</button>
+        <button type="submit" class="btn dark_btn mt-4">Save</button>
+    </form>
+
+{% endblock %}

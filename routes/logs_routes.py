@@ -67,3 +67,36 @@ def read_entry(entry_id):
     """Read an entry"""
     entry = Log.query.get_or_404(entry_id)
     return render_template('entry.html', entry=entry)
+
+@logs_bp.route('/edit_entry/<int:entry_id>', methods=['GET', 'POST'])
+@login_required
+@inject_pets
+def edit_entry(entry_id):
+    """Edit an entry"""
+    entry = Log.query.get_or_404(entry_id)
+    form = EntryForm(obj=entry)
+    db = current_app.extensions['sqlalchemy']
+    
+    # User reached route via POST
+    if form.validate_on_submit():
+        try:
+            entry.title = form.title.data
+            entry.content = form.content.data
+            entry.date_uploaded = form.date_uploaded.data
+
+            db.session.commit()
+            flash('Entry updated!', 'success')
+            return redirect(url_for('logs.pet_logs', pet_id=entry.pet_id))
+        
+        except Exception as e:
+            db.session.rollback()
+            current_app.logger.error(f"Error updating entry: {str(e)}")
+            flash(f'Error updating entry: {str(e)}', 'danger')
+
+    # User reached route via GET
+    if request.method == 'GET':
+        form.pet_id.data = entry.pet_id
+        form.title.data = entry.title
+        form.content.data = entry.content
+        form.date_uploaded.data = entry.date_uploaded
+    return render_template('edit_entry.html', form=form, entry=entry)
