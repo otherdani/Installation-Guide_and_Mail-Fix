@@ -102,6 +102,11 @@ def delete_pet(pet_id):
                 current_app.logger.info(f"Deleted photo: {old_photo_path}")
             except Exception as e:
                 current_app.logger.error(f"Error deleting pet photo: {e}")
+
+    # Delete pet logs
+    if pet.logs:
+        for log in pet.logs:
+            db.session.delete(log)
     
     try:
         db.session.delete(pet)
