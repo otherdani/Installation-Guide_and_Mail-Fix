@@ -43,7 +43,7 @@ def upload_photo(pet_id):
             else:
                 image_url = None
 
-            # Save pet data to the database
+            # Save photo to database
             new_photo = Photo(
                 pet_id=pet_id,
                 image_url=image_url,

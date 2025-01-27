@@ -61,7 +61,7 @@ CREATE TABLE logs(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     pet_id INTEGER NOT NULL,
     title VARCHAR(150),
-    date_uploaded DATE,
+    date_uploaded DATE NOT NULL,
     content TEXT NOT NULL,
     FOREIGN KEY(pet_id) REFERENCES pets(id)
 );

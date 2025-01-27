@@ -24,6 +24,12 @@ h1, h2, h3, h4{
     font-family: "Atma", serif;
 }
 
+hr{
+    border-top: 0.5rem dotted #0F5E49;
+    margin: 1rem auto;
+    width: 20%;
+}
+
 a{
     color: black;
 }
@@ -31,6 +37,12 @@ a:hover{
     color: #0F5E49;
 }
 input:focus {
+    outline: none !important; 
+    border: 0.125rem solid #0F5E49 !important;
+    box-shadow: 0 0 0.4rem #AACB73 !important;
+}
+
+textarea:focus{
     outline: none !important; 
     border: 0.125rem solid #0F5E49 !important;
     box-shadow: 0 0 0.4rem #AACB73 !important;
