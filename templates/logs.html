@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Logs
+{% endblock %}
+
+{% block main %}
+
+    <div class="mb-4">
+        <h2 class="d-inline-block">{{ pet.name }}'s Logs</h2>
+        {% include 'pet_dropdown_menu.html' %}
+    </div>
+
+    {% if logs %}
+        {% for entry in logs %}
+        <div>
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">{{ entry.title }}</h4>
+                <p class="mb-0">{{ entry.date_uploaded }}</p>
+            </div>
+            <div class="text-start">
+                <p >{{ entry.content[:150] }}...</p>
+                <a href="{{ url_for('logs.read_entry', entry_id=entry.id) }}">Read more <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <!-- Edit and delete buttons -->
+            <div class="d-flex justify-content-end mt-2">
+                <a href="#" class="btn btn-danger ms-2" onclick="confirmDelete(event, '{{ url_for('logs.delete_entry', entry_id=entry.id)}}')">🗑️</a>
+            </div>
+            <hr>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="d-flex flex-column justify-content-center text-center">
+            <img class="bg_img mb-4" src="/static/images/log_pic.png" alt="Girl writing in her laptop with her pets">
+            <h4 class="mb-4">It looks like you haven't added any logs yet.</h4>
+            <h4>Click the + button to add your first one!</h4>
+        </div>
+    {% endif %}
+
+    <!-- Add new log -->
+    <a href="{{ url_for('logs.new_entry', pet_id=pet.id) }}" id="addPetBtn" class="dark_btn btn_plus d-flex align-items-center justify-content-center"><i class="fas fa-plus fa-2x"></i></a> 
+    {% include 'delete_confirmation_modal.html' %}
+
+{% endblock %}

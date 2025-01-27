@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, DateField, BooleanField, FileField, SelectField, PasswordField, SubmitField
+from wtforms import StringField, DateField, BooleanField, FileField, SelectField, PasswordField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Optional, Email, EqualTo, Length
 from flask_wtf.file import FileAllowed
 
@@ -43,6 +43,12 @@ class PetForm(FlaskForm):
 
 class PhotoForm(FlaskForm):
     """Pet Photos"""
-    title = StringField('Título', validators=[Length(max=100)])
-    image = FileField('Imagen', validators=[DataRequired()])
-    date_uploaded = DateField('Fecha', format='%Y-%m-%d', validators=[DataRequired()])
+    title = StringField('Title', validators=[Length(max=100), Optional()])
+    image = FileField('Image', validators=[DataRequired()])
+    date_uploaded = DateField('Date', format='%Y-%m-%d', validators=[DataRequired()])
+
+class EntryForm(FlaskForm):
+    """Entry Logs"""
+    title = StringField('Title', validators=[Length(max=150), Optional()])
+    content = TextAreaField('Content', validators=[DataRequired()])
+    date_uploaded = DateField('Date', format='%Y-%m-%d', validators=[DataRequired()])

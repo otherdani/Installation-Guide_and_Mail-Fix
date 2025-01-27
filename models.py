@@ -90,3 +90,21 @@ class Photo(db.Model):
             "title": self.title,
             "date_uploaded": self.date_uploaded.strftime('%Y-%m-%d')
         }
+    
+class Log(db.Model):
+    """Entry log"""
+    __tablename__ = 'logs'
+    id = db.Column(db.Integer, primary_key=True)
+    pet_id = db.Column(db.Integer, db.ForeignKey('pets.id'), nullable=False)
+    title = db.Column(db.String(150))
+    date_uploaded = db.Column(db.Date, nullable=False)
+    content = db.Column(db.Text, nullable=False)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "pet_id": self.pet_id,
+            "content": self.content,
+            "title": self.title,
+            "date_uploaded": self.date_uploaded.strftime('%Y-%m-%d')
+        }

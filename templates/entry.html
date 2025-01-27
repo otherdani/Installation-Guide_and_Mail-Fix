@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Entry
+{% endblock %}
+
+{% block main %}
+
+    <div>
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="mb-0">{{ entry.title }}</h1>
+            <p class="mb-0">{{ entry.date_uploaded }}</p>
+        </div>
+        <p class="text-start mt-4">{{ entry.content.replace('\n', '<br>') | safe }}</p>
+    </div>
+
+    <button onclick="window.history.back()" class="btn btn-secondary mt-4">Go Back</button>
+
+{% endblock %}
