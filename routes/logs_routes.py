@@ -95,7 +95,6 @@ def edit_entry(entry_id):
 
     # User reached route via GET
     if request.method == 'GET':
-        form.pet_id.data = entry.pet_id
         form.title.data = entry.title
         form.content.data = entry.content
         form.date_uploaded.data = entry.date_uploaded

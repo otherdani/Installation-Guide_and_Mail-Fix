@@ -6,8 +6,8 @@
 
 {% block main %}
 
-    <h1>New Entry</h1>
-    <form action="{{ url_for('logs.edit_entry', pet_id=pet.id) }}" method="POST" class="text-start" enctype="multipart/form-data">
+    <h1>Edit Entry</h1>
+    <form action="{{ url_for('logs.edit_entry', entry_id=entry.id) }}" method="POST" class="text-start" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <div class="mt-4">
             <label for="date" class="fw-bold">Date</label>

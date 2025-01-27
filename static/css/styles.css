@@ -98,6 +98,11 @@ textarea:focus{
     text-decoration: none;
 }
 
+.btn-no-caret::after {
+    display: none !important;
+}
+
+
 /* Top Navbar  */
 #top_navbar {
     background-color: #22BF8A;
