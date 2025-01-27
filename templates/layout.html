@@ -75,18 +75,9 @@
             </main>
         </div>
         <footer class="text-center mt-auto">
-            <p>Copyright © <span id="year"></span>. All rights reserved.</p>
+            <p>Copyright © <span id="current_year"></span>. All rights reserved.</p>
         </footer>
-    </body>
 
-    <script>
-        // Generate current year
-        const yearSpan = document.getElementById("year");
-        const currentYear = new Date().getFullYear();
-        yearSpan.textContent = currentYear;
-    </script>
-    
-    
-    
-    
+        <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    </body>
 </html>
