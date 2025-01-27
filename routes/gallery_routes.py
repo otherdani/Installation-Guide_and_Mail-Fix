@@ -15,7 +15,6 @@ def gallery(pet_id):
     """Display pet gallery"""
     pet = Pet.query.get_or_404(pet_id)
     photos = Photo.query.filter_by(pet_id=pet_id).order_by(Photo.date_uploaded.desc()).all()
-    print(photos)
     photo_data = [photo.to_dict() for photo in photos]
     return render_template('gallery.html', pet=pet,  photos=photo_data)
 
