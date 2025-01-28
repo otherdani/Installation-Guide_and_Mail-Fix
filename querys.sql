@@ -69,7 +69,7 @@ CREATE TABLE logs (
 CREATE TABLE weight_tracker (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         pet_id INTEGER NOT NUll,
-        weight(kg) REAL NOT NULL,
+        weight_in_kg REAL NOT NULL,
         date DATE NOT NULL,
         notes TEXT
 );
