@@ -12,11 +12,28 @@ class User(db.Model, UserMixin):
 
     pets = db.relationship('Pet', backref='owner', lazy=True)
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "email": self.email,
+            "pets": [pet.to_dict() for pet in self.pets]
+        }
+
+
 class Species(db.Model):
     """Pet species"""
     __tablename__ = 'species'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "breeds": [breed.to_dict() for breed in self.breeds]
+        }
+
 
 class Breed(db.Model):
     """Pet breeds"""
@@ -26,6 +43,14 @@ class Breed(db.Model):
     name = db.Column(db.String(100), nullable=False)
 
     species = db.relationship('Species', back_populates='breeds', lazy='select')
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "species": {"id": self.species.id, "name": self.species.name} if self.species else None
+        }
+
 
 class Pet(db.Model):
     """Pet general data"""
@@ -73,6 +98,26 @@ class Pet(db.Model):
         if next_birthday < today:
             next_birthday = next_birthday.replace(year=today.year + 1)
         return (next_birthday - today).days
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "pet_profile_photo": self.pet_profile_photo,
+            "birth_date": self.birth_date.strftime('%Y-%m-%d') if self.birth_date else None,
+            "adoption_date": self.adoption_date.strftime('%Y-%m-%d') if self.adoption_date else None,
+            "sex": self.sex,
+            "species": {"id": self.species.id, "name": self.species.name} if self.species else None,
+            "breed": {"id": self.breed.id, "name": self.breed.name} if self.breed else None,
+            "sterilized": self.sterilized,
+            "microchip_number": self.microchip_number,
+            "insurance_company": self.insurance_company,
+            "insurance_number": self.insurance_number,
+            "age": self.age(),
+            "photos": [photo.to_dict() for photo in self.photos],
+            "logs": [log.to_dict() for log in self.logs]
+        }
+
 
 class Photo(db.Model):
     """Pet Photo"""
@@ -108,4 +153,84 @@ class Log(db.Model):
             "content": self.content,
             "title": self.title,
             "date_uploaded": self.date_uploaded.strftime('%Y-%m-%d')
+        }
+    
+class WeightTracker(db.Model):
+    """Database model for pet weight tracking"""
+    __tablename__ = 'weight_tracker'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    pet_id = db.Column(db.Integer, db.ForeignKey('pets.id', ondelete='CASCADE'), nullable=False)
+    weight = db.Column(db.Float, nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    notes = db.Column(db.Text, nullable=True)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "pet_id": self.pet_id,
+            "weight": self.weight,
+            "date": self.date.strftime('%Y-%m-%d'),
+            "notes": self.notes,
+        }
+
+class VaccineTracker(db.Model):
+    """Database model for pet vaccine tracking"""
+    __tablename__ = 'vaccine_tracker'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    pet_id = db.Column(db.Integer, db.ForeignKey('pets.id', ondelete='CASCADE'), nullable=False)
+    vaccine_name = db.Column(db.String(100), nullable=False)
+    date_administered = db.Column(db.Date, nullable=False)
+    next_dosis = db.Column(db.Date, nullable=True)
+    administered_by = db.Column(db.String(150), nullable=True)
+    notes = db.Column(db.Text, nullable=True)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "pet_id": self.pet_id,
+            "vaccine_name": self.vaccine_name,
+            "date_administered": self.date_administered.strftime('%Y-%m-%d'),
+            "next_dosis": self.next_dosis.strftime('%Y-%m-%d') if self.next_dosis else None,
+            "administered_by": self.administered_by,
+            "notes": self.notes,
+        }
+
+class InternalDewormingTracker(db.Model):
+    """Database model for internal deworming tracking"""
+    __tablename__ = 'internal_deworming_tracker'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    pet_id = db.Column(db.Integer, db.ForeignKey('pets.id', ondelete='CASCADE'), nullable=False)
+    product_name = db.Column(db.String(100), nullable=False)
+    date_administered = db.Column(db.Date, nullable=False)
+    next_dosis = db.Column(db.Date, nullable=True)
+    notes = db.Column(db.Text, nullable=True)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "pet_id": self.pet_id,
+            "product_name": self.product_name,
+            "date_administered": self.date_administered.strftime('%Y-%m-%d'),
+            "next_dosis": self.next_dosis.strftime('%Y-%m-%d') if self.next_dosis else None,
+            "notes": self.notes,
+        }
+
+class ExternalDewormingTracker(db.Model):
+    """Database model for external deworming tracking"""
+    __tablename__ = 'external_deworming_tracker'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    pet_id = db.Column(db.Integer, db.ForeignKey('pets.id', ondelete='CASCADE'), nullable=False)
+    product_name = db.Column(db.String(100), nullable=False)
+    date_administered = db.Column(db.Date, nullable=False)
+    next_dosis = db.Column(db.Date, nullable=True)
+    notes = db.Column(db.Text, nullable=True)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "pet_id": self.pet_id,
+            "product_name": self.product_name,
+            "date_administered": self.date_administered.strftime('%Y-%m-%d'),
+            "next_dosis": self.next_dosis.strftime('%Y-%m-%d') if self.next_dosis else None,
+            "notes": self.notes,
         }

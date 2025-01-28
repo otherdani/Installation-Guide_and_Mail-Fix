@@ -1,8 +1,10 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, DateField, BooleanField, FileField, SelectField, PasswordField, SubmitField, TextAreaField
+from wtforms import StringField, DateField, BooleanField, FileField, SelectField, PasswordField, SubmitField, TextAreaField, FloatField
 from wtforms.validators import DataRequired, Optional, Email, EqualTo, Length
 from flask_wtf.file import FileAllowed
 
+
+# Auth Forms
 class RegisterForm(FlaskForm):
     """Register a new user"""
     username = StringField('Username', validators=[DataRequired()])
@@ -27,6 +29,7 @@ class ResetPasswordForm(FlaskForm):
     submit = SubmitField('Reset Password')
 
 
+# Pet Forms
 class PetForm(FlaskForm):
     """Add new pet"""
     pet_profile_photo = FileField('Upload Photo', validators=[FileAllowed(['jpg', 'jpeg', 'png'], 'Images only!'), Optional()])
@@ -41,6 +44,8 @@ class PetForm(FlaskForm):
     insurance_company = StringField('Insurance Company', validators=[Optional()])
     insurance_number = StringField('Insurance Number', validators=[Optional()])
 
+
+# Features Forms
 class PhotoForm(FlaskForm):
     """Pet Photos"""
     title = StringField('Title', validators=[Length(max=100), Optional()])
@@ -52,3 +57,37 @@ class EntryForm(FlaskForm):
     title = StringField('Title', validators=[Length(max=150), Optional()])
     content = TextAreaField('Content', validators=[DataRequired()])
     date_uploaded = DateField('Date', format='%Y-%m-%d', validators=[DataRequired()])
+
+
+# Trackers Forms
+class WeightForm(FlaskForm):
+    """Form for tracking pet weight"""
+    weight = FloatField('Weight (kg)', validators=[DataRequired()])
+    date = DateField('Date', format='%Y-%m-%d', validators=[DataRequired()])
+    notes = TextAreaField('Notes', validators=[Optional(), Length(max=200)])
+    submit = SubmitField('Add Weight Entry')
+
+class VaccineForm(FlaskForm):
+    """Form for tracking pet vaccines"""
+    vaccine_name = StringField('Vaccine Name', validators=[DataRequired(), Length(max=100)])
+    date_administered = DateField('Date Administered', format='%Y-%m-%d', validators=[DataRequired()])
+    next_dosis = DateField('Next Dose Date', format='%Y-%m-%d', validators=[Optional()])
+    administered_by = StringField('Administered By', validators=[Optional(), Length(max=150)])
+    notes = TextAreaField('Notes', validators=[Optional(), Length(max=200)])
+    submit = SubmitField('Add Vaccine Entry')
+
+class InternalDewormingForm(FlaskForm):
+    """Form for internal deworming tracker"""
+    product_name = StringField('Product Name', validators=[DataRequired(), Length(max=100)])
+    date_administered = DateField('Date Administered', format='%Y-%m-%d', validators=[DataRequired()])
+    next_dosis = DateField('Next Dose Date', format='%Y-%m-%d', validators=[Optional()])
+    notes = TextAreaField('Notes', validators=[Optional(), Length(max=200)])
+    submit = SubmitField('Add Internal Deworming Entry')
+
+class ExternalDewormingForm(FlaskForm):
+    """Form for external deworming tracker"""
+    product_name = StringField('Product Name', validators=[DataRequired(), Length(max=100)])
+    date_administered = DateField('Date Administered', format='%Y-%m-%d', validators=[DataRequired()])
+    next_dosis = DateField('Next Dose Date', format='%Y-%m-%d', validators=[Optional()])
+    notes = TextAreaField('Notes', validators=[Optional(), Length(max=200)])
+    submit = SubmitField('Add External Deworming Entry')
