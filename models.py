@@ -160,7 +160,7 @@ class WeightTracker(db.Model):
     __tablename__ = 'weight_tracker'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     pet_id = db.Column(db.Integer, db.ForeignKey('pets.id', ondelete='CASCADE'), nullable=False)
-    weight = db.Column(db.Float, nullable=False)
+    weight_in_kg = db.Column(db.Float, nullable=False)
     date = db.Column(db.Date, nullable=False)
     notes = db.Column(db.Text, nullable=True)
 
@@ -168,7 +168,7 @@ class WeightTracker(db.Model):
         return {
             "id": self.id,
             "pet_id": self.pet_id,
-            "weight": self.weight,
+            "weight_in_kg": self.weight_in_kg,
             "date": self.date.strftime('%Y-%m-%d'),
             "notes": self.notes,
         }
@@ -179,7 +179,7 @@ class VaccineTracker(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     pet_id = db.Column(db.Integer, db.ForeignKey('pets.id', ondelete='CASCADE'), nullable=False)
     vaccine_name = db.Column(db.String(100), nullable=False)
-    date_administered = db.Column(db.Date, nullable=False)
+    date = db.Column(db.Date, nullable=False)
     next_dosis = db.Column(db.Date, nullable=True)
     administered_by = db.Column(db.String(150), nullable=True)
     notes = db.Column(db.Text, nullable=True)
@@ -189,7 +189,7 @@ class VaccineTracker(db.Model):
             "id": self.id,
             "pet_id": self.pet_id,
             "vaccine_name": self.vaccine_name,
-            "date_administered": self.date_administered.strftime('%Y-%m-%d'),
+            "date_administered": self.date.strftime('%Y-%m-%d'),
             "next_dosis": self.next_dosis.strftime('%Y-%m-%d') if self.next_dosis else None,
             "administered_by": self.administered_by,
             "notes": self.notes,
@@ -201,7 +201,7 @@ class InternalDewormingTracker(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     pet_id = db.Column(db.Integer, db.ForeignKey('pets.id', ondelete='CASCADE'), nullable=False)
     product_name = db.Column(db.String(100), nullable=False)
-    date_administered = db.Column(db.Date, nullable=False)
+    date = db.Column(db.Date, nullable=False)
     next_dosis = db.Column(db.Date, nullable=True)
     notes = db.Column(db.Text, nullable=True)
 
@@ -210,7 +210,7 @@ class InternalDewormingTracker(db.Model):
             "id": self.id,
             "pet_id": self.pet_id,
             "product_name": self.product_name,
-            "date_administered": self.date_administered.strftime('%Y-%m-%d'),
+            "date_administered": self.date.strftime('%Y-%m-%d'),
             "next_dosis": self.next_dosis.strftime('%Y-%m-%d') if self.next_dosis else None,
             "notes": self.notes,
         }
@@ -221,7 +221,7 @@ class ExternalDewormingTracker(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     pet_id = db.Column(db.Integer, db.ForeignKey('pets.id', ondelete='CASCADE'), nullable=False)
     product_name = db.Column(db.String(100), nullable=False)
-    date_administered = db.Column(db.Date, nullable=False)
+    date = db.Column(db.Date, nullable=False)
     next_dosis = db.Column(db.Date, nullable=True)
     notes = db.Column(db.Text, nullable=True)
 
@@ -230,7 +230,27 @@ class ExternalDewormingTracker(db.Model):
             "id": self.id,
             "pet_id": self.pet_id,
             "product_name": self.product_name,
-            "date_administered": self.date_administered.strftime('%Y-%m-%d'),
+            "date_administered": self.date.strftime('%Y-%m-%d'),
+            "next_dosis": self.next_dosis.strftime('%Y-%m-%d') if self.next_dosis else None,
+            "notes": self.notes,
+        }
+    
+class MedicationTracker(db.Model):
+    """Database model for medication tracking"""
+    __tablename__ = 'medication_tracker'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    pet_id = db.Column(db.Integer, db.ForeignKey('pets.id', ondelete='CASCADE'), nullable=False)
+    product_name = db.Column(db.String(100), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    next_dosis = db.Column(db.Date, nullable=True)
+    notes = db.Column(db.Text, nullable=True)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "pet_id": self.pet_id,
+            "product_name": self.product_name,
+            "date_administered": self.date.strftime('%Y-%m-%d'),
             "next_dosis": self.next_dosis.strftime('%Y-%m-%d') if self.next_dosis else None,
             "notes": self.notes,
         }

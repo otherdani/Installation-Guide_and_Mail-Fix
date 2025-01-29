@@ -67,28 +67,28 @@ CREATE TABLE logs (
 );
 
 CREATE TABLE weight_tracker (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        pet_id INTEGER NOT NUll,
-        weight_in_kg REAL NOT NULL,
-        date DATE NOT NULL,
-        notes TEXT
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pet_id INTEGER NOT NUll,
+    weight_in_kg REAL NOT NULL,
+    date DATE NOT NULL,
+    notes TEXT
 );
 
 CREATE TABLE vaccine_tracker (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        pet_id INTEGER NOT NUll,
-        vaccine_name VARCHAR(100) NOT NULL,
-        date_administered DATE NOT NULL,
-        next_dosis DATE,
-        administered_by VARCHAR(150),
-        notes TEXT
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pet_id INTEGER NOT NUll,
+    vaccine_name VARCHAR(100) NOT NULL,
+    date DATE NOT NULL,
+    next_dosis DATE,
+    administered_by VARCHAR(150),
+    notes TEXT
 );
 
 CREATE TABLE internal_deworming_tracker (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     pet_id INTEGER NOT NULL,
     product_name VARCHAR(100) NOT NULL,
-    date_administered DATE NOT NULL,
+    date DATE NOT NULL,
     next_dosis DATE,
     notes TEXT
 );
@@ -97,7 +97,16 @@ CREATE TABLE external_deworming_tracker (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     pet_id INTEGER NOT NULL,
     product_name TEXT NOT NULL,
-    date_administered DATE NOT NULL,
+    date DATE NOT NULL,
+    next_dosis DATE,
+    notes TEXT
+);
+
+CREATE TABLE medication_tracker (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pet_id INTEGER NOT NULL,
+    product_name TEXT NOT NULL,
+    date DATE NOT NULL,
     next_dosis DATE,
     notes TEXT
 );
