@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Weight Graph
+{% endblock %}
+
+{% block main %}
+    <h2>{{ pet.name }}'s Weight Graph</h2>
+    <img src="data:image/png;base64,{{ img_data }}" alt="Weight Graph">
+{% endblock %}
