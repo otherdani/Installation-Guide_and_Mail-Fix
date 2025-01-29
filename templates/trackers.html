@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Pet Trackers
+{% endblock %}
+
+{% block main %}
+
+    <div class="mb-4">
+        <h2 class="d-inline-block">{{ pet.name }}'s Trackers</h2>
+        {% include 'pet_dropdown_menu.html' %}
+    </div>
+
+    <!-- Tabs for Trackers -->
+    <ul class="nav nav-pills mb-3" id="tracker-tabs" role="tablist">
+        {% for tracker in trackers %}
+        <li class="nav-item" role="presentation">
+            <a class="nav-link {% if loop.index == 1 %}active{% endif %}" id="tab-{{ tracker.name|replace(' ', '-') }}" data-bs-toggle="pill" href="#{{ tracker.name|replace(' ', '-') }}" role="tab" aria-controls="{{ tracker.name|replace(' ', '-') }}" aria-selected="true">
+                <i class="fas {% if tracker.name == 'Weight Tracker' %}fa-weight-hanging{% elif tracker.name == 'Vaccination Tracker' %}fa-syringe{% elif tracker.name == 'Internal Deworming' %}fa-pills{% elif tracker.name == 'External Deworming' %}fa-tablets{% else %}fa-prescription-bottle-alt{% endif %}"></i>
+                {{ tracker.name }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <div class="tab-content" id="tracker-tabs-content">
+        {% for tracker in trackers %}
+        <div class="tab-pane fade {% if loop.index == 1 %}show active{% endif %}" id="{{ tracker.name|replace(' ', '-') }}" role="tabpanel" aria-labelledby="tab-{{ tracker.name|replace(' ', '-') }}">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ tracker.name }}</h5>
+                    <p class="card-text">{{ tracker.description }}</p>
+                    <a href="{{ url_for(tracker.endpoint, pet_id=pet.id) }}" class="btn btn-primary">View Tracker</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>  
+
+{% endblock %}

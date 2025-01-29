@@ -5,7 +5,7 @@
     </button>
     <ul class="dropdown-menu card_menu dropdown-menu-end animate-dropdown" aria-labelledby="dropdownMenuButton">
         <li><a href="{{ url_for('pet.general_data', pet_id=pet.id) }}" class="dropdown-item"><i class="fas fa-bone"></i> General Data</a></li>
-        <li><a href="#" class="dropdown-item"><i class="fas fa-chart-line"></i> Trackers</a></li>
+        <li><a href="{{ url_for('trackers.trackers_home', pet_id=pet.id) }}" class="dropdown-item"><i class="fas fa-chart-line"></i> Trackers</a></li>
         <li><a href="{{ url_for('gallery.gallery', pet_id=pet.id) }}" class="dropdown-item"><i class="fas fa-images"></i> Gallery</a></li>
         <li><a href="#" class="dropdown-item"><i class="fas fa-file-medical-alt"></i> Documents</a></li>
         <li><a href="{{ url_for('logs.pet_logs', pet_id=pet.id) }}" class="dropdown-item"><i class="fas fa-book"></i> Log Records</a></li>

@@ -189,3 +189,19 @@ textarea:focus{
     border-radius: 8px;
     padding: 5px 0 0;
 }
+
+/* Trackers */
+.nav-pills {
+    --bs-nav-pills-link-active-bg: #0F5E49;
+}
+
+.nav-link{
+    color: #0F5E49;
+}
+.nav-link:hover{
+    color: black;
+}
+
+.tab-pane {
+    margin-top: 20px;
+}
