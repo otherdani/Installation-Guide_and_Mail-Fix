@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Add {{ tracker_type|capitalize }}
+{% endblock %}
+
+{% block main %}
+    <h1>Add New {{ tracker_type|capitalize }} Entry</h1>
+
+    <form method="POST" action="{{ url_for('trackers.add_tracker', tracker_type='weight') }}">
+        {{ form.hidden_tag() }}
+
+        <!-- Conditional fields for each tracker type -->
+        {% if tracker_type == 'weight' %}
+            <div class="form-group">
+                {{ form.weight.label }} 
+                {{ form.weight(class="form-control") }}
+            </div>
+        {% elif tracker_type == 'vaccine' %}
+            <div class="form-group">
+                {{ form.vaccine_name.label }} 
+                {{ form.vaccine_name(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.date_administered.label }} 
+                {{ form.date_administered(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.next_dosis.label }} 
+                {{ form.next_dosis(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.administered_by.label }} 
+                {{ form.administered_by(class="form-control") }}
+            </div>
+        {% elif tracker_type == 'internal_deworming' %}
+            <div class="form-group">
+                {{ form.product_name.label }} 
+                {{ form.product_name(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.date_administered.label }} 
+                {{ form.date_administered(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.next_dosis.label }} 
+                {{ form.next_dosis(class="form-control") }}
+            </div>
+        {% elif tracker_type == 'external_deworming' %}
+            <div class="form-group">
+                {{ form.product_name.label }} 
+                {{ form.product_name(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.date_administered.label }} 
+                {{ form.date_administered(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.next_dosis.label }} 
+                {{ form.next_dosis(class="form-control") }}
+            </div>
+        {% elif tracker_type == 'medication' %}
+            <div class="form-group">
+                {{ form.product_name.label }} 
+                {{ form.product_name(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.date_administered.label }} 
+                {{ form.date_administered(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.next_dosis.label }} 
+                {{ form.next_dosis(class="form-control") }}
+            </div>
+        {% endif %}
+
+        <div class="form-group">
+            {{ form.notes.label }}
+            {{ form.notes(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+{% endblock %}
