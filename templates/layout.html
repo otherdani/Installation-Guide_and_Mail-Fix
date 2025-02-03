@@ -49,10 +49,14 @@
                                             <li><hr class="dropdown-divider"></li>
                                             <li><a class="dropdown-item" href="{{ url_for('pet.general_data', pet_id=pet.id) }}">{{ pet.name }}</a></li>
                                         {% endfor %}
-
                                     </ul>
                                 </li>
-                                <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-calendar fa-2x"></i></a></li>
+                              
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link" id="theme-toggle">                                    
+                                        <i class="fas fa-lightbulb fa-2x"></i>
+                                    </a>                                
+                                </li>
                                 <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-cog fa-2x"></i></a></li>
                                 <li class="nav-item"><a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt fa-2x"></i></a></li>
                             </ul>          

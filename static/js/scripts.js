@@ -1,3 +1,23 @@
+// Theme selection
+document.addEventListener("DOMContentLoaded", () => {
+    const themeToggle = document.getElementById("theme-toggle");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const savedTheme = localStorage.getItem("theme");
+
+    // Set theme on load
+    const theme = savedTheme || (prefersDark ? "dark" : "light");
+    document.body.classList.toggle("dark-mode", theme === "dark");
+
+    // Save theme to cookies
+    document.cookie = `theme=${theme}; path=/; max-age=31536000`;
+
+    themeToggle.addEventListener("click", () => {
+        const isDark = document.body.classList.toggle("dark-mode");
+        const theme = isDark ? "dark" : "light";
+        document.cookie = `theme=${theme}; path=/; max-age=31536000`;
+    });
+});
+
 // Generate current year
 const yearSpan = document.getElementById("current_year");
 const currentYear = new Date().getFullYear();

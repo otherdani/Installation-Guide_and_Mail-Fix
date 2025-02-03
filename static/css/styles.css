@@ -1,6 +1,26 @@
+/* Global Theme Variables */
+:root {
+    --bg-color: #FFFFE8; /* Light Mode Background */
+    --text-color: black;
+    --primary-color: #22BF8A;
+    --secondary-color: #F6EACB;
+}
+
+/* Dark Mode */
+body.dark-mode {
+    --bg-color: #222;
+    --text-color: #FFFFE8;
+    --primary-color: #0F5E49;
+    --secondary-color: black;
+}
+body.dark-mode .modal-content{
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
 /* Elements properties */
 body{
-    background-color: #FFFFE8;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     font-family: "Nunito", sans-serif;
     font-optical-sizing: auto;
     font-weight: 500;
@@ -31,11 +51,12 @@ hr{
 }
 
 a{
-    color: black;
+    color: var(--text-color);
 }
 a:hover{
     color: #0F5E49;
 }
+
 input:focus {
     outline: none !important; 
     border: 0.125rem solid #0F5E49 !important;
@@ -49,16 +70,15 @@ textarea:focus{
 }
 
 /* Custom classes */
-.vertical_padding{
-    margin-top: 1%;
-}
-
 .container-fluid{
     padding: 0% 9%;
 }
 
 .dropdown-menu{
-    background-color: #22BF8A;
+    background-color: var(--primary-color);
+}
+.dropdown-item, .dropdown button{
+    color: var(--text-color);
 }
 
 .animate-dropdown {
@@ -75,6 +95,18 @@ textarea:focus{
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+.card {
+    padding: 1rem;
+    background-color: var(--secondary-color);
+    --bs-card-border-color: var(--text-color);
+    color: var(--text-color);
+}
+
+.text-body-secondary{
+    color: var(--text-color) !important;
+}
+
 /* Custom buttons */
 .btn_plus {
     width: 70px;
@@ -93,7 +125,7 @@ textarea:focus{
     background-color: #22BF8A;
     border-color: #0F5E49;
 }
-.dark_btn a{
+.dark_btn a i{
     color: white;
     text-decoration: none;
 }
@@ -105,7 +137,7 @@ textarea:focus{
 
 /* Top Navbar  */
 #top_navbar {
-    background-color: #22BF8A;
+    background-color: var(--primary-color);
     color: white;
     top: 0;
     left: 0;
@@ -118,11 +150,10 @@ textarea:focus{
     padding-right: 1.25rem;
 }
 
-.toggle_sidebar{
-    border-style: none;
-    background-color: transparent;
-    padding-right: 1rem;
+.nav-link, .nav-link i, .nav-link.dropdown-toggle {
+    color: var(--text-color);
 }
+
 .navbar_name{
     margin: 0;
 }
@@ -140,10 +171,6 @@ textarea:focus{
 }
 
 /* Pet card */
-.pet_card {
-    padding: 1rem;
-    background-color: #F6EACB;
-}
 .pet-photo{
     height: auto;
     width: 100%;
@@ -154,9 +181,6 @@ textarea:focus{
     display: inline-block;
 }
 
-.card_menu{
-    background-color: #F6EACB;
-}
 #addPetBtn{
     position: fixed;
     right: 9%;
@@ -192,16 +216,19 @@ textarea:focus{
 
 /* Trackers */
 .nav-pills {
-    --bs-nav-pills-link-active-bg: #0F5E49;
+    --bs-nav-pills-link-active-bg: var(--primary-color);
 }
 
-.nav-link{
-    color: #0F5E49;
-}
 .nav-link:hover{
     color: black;
 }
 
 .tab-pane {
     margin-top: 20px;
+}
+
+.table{
+    --bs-table-bg: var(--bg-color);
+    --bs-table-color: var(--text-color);
+    --bs-table-border-color: transparent;
 }

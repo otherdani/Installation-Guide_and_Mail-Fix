@@ -50,7 +50,7 @@
                     <h5>Breed:</h5>
                 </div>
                 <div class="col">
-                    {{ pet.breed.name if pet.breed else 'No especificada' }}
+                    {{ pet.breed.name }}
                 </div>
             </div>
 
@@ -68,7 +68,7 @@
                     <h5>Birth Date:</h5>
                 </div>
                 <div class="col">
-                    {{ pet.birth_date }}
+                    {{ pet.birth_date or "Unknown"}}
                 </div>
             </div>
 
@@ -76,9 +76,15 @@
                 <div class="col">
                     <h5>Days to birthday:</h5>
                 </div>
-                <div class="col">
-                    {{ pet.days_to_birthday(pet.birth_date) }} days
-                </div>
+                {% if pet.birthdate %}
+                    <div class="col">
+                        {{ pet.days_to_birthday(pet.birth_date) }} days
+                    </div>
+                {% else %}
+                    <div class="col">
+                        -
+                    </div>
+                {% endif %}
             </div>
 
             <div class="row mb-2">
@@ -86,7 +92,7 @@
                     <h5>Adoption date:</h5>
                 </div>
                 <div class="col">
-                    {{ pet.adoption_date }}
+                    {{ pet.adoption_date or "Unknown"}}
                 </div>
             </div>
 
