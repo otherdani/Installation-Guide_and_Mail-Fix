@@ -189,7 +189,7 @@ class VaccineTracker(db.Model):
             "id": self.id,
             "pet_id": self.pet_id,
             "vaccine_name": self.vaccine_name,
-            "date_administered": self.date.strftime('%Y-%m-%d'),
+            "date": self.date.strftime('%Y-%m-%d'),
             "next_dosis": self.next_dosis.strftime('%Y-%m-%d') if self.next_dosis else None,
             "administered_by": self.administered_by,
             "notes": self.notes,
@@ -210,7 +210,7 @@ class InternalDewormingTracker(db.Model):
             "id": self.id,
             "pet_id": self.pet_id,
             "product_name": self.product_name,
-            "date_administered": self.date.strftime('%Y-%m-%d'),
+            "date": self.date.strftime('%Y-%m-%d'),
             "next_dosis": self.next_dosis.strftime('%Y-%m-%d') if self.next_dosis else None,
             "notes": self.notes,
         }
@@ -230,7 +230,7 @@ class ExternalDewormingTracker(db.Model):
             "id": self.id,
             "pet_id": self.pet_id,
             "product_name": self.product_name,
-            "date_administered": self.date.strftime('%Y-%m-%d'),
+            "date": self.date.strftime('%Y-%m-%d'),
             "next_dosis": self.next_dosis.strftime('%Y-%m-%d') if self.next_dosis else None,
             "notes": self.notes,
         }
@@ -250,7 +250,7 @@ class MedicationTracker(db.Model):
             "id": self.id,
             "pet_id": self.pet_id,
             "product_name": self.product_name,
-            "date_administered": self.date.strftime('%Y-%m-%d'),
+            "date": self.date.strftime('%Y-%m-%d'),
             "next_dosis": self.next_dosis.strftime('%Y-%m-%d') if self.next_dosis else None,
             "notes": self.notes,
         }
