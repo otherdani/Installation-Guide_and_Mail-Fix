@@ -41,16 +41,17 @@ def trackers_home(pet_id):
     
     return render_template('trackers.html', pet=pet, trackers=trackers_with_entries)
 
-@trackers_bp.route('/add/<tracker_type>', methods=['GET', 'POST'])
+@trackers_bp.route('/add/<tracker_type>/<int:pet_id>', methods=['GET', 'POST'])
 @login_required
 @inject_pets
-def add_tracker(tracker_type):
+def add_tracker(tracker_type, pet_id):
     """Add new data to tracker"""
     db = current_app.extensions['sqlalchemy']
 
     # Form instances
     form = None
     tracker_model = None
+    pet = Pet.query.get_or_404(pet_id)
 
     # Map tracker types to respective forms and models
     tracker_map = {
@@ -70,7 +71,6 @@ def add_tracker(tracker_type):
 
     # Process the form if it's submitted
     if form.validate_on_submit():
-        pet_id = request.form.get('pet_id')
         date = form.date.data
         notes = form.notes.data
 
@@ -116,9 +116,9 @@ def add_tracker(tracker_type):
         flash("Data successfully added", "info")
 
         # Redirect to the appropriate page (could be a list or details page)
-        return redirect(url_for('trackers.trackers_home', pet_id=pet_id))
+        return redirect(url_for('trackers.trackers_home', pet_id=pet.id))
 
-    return render_template('tracker_add.html', form=form, tracker_type=tracker_type)
+    return render_template('tracker_add.html', form=form, tracker_type=tracker_type, pet_id=pet_id)
 
 
 @trackers_bp.route('/<int:pet_id>/weight_graph')
