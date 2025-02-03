@@ -135,7 +135,16 @@
                     {{ pet.insurance_number or "-" }}
                 </div>
             </div>
+            <div class="row mb-2 mt-4">
+                <div class="col">
+                    <a href="{{ url_for('pet.edit_pet', pet_id=pet.id) }}" class="btn btn-success ms-2">✏️</a>
+                </div>
+                <div class="col">
+                    <a href="#" class="btn btn-danger ms-2" onclick="confirmDelete(event, '{{ url_for('pet.delete_pet', pet_id=pet.id)}}')">🗑️</a>
+                </div>
+            </div>
         </div>
     </div>
+    {% include 'delete_confirmation_modal.html' %}
 
 {% endblock %}
