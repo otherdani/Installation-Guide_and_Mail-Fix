@@ -51,7 +51,6 @@ def add_tracker(tracker_type, pet_id):
     # Form instances
     form = None
     tracker_model = None
-    pet = Pet.query.get_or_404(pet_id)
 
     # Map tracker types to respective forms and models
     tracker_map = {
@@ -80,34 +79,33 @@ def add_tracker(tracker_type, pet_id):
             new_tracker = tracker_model(pet_id=pet_id, weight_in_kg=weight_in_kg, date=date, notes=notes)
         elif tracker_type == 'vaccine':
             vaccine_name = form.vaccine_name.data
-            date_administered = form.date_administered.data
             next_dosis = form.next_dosis.data
             administered_by = form.administered_by.data
             new_tracker = tracker_model(
-                pet_id=pet_id, vaccine_name=vaccine_name, date_administered=date_administered,
+                pet_id=pet_id, vaccine_name=vaccine_name, date=date,
                 next_dosis=next_dosis, administered_by=administered_by, notes=notes
             )
         elif tracker_type == 'internal_deworming':
             product_name = form.product_name.data
-            date_administered = form.date_administered.data
             next_dosis = form.next_dosis.data
             new_tracker = tracker_model(
-                pet_id=pet_id, product_name=product_name, date_administered=date_administered, next_dosis=next_dosis, notes=notes
+                pet_id=pet_id, product_name=product_name, date=date, next_dosis=next_dosis, notes=notes
             )
         elif tracker_type == 'external_deworming':
             product_name = form.product_name.data
-            date_administered = form.date_administered.data
             next_dosis = form.next_dosis.data
             new_tracker = tracker_model(
-                pet_id=pet_id, product_name=product_name, date_administered=date_administered, next_dosis=next_dosis, notes=notes
+                pet_id=pet_id, product_name=product_name, date=date, next_dosis=next_dosis, notes=notes
             )
         elif tracker_type == 'medication':
             product_name = form.product_name.data
-            date_administered = form.date_administered.data
+            date = form.date.data
             next_dosis = form.next_dosis.data
             new_tracker = tracker_model(
-                pet_id=pet_id, product_name=product_name, date_administered=date_administered, next_dosis=next_dosis, notes=notes
+                pet_id=pet_id, product_name=product_name, date=date, next_dosis=next_dosis, notes=notes
             )
+        else:
+            return error_message("An error has occurred", 400)
 
         # Add new tracker to the database
         db.session.add(new_tracker)
@@ -116,7 +114,7 @@ def add_tracker(tracker_type, pet_id):
         flash("Data successfully added", "info")
 
         # Redirect to the appropriate page (could be a list or details page)
-        return redirect(url_for('trackers.trackers_home', pet_id=pet.id))
+        return redirect(url_for('trackers.trackers_home', pet_id=pet_id))
 
     return render_template('tracker_add.html', form=form, tracker_type=tracker_type, pet_id=pet_id)
 

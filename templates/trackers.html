@@ -36,14 +36,20 @@
                         <thead>
                             <tr>
                                 <th>Date</th>
-                                <th>Value</th>
+                                <th>Data</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for entry in tracker.entries %}
                             <tr>
                                 <td>{{ entry.date }}</td>
-                                <td>{{ entry.value }}</td>
+                                {% if tracker.type == 'weight' %}
+                                    <td>{{ entry.weight_in_kg }} kg</td>
+                                {% elif tracker_type == 'vaccine' %}
+                                    <td>{{ entry.vaccine_name }}</td>
+                                {% else %}
+                                    <td>{{ entry.product_name }}</td>
+                                {% endif %}
                             </tr>
                             {% endfor %}
                         </tbody>
