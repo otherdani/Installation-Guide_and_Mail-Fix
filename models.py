@@ -73,6 +73,11 @@ class Pet(db.Model):
     breed = db.relationship('Breed', lazy='joined')
     photos = db.relationship('Photo', backref='pet', lazy=True)
     logs = db.relationship('Log', backref='pet', lazy=True)
+    weight_tracks = db.relationship('WeightTracker', backref='pet', lazy=True)
+    vaccines = db.relationship('VaccineTracker', backref='pet', lazy=True)
+    internal_deworm = db.relationship('InternalDewormingTracker', backref='pet', lazy=True)
+    external_deworm = db.relationship('ExternalDewormingTracker', backref='pet', lazy=True)
+    medications = db.relationship('MedicationTracker', backref='pet', lazy=True)
 
     # Inverse relationships
     Species.breeds = db.relationship('Breed', back_populates='species', lazy='select')
