@@ -125,7 +125,7 @@ textarea:focus{
     background-color: #22BF8A;
     border-color: #0F5E49;
 }
-.dark_btn a i{
+.dark_btn a{
     color: white;
     text-decoration: none;
 }

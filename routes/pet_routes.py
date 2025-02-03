@@ -107,8 +107,8 @@ def delete_pet(pet_id):
     if pet.logs:
         for log in pet.logs:
             db.session.delete(log)
-    if pet.weights:
-        for weight in pet.weights:
+    if pet.weight_tracks:
+        for weight in pet.weight_tracks:
             db.session.delete(weight)
     if pet.vaccines:
         for vaccine in pet.vaccines:
