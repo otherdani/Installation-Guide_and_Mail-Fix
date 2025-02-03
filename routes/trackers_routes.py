@@ -139,12 +139,12 @@ def weight_graph(pet_id):
     img.seek(0)
     img_data = base64.b64encode(img.getvalue()).decode('utf-8')
 
-    return render_template('weight_graph.html', img_data=img_data, pet=pet)
+    return render_template('weight_graph.html', img_data=img_data, pet=pet, pet_id=pet.id)
 
 @trackers_bp.route('/<int:pet_id>/vaccinations')
 def vaccinations(pet_id):
     pet = Pet.query.get_or_404(pet_id)
-    return render_template('vaccination_tracker.html', pet=pet)
+    return render_template('vaccination_tracker.html', pet_id=pet.id)
 
 @trackers_bp.route('/<int:pet_id>/internal_deworming')
 def internal_deworming(pet_id):
