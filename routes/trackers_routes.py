@@ -123,9 +123,10 @@ def add_tracker(tracker_type, pet_id):
 @login_required
 def weight_graph(pet_id):
     weight_entries = WeightTracker.query.filter_by(pet_id=pet_id).order_by(WeightTracker.date).all()
+    pet = Pet.query.get_or_404(pet_id)
 
     dates = [entry.date for entry in weight_entries]
-    weights = [entry.value for entry in weight_entries]
+    weights = [entry.weight_in_kg for entry in weight_entries]
 
     fig, ax = plt.subplots()
     ax.plot(dates, weights, marker='o', color='b')
@@ -138,7 +139,7 @@ def weight_graph(pet_id):
     img.seek(0)
     img_data = base64.b64encode(img.getvalue()).decode('utf-8')
 
-    return render_template('weight_graph.html', img_data=img_data)
+    return render_template('weight_graph.html', img_data=img_data, pet=pet)
 
 @trackers_bp.route('/<int:pet_id>/vaccinations')
 def vaccinations(pet_id):
