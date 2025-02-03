@@ -45,7 +45,7 @@
                                 <td>{{ entry.date }}</td>
                                 {% if tracker.type == 'weight' %}
                                     <td>{{ entry.weight_in_kg }} kg</td>
-                                {% elif tracker_type == 'vaccine' %}
+                                {% elif tracker.type == 'vaccine' %}
                                     <td>{{ entry.vaccine_name }}</td>
                                 {% else %}
                                     <td>{{ entry.product_name }}</td>

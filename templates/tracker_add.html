@@ -6,6 +6,7 @@
 
 {% block main %}
     <h1>Add New {{ tracker_type|capitalize }} Entry</h1>
+    {% include 'pet_dropdown_menu.html' %}
 
     <form method="POST" action="{{ url_for('trackers.add_tracker', tracker_type=tracker_type, pet_id=pet_id) }}">
         {{ form.hidden_tag() }}
@@ -34,17 +35,17 @@
         {% elif tracker_type == 'internal_deworming' %}
             <div class="form-group mt-4">
                 {{ form.product_name.label }} 
-                {{ form.product_name(class="form-control mx-auto w-auto") }}
+                {{ form.product_name(class="form-control mx-auto w-auto", required=True, autofocus=True) }}
             </div>
         {% elif tracker_type == 'external_deworming' %}
             <div class="form-group mt-4">
                 {{ form.product_name.label }} 
-                {{ form.product_name(class="form-control mx-auto w-auto") }}
+                {{ form.product_name(class="form-control mx-auto w-auto", required=True, autofocus=True) }}
             </div>
         {% elif tracker_type == 'medication' %}
             <div class="form-group mt-4">
                 {{ form.product_name.label }} 
-                {{ form.product_name(class="form-control mx-auto w-auto") }}
+                {{ form.product_name(class="form-control mx-auto w-auto", required=True, autofocus=True) }}
             </div>
         {% endif %}
 
@@ -60,8 +61,8 @@
             {{ form.notes(class="form-control mx-auto w-auto") }}
         </div>
 
-        <div>
-            {{ form.submit(class="btn dark_btn mt-4") }}
-        </div>
+        {{ form.submit(class="btn dark_btn mt-4") }}
+        <button onclick="window.history.back()" class="btn btn-secondary mt-4">Cancel</button>
     </form>
+
 {% endblock %}

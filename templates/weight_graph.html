@@ -6,5 +6,8 @@
 
 {% block main %}
     <h2>{{ pet.name }}'s Weight Graph</h2>
+    {% include 'pet_dropdown_menu.html' %}
+
+    <!-- Display Weight Graph -->
     <img src="data:image/png;base64,{{ img_data }}" alt="Weight Graph">
 {% endblock %}

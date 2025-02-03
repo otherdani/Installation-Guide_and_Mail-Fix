@@ -113,7 +113,7 @@ def add_tracker(tracker_type, pet_id):
 
         flash("Data successfully added", "info")
 
-        # Redirect to the appropriate page (could be a list or details page)
+        # Redirect to the previous page
         return redirect(url_for('trackers.trackers_home', pet_id=pet_id))
 
     return render_template('tracker_add.html', form=form, tracker_type=tracker_type, pet_id=pet_id)
