@@ -14,9 +14,9 @@
         <a href="/register/facebook"><button class="btn"><i class="fab fa-facebook fa-2x"></i></button></a>
         <a href="/register/apple"><button class="btn"><i class="fab fa-apple fa-2x"></i></button></a>
     </div>
-    <div class="vertical_padding">
+    <div class="mt-4">
         <h4>Or</h4>
-        <form action="/register" method="post">
+        <form action="{{ url_for('auth.register') }}" method="post">
             {{ form.hidden_tag() }}
             <div class="mb-3">
                 <label for="email">Username</label>
@@ -37,7 +37,7 @@
             <button class="btn dark_btn" type="submit">Register</button>
         </form>
     </div>
-    <div class="vertical_padding">
+    <div class="mt-4">
         <a href="/login">Already have an account?</a>
     </div>
     
