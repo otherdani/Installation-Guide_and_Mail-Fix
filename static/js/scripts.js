@@ -1,22 +1,44 @@
 // Theme selection
 document.addEventListener("DOMContentLoaded", () => {
     const themeToggle = document.getElementById("theme-toggle");
+    const themeIcon = document.getElementById("theme-icon");
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     const savedTheme = localStorage.getItem("theme");
 
-    // Set theme on load
-    const theme = savedTheme || (prefersDark ? "dark" : "light");
-    document.body.classList.toggle("dark-mode", theme === "dark");
+    // Determine prefered user theme
+    const isDarkMode = savedTheme ? savedTheme === "dark" : prefersDark;
+    document.body.classList.toggle("dark-mode", isDarkMode);
+    updateIcon(isDarkMode);
 
-    // Save theme to cookies
-    document.cookie = `theme=${theme}; path=/; max-age=31536000`;
+    // Save theme in localStorage
+    function saveTheme(isDark) {
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+    }
 
-    themeToggle.addEventListener("click", () => {
+    // Update sun/moon icon
+    function updateIcon(isDark) {
+        themeIcon.classList.remove("fas", "far");
+        themeIcon.classList.add(isDark ? "far" : "fas");
+    }
+
+    // Change theme manually
+    themeToggle.addEventListener("click", (event) => {
+        event.preventDefault();
         const isDark = document.body.classList.toggle("dark-mode");
-        const theme = isDark ? "dark" : "light";
-        document.cookie = `theme=${theme}; path=/; max-age=31536000`;
+        saveTheme(isDark);
+        updateIcon(isDark);
+    });
+
+    // Review system preferences
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+        if (!localStorage.getItem("theme")) { // Change if user didn't change it manually
+            const newPreference = e.matches;
+            document.body.classList.toggle("dark-mode", newPreference);
+            updateIcon(newPreference);
+        }
     });
 });
+
 
 // Generate current year
 const yearSpan = document.getElementById("current_year");

@@ -18,6 +18,7 @@ def login_required(f):
 
     return decorated_function
 
+
 def inject_pets(f):
     """Obtain pets related to a user"""
     @wraps(f)
@@ -27,8 +28,6 @@ def inject_pets(f):
         return f(*args, **kwargs)
     return decorated_function
 
-
-from flask import render_template
 
 def error_message(message, code):
     """Render message as an apology to user with an http.cat image."""
