@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 
 from models import Pet, Breed, Species, Photo
 from forms import PetForm
-from helpers import error_message, allowed_photo_file, inject_pets, login_required
+from helpers import error_message, allowed_photo_file, inject_pets, login_required, delete_pet_from_db
 
 pet_bp = Blueprint('pet', __name__)
 
@@ -79,52 +79,9 @@ def delete_pet(pet_id):
     """Delete a pet from db"""
     pet = Pet.query.get_or_404(pet_id)
     db = current_app.extensions['sqlalchemy']
-
-    # Delete gallery photos associated with the pet
-    if pet.photos:
-        for photo in pet.photos:
-            if photo.image_url:
-                photo_path = os.path.join(current_app.config['UPLOAD_FOLDER'], photo.image_url)
-                if os.path.exists(photo_path):
-                    try:
-                        os.remove(photo_path)
-                        current_app.logger.info(f"Deleted photo: {photo_path}")
-                    except Exception as e:
-                        current_app.logger.error(f"Error deleting photo {photo_path}: {e}")
-            db.session.delete(photo)
-    
-    # Delete pet photo
-    if pet.pet_profile_photo:
-        old_photo_path = os.path.join(current_app.config['UPLOAD_FOLDER'], pet.pet_profile_photo)
-        if os.path.exists(old_photo_path):
-            try:
-                os.remove(old_photo_path)
-                current_app.logger.info(f"Deleted photo: {old_photo_path}")
-            except Exception as e:
-                current_app.logger.error(f"Error deleting pet photo: {e}")
-
-    # Delete pet logs
-    if pet.logs:
-        for log in pet.logs:
-            db.session.delete(log)
-    if pet.weight_tracks:
-        for weight in pet.weight_tracks:
-            db.session.delete(weight)
-    if pet.vaccines:
-        for vaccine in pet.vaccines:
-            db.session.delete(vaccine)
-    if pet.internal_deworm:
-        for i in pet.internal_deworm:
-            db.session.delete(i)
-    if pet.external_deworm:
-        for e in pet.external_deworm:
-            db.session.delete(e)
-    if pet.medications:
-        for med in pet.medications:
-            db.session.delete(med)
     
     try:
-        db.session.delete(pet)
+        delete_pet_from_db(pet, db)
         db.session.commit()
         flash('Pet deleted successfully!', 'success')
     except Exception as e:
