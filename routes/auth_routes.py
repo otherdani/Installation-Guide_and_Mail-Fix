@@ -6,9 +6,9 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from itsdangerous import URLSafeTimedSerializer as Serializer, BadSignature, SignatureExpired
 from flask_mail import Message
 
-from models import User
+from models import User, Pet
 from forms import LoginForm, RegisterForm, ResetPasswordForm, RestorePasswordForm
-from helpers import error_message
+from helpers import error_message, delete_pet_from_db
 
 
 auth_bp = Blueprint('auth', __name__)
@@ -217,3 +217,34 @@ def reset_password(token):
         return redirect("/login")
 
     return render_template("reset_password.html", form=form)
+
+@auth_bp.route("/delete_user/<int:user_id>", methods=["GET"])
+def delete_user(user_id):
+    """Delete a user and all their pets from the database."""
+    db = current_app.extensions['sqlalchemy']
+    
+    # Fetch user by ID
+    user = User.query.get_or_404(user_id)
+    
+    try:
+        # Delete all pets associated with this user
+        pets = Pet.query.filter_by(user_id=user_id).all()
+
+        # Iterate over each pet and delete it
+        for pet in pets:
+            delete_pet_from_db(pet, db)
+        
+        # Commit deletion of all pets
+        db.session.commit()
+
+        # Now delete the user
+        db.session.delete(user)
+        db.session.commit()
+
+        flash('User and all their pets have been deleted successfully.', 'success')
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Error deleting user: {str(e)}")
+        flash(f'Error deleting user: {str(e)}', 'danger')
+
+    return redirect('/')
