@@ -8,7 +8,7 @@ from flask_mail import Message
 
 from models import User, Pet
 from forms import LoginForm, RegisterForm, ResetPasswordForm, RestorePasswordForm
-from helpers import error_message, delete_pet_from_db
+from helpers import error_message, delete_pet_from_db, login_required
 
 
 auth_bp = Blueprint('auth', __name__)
@@ -66,7 +66,7 @@ def register():
         # Check if email already exists
         existing_user = User.query.filter_by(email=email).first()
         if existing_user:
-            return error_message("This email is already registered. Try to login", 400)
+            return error_message("This email is already registered. Try to login", 409)
         
         # Check password = confirmation
         if password != confirmation:
@@ -120,7 +120,7 @@ def confirm_email(token):
     try:
         # Deserialize token
         s = Serializer(current_app.secret_key)
-        email = s.loads(token, salt='email-confirm', max_age=3600)
+        email = s.loads(token, salt='email-confirm', max_age=300)
     except (BadSignature, SignatureExpired) as e:
         current_app.logger.error("Token error: %s", e)
         flash("The confirmation link is invalid or has expired. Please request a new confirmation email.", "danger")
@@ -158,14 +158,18 @@ def restore_password():
         user = User.query.filter_by(email=email).first()
 
         if not user:
-            return error_message("This email is not registered.", 404)
+            return error_message("This email is not registered.", 400)
 
+        if session['user_id']:
+            if session['user_id'] != user.id:
+                return error_message("This is not your email. Try again", 403)
+        
         # Generate reset token
         s = Serializer(current_app.secret_key)
         token = s.dumps(email, salt='password-reset')
 
         # Create the reset URL
-        reset_url = url_for('reset_password', token=token, _external=True)
+        reset_url = url_for('auth.reset_password', token=token, _external=True)
         html = render_template('password_reset_email.html', reset_url=reset_url)
         subject = "Password Reset Request"
 
@@ -192,7 +196,7 @@ def reset_password(token):
     try:
         # Deserialize token
         s = Serializer(current_app.secret_key)
-        email = s.loads(token, salt='password-reset', max_age=3600)
+        email = s.loads(token, salt='password-reset', max_age=300) # Set token duration to 5 min
     except (BadSignature, SignatureExpired) as e:
         current_app.logger.error("Token error: %s", e)
         flash("The reset link is invalid or has expired. Please request a new link.", "danger")
@@ -219,6 +223,7 @@ def reset_password(token):
     return render_template("reset_password.html", form=form)
 
 @auth_bp.route("/delete_user/<int:user_id>", methods=["GET"])
+@login_required
 def delete_user(user_id):
     """Delete a user and all their pets from the database."""
     db = current_app.extensions['sqlalchemy']
@@ -242,6 +247,9 @@ def delete_user(user_id):
         db.session.commit()
 
         flash('User and all their pets have been deleted successfully.', 'success')
+        session.clear()
+        return redirect(url_for('home.welcome'))
+    
     except Exception as e:
         db.session.rollback()
         current_app.logger.error(f"Error deleting user: {str(e)}")

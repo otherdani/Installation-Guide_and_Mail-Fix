@@ -2,7 +2,7 @@ import os
 from flask import Blueprint, render_template, request, redirect, flash, current_app, session, jsonify
 from werkzeug.utils import secure_filename
 
-from models import Pet, Breed, Species, Photo
+from models import Pet, Breed, Species
 from forms import PetForm
 from helpers import error_message, allowed_photo_file, inject_pets, login_required, delete_pet_from_db
 
@@ -45,6 +45,11 @@ def add_new_pet():
                 
             else:
                 pet_profile_photo = None
+            # Check if the microchip number is already used
+            existing_pet = Pet.query.filter_by(microchip_number=microchip_number).first()
+            if existing_pet:
+                return error_message("Microchip number already registered.", 409)
+
 
             # Save pet data to the database
             new_pet = Pet(
@@ -63,7 +68,6 @@ def add_new_pet():
             )
             db.session.add(new_pet)
             db.session.commit()
-
             flash('Pet registered successfully!', 'success')
             return redirect("/")
 
@@ -134,6 +138,9 @@ def edit_pet(pet_id):
             db.session.commit()
             flash('Pet information updated successfully!', 'success')
             return redirect('/')
+        except IntegrityError:
+            return error_message("Microchip number must be unique.", 400)
+        
         except Exception as e:
             db.session.rollback()
             current_app.logger.error(f"Error updating pet: {str(e)}")
