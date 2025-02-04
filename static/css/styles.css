@@ -53,8 +53,8 @@ hr{
 a, i {
     color: var(--text-color);
 }
-a:hover{
-    color: #0F5E49;
+a:hover, i:hover, .dropdown-item:hover i {
+    color: var(--secondary-color) !important;
 }
 
 input:focus {
@@ -98,12 +98,16 @@ textarea:focus{
 
 .card {
     padding: 1rem;
-    background-color: var(--secondary-color);
+    background-color: var(--primary-color);
     --bs-card-border-color: var(--text-color);
     color: var(--text-color);
 }
 
 .text-body-secondary{
+    color: var(--text-color) !important;
+}
+
+.text-muted{
     color: var(--text-color) !important;
 }
 
@@ -155,6 +159,9 @@ textarea:focus{
 
 .nav-link, .nav-link.dropdown-toggle {
     color: var(--text-color);
+}
+.dropdown-item:hover{
+    background-color: var(--primary-color);
 }
 
 .navbar_name{
