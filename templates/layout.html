@@ -68,9 +68,9 @@
             <header>
                 <!-- Custom Alert -->
                 <div id="customAlert" class="alert alert-danger alert-dismissible fade show text-center" role="alert" style="display:none;">
-                    <strong>Error!</strong> <span id="alertMessage">Please fill in all the required fields.</span>
+                    <strong>Error!</strong> <span id="alertMessage"></span>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
+                </div>                
                 {% if get_flashed_messages() %}
                     <div class="alert alert-primary alert-dismissible fade show mb-0 text-center" role="alert" id="flashedMessage">
                         {{ get_flashed_messages() | join(" ") }}

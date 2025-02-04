@@ -94,6 +94,14 @@
 
 
     <script>
+        function showAlert(message) {
+            $('#alertMessage').text(message);
+            $('#customAlert').show();
+            setTimeout(function() {
+                $('#customAlert').fadeOut();
+            }, 5000);
+        }
+
         // Steps management
         $(document).ready(function() {
             // Show breeds depending on selected specie
@@ -130,21 +138,26 @@
 
                 if (name === "") {
                     showAlert("Please enter a name for your pet before proceeding.");
-                    return; // Don't proceed if name is empty
+                    $('#name').addClass('is-invalid');
+                    return;
                 }
+
 
                 if (sex === "" || sex === null) {
                     showAlert("Please select a sex for your pet.");
+                    $('#nsex').addClass('is-invalid');
                     return; // Don't proceed if sex is not selected
                 }
 
                 if (species === "" || species === null) {
                     showAlert("Please select a species for your pet.");
+                    $('#species').addClass('is-invalid');
                     return; // Don't proceed if species is not selected
                 }
 
                 if (breed === "" || breed === null) {
                     showAlert("Please select a breed for your pet.");
+                    $('#breed').addClass('is-invalid');
                     return; // Don't proceed if breed is not selected
                 }
 
