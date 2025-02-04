@@ -28,30 +28,15 @@ def inject_pets(f):
     return decorated_function
 
 
-def error_message(message, code=400):
-    """Render message as an apology to user."""
+from flask import render_template
 
-    def escape(s):
-        """
-        Escape special characters.
-
-        https://github.com/jacebrowning/memegen#special-characters
-        """
-        for old, new in [
-            ("-", "--"),
-            (" ", "-"),
-            ("_", "__"),
-            ("?", "~q"),
-            ("%", "~p"),
-            ("#", "~h"),
-            ("/", "~s"),
-            ('"', "''"),
-        ]:
-            s = s.replace(old, new)
-        return s
-
-    return render_template("error.html", top=code, bottom=escape(message)), code
-
+def error_message(message, code):
+    """Render message as an apology to user with an http.cat image."""
+    return render_template(
+        "error.html",
+        top=code,
+        bottom=message,
+    ), code
 
 
 def allowed_photo_file(filename):
