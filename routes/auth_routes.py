@@ -1,5 +1,6 @@
 import os
 import logging
+from smtplib import SMTPException
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app, session
 from werkzeug.security import check_password_hash, generate_password_hash
 from itsdangerous import URLSafeTimedSerializer as Serializer, BadSignature, SignatureExpired
@@ -84,7 +85,7 @@ def register():
             token = s.dumps(email, salt='email-confirm')
 
             # Create the confirmation URL
-            confirm_url = url_for('confirm_email', token=token, _external=True)
+            confirm_url = url_for('auth.confirm_email', token=token, _external=True)
             html = render_template('email_confirmation.html', confirm_url=confirm_url)
             subject = "Confirm your email"
 
@@ -98,11 +99,15 @@ def register():
 
             flash("A confirmation email has been sent. Please check your inbox and your spam folder.", "info")
             return redirect("/")
-
-        except (KeyError, ValueError) as e:
-            current_app.logger.error("Error during email sending or token generation: %s", e)
+        
+        except SMTPException as e:
+            current_app.logger.error("SMTP error: %s", e)
+            return error_message("An error occurred while sending the email. Please try again later.", 500)
+        
+        except Exception as e:
+            current_app.logger.error("Unexpected error: %s", e)
             session.clear()  # Clean up session on failure
-            return error_message("An error occurred. Please try again.", 500)
+            return error_message("An unexpected error occurred. Please try again later.", 500)
 
     # User reached route via GET
     return render_template("register.html", form=form)
