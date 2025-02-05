@@ -1,11 +1,14 @@
-from io import BytesIO
-import base64
-from flask import Blueprint, render_template, redirect, url_for, request, current_app, flash
-import matplotlib.pyplot as plt
+from datetime import datetime, timedelta
+from flask import Blueprint, render_template, redirect, url_for, current_app, flash, request
+import matplotlib
+import calendar
 
-from helpers import login_required, inject_pets, error_message
+from helpers import login_required, inject_pets, error_message, create_weight_graph
 from models import Pet, WeightTracker, VaccineTracker, InternalDewormingTracker, ExternalDewormingTracker, MedicationTracker
 from forms import WeightForm, VaccineForm, InternalDewormingForm, ExternalDewormingForm, MedicationForm
+
+# Use backend without graphic interface to avoid sockets conflict
+matplotlib.use('Agg')
 
 trackers_bp = Blueprint('trackers', __name__)
 
@@ -119,27 +122,61 @@ def add_tracker(tracker_type, pet_id):
     return render_template('tracker_add.html', form=form, tracker_type=tracker_type, pet_id=pet_id)
 
 
-@trackers_bp.route('/<int:pet_id>/weight_graph')
+@trackers_bp.route('/<int:pet_id>/weight_graph', methods=['GET'])
 @login_required
 def weight_graph(pet_id):
+    """Display a graph of pet weight for the current or specified month."""
     weight_entries = WeightTracker.query.filter_by(pet_id=pet_id).order_by(WeightTracker.date).all()
     pet = Pet.query.get_or_404(pet_id)
 
-    dates = [entry.date for entry in weight_entries]
-    weights = [entry.weight_in_kg for entry in weight_entries]
+    # Get current date and parse month/year from request args
+    month = request.args.get('month', default=datetime.now().month, type=int)
+    year = request.args.get('year', default=datetime.now().year, type=int)
 
-    fig, ax = plt.subplots()
-    ax.plot(dates, weights, marker='o', color='b')
-    ax.set(xlabel='Date', ylabel='Weight (kg)', title="Pet's Weight Over Time")
-    ax.grid()
+    # Generate all days of the specified month
+    first_day = datetime(year, month, 1)
+    last_day = datetime(year, month, calendar.monthrange(year, month)[1])
+    all_days = [first_day + timedelta(days=i) for i in range((last_day - first_day).days + 1)]
 
-    # Save the plot to a BytesIO object to display it on the page
-    img = BytesIO()
-    fig.savefig(img, format='png')
-    img.seek(0)
-    img_data = base64.b64encode(img.getvalue()).decode('utf-8')
+    # Map user-provided data to corresponding days
+    weight_data = {entry.date: entry.weight_in_kg for entry in weight_entries if entry.date.month == month and entry.date.year == year}
+    monthly_weights = [weight_data.get(day.date(), None) for day in all_days]
 
-    return render_template('weight_graph.html', img_data=img_data, pet=pet, pet_id=pet.id)
+    # Check if there is any data for the month
+    if not any(monthly_weights):
+        return render_template(
+            'weight_graph.html',
+            pet=pet,
+            year=year,
+            month=month,
+            month_name=first_day.strftime('%B'),
+            monthly_img_data=None,
+            current_month=datetime.now().month,
+            current_year=datetime.now().year,
+        )
+
+    # Monthly graph
+    monthly_img_data = create_weight_graph(
+        dates=all_days,
+        weights=monthly_weights,
+        title=f"Pet's Weight for {first_day.strftime('%B %Y')}",
+        xlabel='Day',
+        ylabel='Weight (kg)',
+        color='g',
+        show_days_only=True
+    )
+
+    return render_template(
+        'weight_graph.html',
+        pet=pet,
+        year=year,
+        month=month,
+        month_name=first_day.strftime('%B'),
+        monthly_img_data=monthly_img_data,
+        current_month=datetime.now().month,
+        current_year=datetime.now().year,
+    )
+
 
 @trackers_bp.route('/<int:pet_id>/vaccinations')
 def vaccinations(pet_id):
