@@ -62,3 +62,11 @@ setTimeout(function() {
         alert.classList.add('fade');
     }
 }, 5000);
+
+function showAlert(message) {
+    $('#alertMessage').text(message);
+    $('#customAlert').show();
+    setTimeout(function() {
+        $('#customAlert').fadeOut();
+    }, 5000);
+}

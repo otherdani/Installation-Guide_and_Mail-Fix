@@ -66,9 +66,9 @@
                                     <td>{{ entry.administered_by }}</td>
                                 {% else %}
                                     <td>{{ entry.product_name }}</td>
-                                    <td>{{ entry.next_dosis }}</td>
+                                    <td>{{ entry.next_dosis or "-"}}</td>
                                 {% endif %}
-                                <td>{{ entry.notes }}</td>
+                                <td>{{ entry.notes or "-"}}</td>
                             </tr>
                             {% endfor %}
                         </tbody>

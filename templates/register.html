@@ -5,21 +5,15 @@
 {% endblock %}
 
 {% block main %}
-    <div class="vertical_padding">
+    <div class="mt-4">
         <img src="/static/images/favicon.png" alt="logo" class="welcome_logo">
-        <h1>Register with social media</h1>
-    </div>
-    <div class="vertical_padding">
-        <a href="/register/google"><button class="btn"><i class="fab fa-google fa-2x"></i></button></a>
-        <a href="/register/facebook"><button class="btn"><i class="fab fa-facebook fa-2x"></i></button></a>
-        <a href="/register/apple"><button class="btn"><i class="fab fa-apple fa-2x"></i></button></a>
+        <h1>Sign Up</h1>
     </div>
     <div class="mt-4">
-        <h4>Or</h4>
-        <form action="{{ url_for('auth.register') }}" method="post">
+        <form id="registrationForm" action="{{ url_for('auth.register') }}" method="post">
             {{ form.hidden_tag() }}
             <div class="mb-3">
-                <label for="email">Username</label>
+                <label for="username">Username</label>
                 {{ form.username(class="form-control mx-auto w-auto", placeholder="Username") }}
             </div>
             <div class="mb-3">
@@ -31,7 +25,7 @@
                 {{ form.password(class="form-control mx-auto w-auto", placeholder="Enter your password") }}
             </div>
             <div class="mb-3">
-                <label for="password">Password Confirmation</label>
+                <label for="confirmation">Password Confirmation</label>
                 {{ form.confirmation(class="form-control mx-auto w-auto", placeholder="Confirm password") }}
             </div>
             <button class="btn dark_btn" type="submit">Register</button>
@@ -40,6 +34,26 @@
     <div class="mt-4">
         <a href="/login">Already have an account?</a>
     </div>
-    
-    
+
+    <script>
+        $(document).ready(function() {
+            $('#registrationForm').on('submit', function(event) {
+                // Clear previous error message
+                $('#error-message').hide().text('');
+
+                // Get password and confirmation values
+                var password = $('input[name="password"]').val();
+                var confirmation = $('input[name="confirmation"]').val();
+
+                // Check if passwords match
+                if (password !== confirmation) {
+                    // Prevent form submission
+                    event.preventDefault();
+                    // Show error message
+                    showAlert("Passwords do not match. Please try again.");
+                }
+            });
+        });
+    </script>
+
 {% endblock %}
