@@ -98,7 +98,7 @@ textarea:focus{
 
 .card {
     padding: 1rem;
-    background-color: var(--primary-color);
+    background-color: var(--secondary-color);
     --bs-card-border-color: var(--text-color);
     color: var(--text-color);
 }
@@ -241,4 +241,16 @@ textarea:focus{
     --bs-table-bg: var(--bg-color);
     --bs-table-color: var(--text-color);
     --bs-table-border-color: transparent;
+}
+
+/* Weight graph  */
+.graph-container {
+    max-width: 100%; /* Ensure it doesn't exceed the container's width */
+    max-height: 50%;
+    overflow: hidden; /* Prevent overflow */
+}
+
+.responsive-graph svg {
+    width: 100%; /* Scale SVG to fit container */
+    height: auto; /* Maintain aspect ratio */
 }

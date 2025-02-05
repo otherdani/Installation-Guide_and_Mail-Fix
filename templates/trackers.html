@@ -31,8 +31,16 @@
                     <h5 class="card-title">{{ tracker.name }}</h5>
                     <p class="card-text">{{ tracker.description }}</p>
 
+                    <!-- Add New Entry Button -->
+                    <a href="{{ url_for('trackers.add_tracker', tracker_type=tracker.type, pet_id=pet.id) }}" class="btn btn-success">Add New Entry</a>
+
+                    {% if tracker.name == 'Weight Tracker' %}
+                    <!-- Weight Graph Button -->
+                    <a href="{{ url_for('trackers.weight_graph', pet_id=pet.id) }}" class="btn btn-info">View Weight Graph</a>
+                    {% endif %}
+
                     <!-- Show Latest Entries -->
-                    <table class="table">
+                    <table class="table mt-4">
                         <thead>
                             <tr>
                                 <th>Date</th>
@@ -54,14 +62,6 @@
                             {% endfor %}
                         </tbody>
                     </table>
-
-                    <!-- Add New Entry Button -->
-                    <a href="{{ url_for('trackers.add_tracker', tracker_type=tracker.type, pet_id=pet.id) }}" class="btn btn-success">Add New Entry</a>
-
-                    {% if tracker.name == 'Weight Tracker' %}
-                    <!-- Weight Graph Button -->
-                    <a href="{{ url_for('trackers.weight_graph', pet_id=pet.id) }}" class="btn btn-info">View Weight Graph</a>
-                    {% endif %}
                 </div>
             </div>
         </div>

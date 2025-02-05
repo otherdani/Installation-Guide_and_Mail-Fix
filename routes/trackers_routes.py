@@ -155,7 +155,7 @@ def weight_graph(pet_id):
             current_year=datetime.now().year,
         )
 
-    # Monthly graph
+    # Monthly graph as SVG
     monthly_img_data = create_weight_graph(
         dates=all_days,
         weights=monthly_weights,
@@ -176,6 +176,7 @@ def weight_graph(pet_id):
         current_month=datetime.now().month,
         current_year=datetime.now().year,
     )
+
 
 
 @trackers_bp.route('/<int:pet_id>/vaccinations')
