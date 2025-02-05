@@ -1,7 +1,6 @@
 import os
 from flask import Flask
 from dotenv import load_dotenv
-from authlib.integrations.flask_client import OAuth
 from flask_mail import Mail
 
 from extensions import db, migrate, session as session_ext, csrf
@@ -36,7 +35,6 @@ def init_app():
     migrate.init_app(app, db)
     session_ext.init_app(app)
     csrf.init_app(app)
-    oauth = OAuth(app)
 
     # Configure Flask-Mail
     # Sentitive data is in a .env file to improve security
