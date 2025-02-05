@@ -71,8 +71,7 @@ def upgrade():
     sa.ForeignKeyConstraint(['breed_id'], ['breeds.id'], ondelete='SET NULL'),
     sa.ForeignKeyConstraint(['species_id'], ['species.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('microchip_number')
+    sa.PrimaryKeyConstraint('id')
     )
     with op.batch_alter_table('pets', schema=None) as batch_op:
         batch_op.create_index(batch_op.f('ix_pets_breed_id'), ['breed_id'], unique=False)
