@@ -53,7 +53,7 @@ There are multiple trackers available, including:
 
 ### 🏗 **Main Components**
 
-#### ⚙️ Core Application Files  
+### ⚙️ Core Application Files  
 1. **`app.py`** – Application Entry Point  
    This file **runs the Flask application** by calling the `init_app()` function from `app_factory.py`.  
    - **Imports and initializes the app** using the factory function.  
@@ -78,22 +78,21 @@ There are multiple trackers available, including:
 This modular setup is based on the **App Factory Pattern** and ensures that the app remains **organized, secure, and easy to maintain**. Also, this separation of concerns makes the project **more scalable** by keeping the initialization logic (`app_factory.py`) independent from the execution logic (`app.py`).
 
 
-#### 🗂 Complementary Files
+### 🗂 Complementary Files
 1. **`helpers.py`**  – Utility Functions for PetPal
-   This file contains **helper functions and decorators** that simplify various tasks across the application, enhancing **code organization and reusability**, such as:
-   - **`login_required(f)`** – A decorator that ensures users are logged in before accessing certain routes. If not authenticated, the user is redirected to the welcome page.  
-   - **`inject_pets(f)`** – A decorator that retrieves the user's pets from the database and makes them available globally (`g.pets`) for templates and views. 
-   - **`error_message(message, code)`** – Renders an error page using a custom template (`error.html`), displaying an `http.cat` image based on the error code.  
-   - **`allowed_photo_file(filename)`** – Validates if an uploaded file has an allowed image extension (`png`, `jpg`, `jpeg`, `gif`).  
-   - **`delete_pet_from_db(pet, db)`** – Deletes a pet and all its associated data, including:  
-      - Profile and gallery photos.  
-      - Logs, weight records, vaccines, medications, and deworming records.  
-   - **`create_weight_graph(dates, weights, title, xlabel, ylabel, color, show_days_only=False)`**  
-      - Generates a **weight tracking graph** for pets using `matplotlib`.  
-      - Filters out missing data points, formats the x-axis for better readability, and **returns the graph as an SVG** for responsive rendering.  
+   This file contains **helper functions and decorators** that simplify various tasks across the application, enhancing **code organization and reusability**.
+   `helpers.py` enhances the application's **security**, **data management**, and **visualization capabilities**, avoiding code repetition and making `PetPal` more **efficient and user-friendly**.
+      - **`login_required(f)`** – A decorator that ensures users are logged in before accessing certain routes. If not authenticated, the user is redirected to the welcome page.  
+      - **`inject_pets(f)`** – A decorator that retrieves the user's pets from the database and makes them available globally (`g.pets`) for templates and views. 
+      - **`error_message(message, code)`** – Renders an error page using a custom template (`error.html`), displaying an `http.cat` image based on the error code.  
+      - **`allowed_photo_file(filename)`** – Validates if an uploaded file has an allowed image extension (`png`, `jpg`, `jpeg`, `gif`).  
+      - **`delete_pet_from_db(pet, db)`** – Deletes a pet and all its associated data, including:  
+         - Profile and gallery photos.  
+         - Logs, weight records, vaccines, medications, and deworming records.  
+      - **`create_weight_graph(dates, weights, title, xlabel, ylabel, color, show_days_only=False)`**  
+         - Generates a **weight tracking graph** for pets using `matplotlib`.  
+         - Filters out missing data points, formats the x-axis for better readability, and **returns the graph as an SVG** for responsive rendering.  
 
-    ##### 🎯 Purpose  
-   `helpers.py` enhances the application's **security**, **data management**, and **visualization capabilities**, avoiding code repetition and making `PetPal` more **efficient and user-friendly**. 
 
 2. **`models.py`**  – Database models for the project
    Defines the structure of tables using SQLAlchemy, including the `User`, `Species`, `Breed`, `Pet`, `Photo`, `Log`, and `Tracker` models (weight, vaccine, internal/external deworming, and medication). It provides structured relationships between users and their pets while allowing tracking of various health metrics and activities related to pet care. Each model includes methods for converting data into dictionary format for easy serialization, which is useful for data manipulation within the application.
@@ -119,9 +118,8 @@ This modular setup is based on the **App Factory Pattern** and ensures that the 
 6. **`breeds.py`**
    Contains a dictionary of all allowed dog and cat breeds for the app. This data is used to populate the database via migrations, ensuring that only valid breeds are available for selection when adding pets to the system.
 
--
 
-#### 🛣 Routes
+### 🛣 Routes
 
 1. `__init__.py`
    - Initializes the route directory for better organization and access to the app’s routes.
@@ -171,7 +169,7 @@ This modular setup is based on the **App Factory Pattern** and ensures that the 
 Organizing routes into separate files helps keep the code organized, easy to manage, and scalable. It makes adding new features simpler, without overloading the main file. This setup also makes the project more readable, easier to debug, and efficient for teamwork. Testing becomes more straightforward, and code can be reused across different parts of the project. Sensitive features can be easily secured, and the folder structure remains clean and organized as the project grows, making it ready for future development.
 
 
-#### 🖥 **Frontend (Templates & Static Files)**  
+### 🖥 **Frontend (Templates & Static Files)**  
 1. **HTML Templates** – Includes pages for user authentication, pet profiles, trackers, logs, and galleries.
    **`templates/`**  
    Contains the HTML files for rendering different pages in the app. The templates include:
