@@ -65,7 +65,7 @@ class Pet(db.Model):
     species_id = db.Column(db.Integer, db.ForeignKey('species.id', ondelete='CASCADE'), nullable=False, index=True)
     breed_id = db.Column(db.Integer, db.ForeignKey('breeds.id', ondelete='SET NULL'), nullable=True, index=True)
     sterilized = db.Column(db.Boolean, nullable=False, default=False)
-    microchip_number = db.Column(db.String(50), unique=True, nullable=True)
+    microchip_number = db.Column(db.String(50), nullable=True)
     insurance_company = db.Column(db.String(100), nullable=True)
     insurance_number = db.Column(db.String(50), nullable=True)
 
