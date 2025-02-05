@@ -1,8 +1,8 @@
 import os
-import base64
 from io import BytesIO
 from functools import wraps
 from flask import redirect, session, render_template, g, current_app
+import numpy as np
 from models import Pet
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
@@ -87,28 +87,31 @@ def delete_pet_from_db(pet, db):
     # Finally, delete the pet itself
     db.session.delete(pet)
 
-def create_weight_graph(dates, weights, title, xlabel, ylabel, color, valid_labels=None, show_days_only=False):
+
+def create_weight_graph(dates, weights, title, xlabel, ylabel, color, show_days_only=False):
     """Helper function to create and save a weight graph."""
+    
     fig, ax = plt.subplots(figsize=(10, 5))  # Set figure size
 
-    if weights:  # Avoid plotting if there are no entries
-        ax.plot(dates, weights, marker='o', color=color)
-        
-        ax.set(xlabel=xlabel, ylabel=ylabel, title=title)
-        
-        # Format x-axis
-        if show_days_only:
-            ax.xaxis.set_major_formatter(mdates.DateFormatter('%d'))  # Show only day numbers
-            ax.set_xticks(dates)  # Set ticks for all days in the month
-            plt.xticks(rotation=45)  # Rotate for readability
+    # Filter out None values for plotting the line
+    valid_dates = [date for date, weight in zip(dates, weights) if weight is not None]
+    valid_weights = [weight for weight in weights if weight is not None]
 
-        ax.grid()
+    # Plot only valid points with lines connecting them
+    ax.plot(valid_dates, valid_weights, marker='o', color=color)  # Connect only valid points
 
-        # Save plot to a BytesIO buffer as SVG
-        img = BytesIO()
-        fig.savefig(img, format='svg')  # Save as SVG for responsiveness
-        img.seek(0)
-        
-        return img.getvalue().decode('utf-8')  # Return SVG content as string
+    # Set all days of the month on the x-axis
+    ax.set(xlabel=xlabel, ylabel=ylabel, title=title)
+    if show_days_only:
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%d'))  # Show only day numbers
+        ax.set_xticks(dates)  # Set ticks for all days in the month
+        plt.xticks(rotation=45)  # Rotate for readability
+
+    ax.grid()
+
+    # Save plot to a BytesIO buffer as SVG
+    img = BytesIO()
+    fig.savefig(img, format='svg')  # Save as SVG for responsiveness
+    img.seek(0)
     
-    return None  # Return None if there are no weights to plot
+    return img.getvalue().decode('utf-8')  # Return SVG content as string

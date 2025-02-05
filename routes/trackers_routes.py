@@ -126,6 +126,7 @@ def add_tracker(tracker_type, pet_id):
 @login_required
 def weight_graph(pet_id):
     """Display a graph of pet weight for the current or specified month."""
+    # Fetch weight entries and pet data
     weight_entries = WeightTracker.query.filter_by(pet_id=pet_id).order_by(WeightTracker.date).all()
     pet = Pet.query.get_or_404(pet_id)
 
@@ -142,8 +143,12 @@ def weight_graph(pet_id):
     weight_data = {entry.date: entry.weight_in_kg for entry in weight_entries if entry.date.month == month and entry.date.year == year}
     monthly_weights = [weight_data.get(day.date(), None) for day in all_days]
 
+    # Filter out None values for plotting
+    valid_dates = [day for day, weight in zip(all_days, monthly_weights) if weight is not None]
+    valid_weights = [weight for weight in monthly_weights if weight is not None]
+
     # Check if there is any data for the month
-    if not any(monthly_weights):
+    if not valid_weights:
         return render_template(
             'weight_graph.html',
             pet=pet,
@@ -155,10 +160,10 @@ def weight_graph(pet_id):
             current_year=datetime.now().year,
         )
 
-    # Monthly graph as SVG
+    # Generate the monthly graph as SVG with only valid points
     monthly_img_data = create_weight_graph(
-        dates=all_days,
-        weights=monthly_weights,
+        dates=all_days,  # Use all days for x-axis ticks
+        weights=monthly_weights,  # Use original weights (including None)
         title=f"Pet's Weight for {first_day.strftime('%B %Y')}",
         xlabel='Day',
         ylabel='Weight (kg)',
@@ -176,7 +181,6 @@ def weight_graph(pet_id):
         current_month=datetime.now().month,
         current_year=datetime.now().year,
     )
-
 
 
 @trackers_bp.route('/<int:pet_id>/vaccinations')
