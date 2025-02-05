@@ -77,9 +77,8 @@ There are multiple trackers available, including:
 
 This modular setup is based on the **App Factory Pattern** and ensures that the app remains **organized, secure, and easy to maintain**. Also, this separation of concerns makes the project **more scalable** by keeping the initialization logic (`app_factory.py`) independent from the execution logic (`app.py`).
 
--
 
-#### ⚙️ Complementary Files
+#### 🗂 Complementary Files
 1. **`helpers.py`**  – Utility Functions for PetPal
    This file contains **helper functions and decorators** that simplify various tasks across the application, enhancing **code organization and reusability**, such as:
    - **`login_required(f)`** – A decorator that ensures users are logged in before accessing certain routes. If not authenticated, the user is redirected to the welcome page.  
