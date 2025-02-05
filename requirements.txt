@@ -3,7 +3,6 @@ Flask-Session
 requests
 flask-migrate
 flask-sqlalchemy
-authlib
 python-dotenv
 requests
 Flask-Mail
