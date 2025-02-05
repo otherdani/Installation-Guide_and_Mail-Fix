@@ -165,12 +165,12 @@ This modular setup is based on the **App Factory Pattern** and ensures that the 
       - `add_tracker()` - Allows users to add a new entry to any of the trackers (weight, vaccinations, deworming, or medication).
       - `weight_graph()` - Displays a monthly graph that shows pet weight over time.
 
-##### Reasons for Choosing Modular Route Organization
+##### 🚀 Reasons for Choosing Modular Route Organization
 Organizing routes into separate files helps keep the code organized, easy to manage, and scalable. It makes adding new features simpler, without overloading the main file. This setup also makes the project more readable, easier to debug, and efficient for teamwork. Testing becomes more straightforward, and code can be reused across different parts of the project. Sensitive features can be easily secured, and the folder structure remains clean and organized as the project grows, making it ready for future development.
 
 
-### 🖥 **Frontend (Templates & Static Files)**  
-1. **HTML Templates** – Includes pages for user authentication, pet profiles, trackers, logs, and galleries.
+### 🖥️ **Frontend (Templates & Static Files)**  
+1. 📄 **HTML Templates** – Includes pages for user authentication, pet profiles, trackers, logs, and galleries.  
    **`templates/`**  
    Contains the HTML files for rendering different pages in the app. The templates include:
    - **`welcome.html`**: The landing page for the app, showing basic info about PetPal and links to log in or register new users.
@@ -195,7 +195,7 @@ Organizing routes into separate files helps keep the code organized, easy to man
    - **`reset_password.html`** and **`restore_password.html`**: Presents forms that allows password recovery using email address.
    - **`email_confirmation.html`** and **`password_reset_email`**: Provide two distinct email templates: one for confirming user registration during sign-up, and the other for initiating a password reset when the user requests a change.
 
-2.  **Static Files** – Ensures a **responsive design** and enhances **user interactivity**. 
+2. 🖼 **Static Files** – Ensures a **responsive design** and enhances **user interactivity**.  
    **static/**  
       Holds images, CSS, and JavaScript that are used to style and enhance the user interface.  
       - **CSS**: Includes the `style.css` file that ensures the design of the app is visually pleasing and responsive. This file is responsible for styling all the pages.
