@@ -45,11 +45,6 @@ def add_new_pet():
                 
             else:
                 pet_profile_photo = None
-            # Check if the microchip number is already used
-            existing_pet = Pet.query.filter_by(microchip_number=microchip_number).first()
-            if existing_pet:
-                return error_message("Microchip number already registered.", 409)
-
 
             # Save pet data to the database
             new_pet = Pet(
