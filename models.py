@@ -167,7 +167,7 @@ class WeightTracker(db.Model):
     pet_id = db.Column(db.Integer, db.ForeignKey('pets.id', ondelete='CASCADE'), nullable=False)
     weight_in_kg = db.Column(db.Float, nullable=False)
     date = db.Column(db.Date, nullable=False)
-    notes = db.Column(db.Text, nullable=True)
+    notes = db.Column(db.String(100), nullable=True)
 
     def to_dict(self):
         return {
@@ -187,7 +187,7 @@ class VaccineTracker(db.Model):
     date = db.Column(db.Date, nullable=False)
     next_dosis = db.Column(db.Date, nullable=True)
     administered_by = db.Column(db.String(150), nullable=True)
-    notes = db.Column(db.Text, nullable=True)
+    notes = db.Column(db.String(100), nullable=True)
 
     def to_dict(self):
         return {
@@ -208,7 +208,7 @@ class InternalDewormingTracker(db.Model):
     product_name = db.Column(db.String(100), nullable=False)
     date = db.Column(db.Date, nullable=False)
     next_dosis = db.Column(db.Date, nullable=True)
-    notes = db.Column(db.Text, nullable=True)
+    notes = db.Column(db.String(100), nullable=True)
 
     def to_dict(self):
         return {
@@ -228,7 +228,7 @@ class ExternalDewormingTracker(db.Model):
     product_name = db.Column(db.String(100), nullable=False)
     date = db.Column(db.Date, nullable=False)
     next_dosis = db.Column(db.Date, nullable=True)
-    notes = db.Column(db.Text, nullable=True)
+    notes = db.Column(db.String(100), nullable=True)
 
     def to_dict(self):
         return {
@@ -248,7 +248,7 @@ class MedicationTracker(db.Model):
     product_name = db.Column(db.String(100), nullable=False)
     date = db.Column(db.Date, nullable=False)
     next_dosis = db.Column(db.Date, nullable=True)
-    notes = db.Column(db.Text, nullable=True)
+    notes = db.Column(db.String(100), nullable=True)
 
     def to_dict(self):
         return {

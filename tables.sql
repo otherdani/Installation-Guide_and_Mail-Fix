@@ -71,7 +71,7 @@ CREATE TABLE weight_tracker (
     pet_id INTEGER NOT NUll,
     weight_in_kg REAL NOT NULL,
     date DATE NOT NULL,
-    notes TEXT
+    notes VARCHAR(100)
 );
 
 CREATE TABLE vaccine_tracker (
@@ -81,7 +81,7 @@ CREATE TABLE vaccine_tracker (
     date DATE NOT NULL,
     next_dosis DATE,
     administered_by VARCHAR(150),
-    notes TEXT
+    notes VARCHAR(100)
 );
 
 CREATE TABLE internal_deworming_tracker (
@@ -90,7 +90,7 @@ CREATE TABLE internal_deworming_tracker (
     product_name VARCHAR(100) NOT NULL,
     date DATE NOT NULL,
     next_dosis DATE,
-    notes TEXT
+    notes VARCHAR(100)
 );
 
 CREATE TABLE external_deworming_tracker (
@@ -99,7 +99,7 @@ CREATE TABLE external_deworming_tracker (
     product_name TEXT NOT NULL,
     date DATE NOT NULL,
     next_dosis DATE,
-    notes TEXT
+    notes VARCHAR(100)
 );
 
 CREATE TABLE medication_tracker (
@@ -108,5 +108,5 @@ CREATE TABLE medication_tracker (
     product_name TEXT NOT NULL,
     date DATE NOT NULL,
     next_dosis DATE,
-    notes TEXT
+    notes VARCHAR(100)
 );

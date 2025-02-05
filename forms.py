@@ -64,7 +64,7 @@ class WeightForm(FlaskForm):
     """Form for tracking pet weight"""
     weight = FloatField('Weight (kg)', validators=[DataRequired()])
     date = DateField('Date', format='%Y-%m-%d', validators=[DataRequired()])
-    notes = TextAreaField('Notes', validators=[Optional(), Length(max=200)])
+    notes = TextAreaField('Notes', validators=[Optional(), Length(max=100)])
     submit = SubmitField('Add Weight Entry')
 
 class VaccineForm(FlaskForm):
@@ -73,7 +73,7 @@ class VaccineForm(FlaskForm):
     date = DateField('Date Administered', format='%Y-%m-%d', validators=[DataRequired()])
     next_dosis = DateField('Next Dose Date', format='%Y-%m-%d', validators=[Optional()])
     administered_by = StringField('Administered By', validators=[Optional(), Length(max=150)])
-    notes = TextAreaField('Notes', validators=[Optional(), Length(max=200)])
+    notes = TextAreaField('Notes', validators=[Optional(), Length(max=100)])
     submit = SubmitField('Add Vaccine Entry')
 
 class InternalDewormingForm(FlaskForm):
@@ -81,7 +81,7 @@ class InternalDewormingForm(FlaskForm):
     product_name = StringField('Product Name', validators=[DataRequired(), Length(max=100)])
     date= DateField('Date Administered', format='%Y-%m-%d', validators=[DataRequired()])
     next_dosis = DateField('Next Dose Date', format='%Y-%m-%d', validators=[Optional()])
-    notes = TextAreaField('Notes', validators=[Optional(), Length(max=200)])
+    notes = TextAreaField('Notes', validators=[Optional(), Length(max=100)])
     submit = SubmitField('Add Internal Deworming Entry')
 
 class ExternalDewormingForm(FlaskForm):
@@ -89,7 +89,7 @@ class ExternalDewormingForm(FlaskForm):
     product_name = StringField('Product Name', validators=[DataRequired(), Length(max=100)])
     date = DateField('Date Administered', format='%Y-%m-%d', validators=[DataRequired()])
     next_dosis = DateField('Next Dose Date', format='%Y-%m-%d', validators=[Optional()])
-    notes = TextAreaField('Notes', validators=[Optional(), Length(max=200)])
+    notes = TextAreaField('Notes', validators=[Optional(), Length(max=100)])
     submit = SubmitField('Add External Deworming Entry')
 
 
@@ -98,5 +98,5 @@ class MedicationForm(FlaskForm):
     product_name = StringField('Product Name', validators=[DataRequired(), Length(max=100)])
     date = DateField('Date Administered', format='%Y-%m-%d', validators=[DataRequired()])
     next_dosis = DateField('Next Dose Date', format='%Y-%m-%d', validators=[Optional()])
-    notes = TextAreaField('Notes', validators=[Optional(), Length(max=200)])
+    notes = TextAreaField('Notes', validators=[Optional(), Length(max=100)])
     submit = SubmitField('Add Medication Entry')

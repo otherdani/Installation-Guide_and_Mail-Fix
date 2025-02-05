@@ -30,7 +30,7 @@ def trackers_home(pet_id):
     trackers_with_entries = []
     
     for tracker_type, (model, form_class) in TRACKER_MODELS.items():
-        entries = model.query.filter_by(pet_id=pet.id).order_by(model.date.desc()).limit(10).all()
+        entries = model.query.filter_by(pet_id=pet.id).order_by(model.date.desc()).all()
         
         tracker = {
             "name": tracker_type.replace('_', ' ').title() + " Tracker",
@@ -181,24 +181,3 @@ def weight_graph(pet_id):
         current_month=datetime.now().month,
         current_year=datetime.now().year,
     )
-
-
-@trackers_bp.route('/<int:pet_id>/vaccinations')
-def vaccinations(pet_id):
-    pet = Pet.query.get_or_404(pet_id)
-    return render_template('vaccination_tracker.html', pet_id=pet.id)
-
-@trackers_bp.route('/<int:pet_id>/internal_deworming')
-def internal_deworming(pet_id):
-    pet = Pet.query.get_or_404(pet_id)
-    return render_template('internal_deworming_tracker.html', pet=pet)
-
-@trackers_bp.route('/<int:pet_id>/external_deworming')
-def external_deworming(pet_id):
-    pet = Pet.query.get_or_404(pet_id)
-    return render_template('external_deworming_tracker.html', pet=pet)
-
-@trackers_bp.route('/<int:pet_id>/medications')
-def medications(pet_id):
-    pet = Pet.query.get_or_404(pet_id)
-    return render_template('medication_tracker.html', pet=pet)
