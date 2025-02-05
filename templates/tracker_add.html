@@ -20,7 +20,7 @@
         {% if tracker_type == 'weight' %}
             <div class="form-group mt-4">
                 {{ form.weight.label }} 
-                {{ form.weight(class="form-control mx-auto w-auto", required=True, autofocus=True, type="number", min="0") }}
+                {{ form.weight(class="form-control mx-auto w-auto", required=True, autofocus=True, type="number", min="0", step="0.01") }}
             </div>
         {% elif tracker_type == 'vaccine' %}
             <div class="form-group mt-4">
