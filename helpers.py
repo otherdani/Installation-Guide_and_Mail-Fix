@@ -1,7 +1,11 @@
 import os
+import base64
+from io import BytesIO
 from functools import wraps
 from flask import redirect, session, render_template, g, current_app
 from models import Pet
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 
 PHOTO_ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
@@ -82,3 +86,30 @@ def delete_pet_from_db(pet, db):
     
     # Finally, delete the pet itself
     db.session.delete(pet)
+
+def create_weight_graph(dates, weights, title, xlabel, ylabel, color, valid_labels=None, show_days_only=False):
+    """Helper function to create and save a weight graph."""
+    fig, ax = plt.subplots()
+    
+    if weights:  # Avoid plotting if there are no entries
+        ax.plot(dates, weights, marker='o', color=color)
+        
+        ax.set(xlabel=xlabel, ylabel=ylabel, title=title)
+        
+        # Format x-axis
+        if show_days_only:
+            # Use DateFormatter to show only the day of the month
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%d'))
+            ax.set_xticks(dates)  # Set ticks for all days in the month
+            plt.xticks(rotation=45)  # Rotate for readability
+
+        ax.grid()
+
+        # Save plot to a PNG image in memory
+        img = BytesIO()
+        fig.savefig(img, format='png')
+        img.seek(0)
+        return base64.b64encode(img.getvalue()).decode('utf-8')
+    
+    return None  # Return None if there are no weights to plot
+
