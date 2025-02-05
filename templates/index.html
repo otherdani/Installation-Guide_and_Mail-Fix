@@ -15,7 +15,13 @@
                     <div class="row g-0 w-100 align-items-center">
                         <!-- Photo -->
                         <div class="pet_photo col-4 text-center">
+                        {% if pet.pet_profile_photo %}
                             <img src="{{ url_for('static', filename='uploads/' + pet.pet_profile_photo.replace('\\', '/')) }}" alt="{{ pet.name }}" class="img-fluid pet_pfp shadow">
+                            
+                        {% else %}
+                        <!-- Image from: https://www.gettyimages.com/detail/illustration/dog-and-cat-icon-royalty-free-illustration/541833910 -->
+                            <img src="/static/images/default_pfp.jpg" alt="default cat photo" class="img-fluid pet_pfp shadow">
+                        {% endif %}
                         </div>
                         <!-- Pet Info -->
                         <div class="col-8">
