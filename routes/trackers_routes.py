@@ -12,12 +12,13 @@ matplotlib.use('Agg')
 
 trackers_bp = Blueprint('trackers', __name__)
 
-TRACKER_MODELS = {
-    "weight": (WeightTracker, WeightForm),
-    "vaccine": (VaccineTracker, VaccineForm),
-    "internal_deworming": (InternalDewormingTracker, InternalDewormingForm),
-    "external_deworming": (ExternalDewormingTracker, ExternalDewormingForm),
-    "medication": (MedicationTracker, MedicationForm),
+# Map tracker types to respective forms and models
+tracker_map = {
+    'weight': (WeightForm, WeightTracker),
+    'vaccine': (VaccineForm, VaccineTracker),
+    'internal_deworming': (InternalDewormingForm, InternalDewormingTracker),
+    'external_deworming': (ExternalDewormingForm, ExternalDewormingTracker),
+    'medication': (MedicationForm, MedicationTracker)
 }
 
 @trackers_bp.route('/<int:pet_id>')
@@ -54,15 +55,6 @@ def add_tracker(tracker_type, pet_id):
     # Form instances
     form = None
     tracker_model = None
-
-    # Map tracker types to respective forms and models
-    tracker_map = {
-        'weight': (WeightForm, WeightTracker),
-        'vaccine': (VaccineForm, VaccineTracker),
-        'internal_deworming': (InternalDewormingForm, InternalDewormingTracker),
-        'external_deworming': (ExternalDewormingForm, ExternalDewormingTracker),
-        'medication': (MedicationForm, MedicationTracker)
-    }
 
     # Check if the tracker type is valid
     if tracker_type not in tracker_map:
@@ -181,3 +173,21 @@ def weight_graph(pet_id):
         current_month=datetime.now().month,
         current_year=datetime.now().year,
     )
+
+@trackers_bp.route('/delete/<tracker_type>/<int:entry_id>', methods='GET')
+@login_required
+def delete(tracker_type, entry_id):
+    """Delete an entry from db"""
+    tracker = tracker_type
+    entry = tracker.query.get_or_404(entry_id)
+    pet_id=entry.pet_id
+    db = current_app.extensions['sqlalchemy']
+    
+    # Delete from database
+    db.session.delete(entry)
+    db.session.commit()
+
+    flash('Entry deleted successfully.', 'success')
+    return redirect(url_for('trackers.trackers_home/<int:pet_id>', pet_id=pet_id))
+    
+    return redirect('/')

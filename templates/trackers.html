@@ -69,6 +69,13 @@
                                     <td>{{ entry.next_dosis or "-"}}</td>
                                 {% endif %}
                                 <td>{{ entry.notes or "-"}}</td>
+                                <td><a 
+                                    href="#" 
+                                    class="btn btn-danger ms-2" 
+                                    onclick="confirmDelete(event, '{{ url_for('trackers.delete', tracker_type=tracker.type, entry_id=entry.id)}}')">
+                                    🗑️
+                                    </a>
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -78,5 +85,6 @@
         </div>
         {% endfor %}
     </div>
+    {% include 'delete_confirmation_modal.html' %}
 
 {% endblock %}
