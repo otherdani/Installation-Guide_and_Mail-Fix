@@ -174,20 +174,26 @@ def weight_graph(pet_id):
         current_year=datetime.now().year,
     )
 
-@trackers_bp.route('/delete/<tracker_type>/<int:entry_id>', methods='GET')
+@trackers_bp.route('/delete/<tracker_type>/<int:entry_id>', methods=['GET'])
 @login_required
 def delete(tracker_type, entry_id):
     """Delete an entry from db"""
-    tracker = tracker_type
-    entry = tracker.query.get_or_404(entry_id)
-    pet_id=entry.pet_id
     db = current_app.extensions['sqlalchemy']
+    
+    # Check if the tracker type is valid
+    if tracker_type not in tracker_map:
+        return error_message("Invalid tracker type", 400)
+
+    # Get the model class from the tracker_map
+    form_class, tracker_model = tracker_map[tracker_type]
+    
+    # Query the entry
+    entry = tracker_model.query.get_or_404(entry_id)
+    pet_id = entry.pet_id
     
     # Delete from database
     db.session.delete(entry)
     db.session.commit()
 
     flash('Entry deleted successfully.', 'success')
-    return redirect(url_for('trackers.trackers_home/<int:pet_id>', pet_id=pet_id))
-    
-    return redirect('/')
+    return redirect(url_for('trackers.trackers_home', pet_id=pet_id))
