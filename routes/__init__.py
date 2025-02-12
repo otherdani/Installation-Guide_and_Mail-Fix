@@ -1,3 +1,9 @@
+""" 
+    Blueprint configuration adapted from the Flask documentation:  
+    https://flask.palletsprojects.com/en/latest/blueprints/
+    and Miguel Grinberg's Flask tutorial:
+    https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-ii-templates
+"""
 from flask import Flask
 from .home_routes import home_bp
 from .auth_routes import auth_bp

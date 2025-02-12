@@ -2,7 +2,6 @@ import os
 from io import BytesIO
 from functools import wraps
 from flask import redirect, session, render_template, g, current_app
-import numpy as np
 from models import Pet
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
@@ -14,6 +13,7 @@ def login_required(f):
     Decorate routes to require login.
     https://flask.palletsprojects.com/en/latest/patterns/viewdecorators/
     """
+    # Taked from CS50 Finance problem
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -25,7 +25,7 @@ def login_required(f):
 
 
 def inject_pets(f):
-    """Obtain pets related to a user"""
+    """Decorator to obtain pets related to a user"""
     @wraps(f)
     def decorated_function(*args, **kwargs):
         pets = Pet.query.filter_by(user_id=session.get("user_id")).all()
@@ -90,7 +90,7 @@ def delete_pet_from_db(pet, db):
 
 def create_weight_graph(dates, weights, title, xlabel, ylabel, color, show_days_only=False):
     """Helper function to create and save a weight graph."""
-    
+    # Asked ChatGPT for help to create graphs using matplotlib
     fig, ax = plt.subplots(figsize=(10, 5))  # Set figure size
 
     # Filter out None values for plotting the line

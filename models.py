@@ -1,3 +1,9 @@
+"""
+SQLAlchemy models for the database.  
+Model class structure and relationships follow the guidelines from the SQLAlchemy documentation:  
+https://docs.sqlalchemy.org/en/20/orm/mapping_styles.html  
+"""
+
 from datetime import datetime
 from extensions import db
 from flask_login import UserMixin

@@ -1,3 +1,9 @@
+"""
+    Form configuration adapted from the Flask-WTF guide in  
+    "Advanced Web Apps with Python" (https://python-adv-web-apps.readthedocs.io/en/latest/flask_forms.html)
+
+"""
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, DateField, BooleanField, FileField, SelectField, PasswordField, SubmitField, TextAreaField, FloatField
 from wtforms.validators import DataRequired, Optional, Email, EqualTo, Length
@@ -43,6 +49,7 @@ class PetForm(FlaskForm):
     microchip_number = StringField('Microchip Number', validators=[Optional()])
     insurance_company = StringField('Insurance Company', validators=[Optional()])
     insurance_number = StringField('Insurance Number', validators=[Optional()])
+    submit = SubmitField('Register Pet')
 
 
 # Features Forms
@@ -51,12 +58,14 @@ class PhotoForm(FlaskForm):
     title = StringField('Title', validators=[Length(max=100), Optional()])
     image = FileField('Image', validators=[DataRequired()])
     date_uploaded = DateField('Date', format='%Y-%m-%d', validators=[DataRequired()])
+    submit = SubmitField('Add Photo')
 
 class EntryForm(FlaskForm):
     """Entry Logs"""
     title = StringField('Title', validators=[Length(max=150), Optional()])
     content = TextAreaField('Content', validators=[DataRequired()])
     date_uploaded = DateField('Date', format='%Y-%m-%d', validators=[DataRequired()])
+    submit = SubmitField('Add Entry')
 
 
 # Trackers Forms

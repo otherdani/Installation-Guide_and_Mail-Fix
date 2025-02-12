@@ -1,3 +1,6 @@
+# A dictionary with species and breeds to fill the database
+# Asked ChatGPT to create the dictionary based in breeds from American Kennel Club and The International Cat Association
+
 breeds = {
     "dog": [
         "Mixed",
