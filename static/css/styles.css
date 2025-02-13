@@ -53,9 +53,6 @@ hr{
 a, i {
     color: var(--text-color);
 }
-a:hover, i:hover, .dropdown-item:hover i {
-    color: var(--secondary-color) !important;
-}
 
 input:focus {
     outline: none !important; 
@@ -132,6 +129,9 @@ textarea:focus{
 .dark_btn a, .dark_btn i {
     color: #FFFFE8;
     text-decoration: none;
+}
+.dark_btn a:hover{
+    color: var(--secondary-color) !important;
 }
 
 .btn-no-caret::after {
