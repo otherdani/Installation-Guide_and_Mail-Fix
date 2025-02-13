@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, current_app, flash, redirect, url_for
 
-from helpers import login_required, inject_pets
+from helpers import login_required, inject_pets, owned_pet
 from models import Pet, Log
 from forms import EntryForm
 
@@ -12,6 +12,7 @@ logs_bp = Blueprint('logs', __name__)
 def pet_logs(pet_id):
     """Display logs"""
     pet = Pet.query.get_or_404(pet_id)
+    owned_pet(pet)
     logs = Log.query.filter_by(pet_id=pet_id).order_by(Log.date_uploaded.desc()).all()
 
     return render_template('logs.html', pet=pet, logs=logs)
@@ -23,6 +24,7 @@ def new_entry(pet_id):
     """Add new entry"""
     form = EntryForm()
     pet = Pet.query.get_or_404(pet_id)
+    owned_pet(pet)
     db = current_app.extensions['sqlalchemy']
     # User reaches via post
     if request.method == 'POST':
@@ -49,7 +51,7 @@ def new_entry(pet_id):
 @logs_bp.route("/delete_entry/<int:entry_id>", methods=['GET'])
 @login_required
 def delete_entry(entry_id):
-    """Delete photo of a pet"""
+    """Delete a log entry"""
     entry = Log.query.get_or_404(entry_id)
     db = current_app.extensions['sqlalchemy']
     

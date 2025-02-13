@@ -4,12 +4,13 @@ from werkzeug.utils import secure_filename
 
 from models import Pet, Breed, Species
 from forms import PetForm
-from helpers import error_message, allowed_photo_file, inject_pets, login_required, delete_pet_from_db
+from helpers import error_message, allowed_photo_file, inject_pets, login_required, delete_pet_from_db, owned_pet
 
 pet_bp = Blueprint('pet', __name__)
 
 @pet_bp.route("/new_pet", methods=["GET", "POST"])
 @login_required
+@inject_pets
 def add_new_pet():
     """Add new pet to database"""
     form = PetForm()
@@ -77,6 +78,7 @@ def add_new_pet():
 def delete_pet(pet_id):
     """Delete a pet from db"""
     pet = Pet.query.get_or_404(pet_id)
+    owned_pet(pet)
     db = current_app.extensions['sqlalchemy']
     
     try:
@@ -93,9 +95,11 @@ def delete_pet(pet_id):
 
 @pet_bp.route('/edit_pet/<int:pet_id>', methods=['GET', 'POST'])
 @login_required
+@inject_pets
 def edit_pet(pet_id):
     """Edit pet info"""
     pet = Pet.query.get_or_404(pet_id)
+    owned_pet(pet)
     form = PetForm(obj=pet)
     db = current_app.extensions['sqlalchemy']
 
@@ -133,8 +137,6 @@ def edit_pet(pet_id):
             db.session.commit()
             flash('Pet information updated successfully!', 'success')
             return redirect('/')
-        except IntegrityError:
-            return error_message("Microchip number must be unique.", 400)
         
         except Exception as e:
             db.session.rollback()

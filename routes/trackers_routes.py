@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, redirect, url_for, current_app, fl
 import matplotlib
 import calendar
 
-from helpers import login_required, inject_pets, error_message, create_weight_graph
+from helpers import login_required, inject_pets, error_message, create_weight_graph, owned_pet
 from models import Pet, WeightTracker, VaccineTracker, InternalDewormingTracker, ExternalDewormingTracker, MedicationTracker
 from forms import WeightForm, VaccineForm, InternalDewormingForm, ExternalDewormingForm, MedicationForm
 
@@ -27,10 +27,10 @@ tracker_map = {
 def trackers_home(pet_id):
     """Display trackers"""
     pet = Pet.query.get_or_404(pet_id)
-    
+    owned_pet(pet)
     trackers_with_entries = []
     
-    for tracker_type, (model, form_class) in TRACKER_MODELS.items():
+    for tracker_type, (form_class, model) in tracker_map.items():
         entries = model.query.filter_by(pet_id=pet.id).order_by(model.date.desc()).all()
         
         tracker = {
@@ -121,6 +121,7 @@ def weight_graph(pet_id):
     # Fetch weight entries and pet data
     weight_entries = WeightTracker.query.filter_by(pet_id=pet_id).order_by(WeightTracker.date).all()
     pet = Pet.query.get_or_404(pet_id)
+    owned_pet(pet)
 
     # Get current date and parse month/year from request args
     month = request.args.get('month', default=datetime.now().month, type=int)
@@ -190,6 +191,7 @@ def delete(tracker_type, entry_id):
     # Query the entry
     entry = tracker_model.query.get_or_404(entry_id)
     pet_id = entry.pet_id
+    print(pet_id)
     
     # Delete from database
     db.session.delete(entry)

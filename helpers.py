@@ -33,6 +33,11 @@ def inject_pets(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def owned_pet(pet):
+    """Ensure the user owns this pet"""
+    if pet.user_id != session.get("user_id"):
+        return error_message("Invalid route",404)
+
 
 def error_message(message, code):
     """Render message as an apology to user with an http.cat image."""

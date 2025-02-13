@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 
 from models import Pet, Photo
 from forms import PhotoForm
-from helpers import allowed_photo_file, inject_pets, login_required
+from helpers import allowed_photo_file, inject_pets, login_required, owned_pet
 
 gallery_bp = Blueprint('gallery', __name__)
 
@@ -14,6 +14,7 @@ gallery_bp = Blueprint('gallery', __name__)
 def gallery(pet_id):
     """Display pet gallery"""
     pet = Pet.query.get_or_404(pet_id)
+    owned_pet(pet)
     photos = Photo.query.filter_by(pet_id=pet_id).order_by(Photo.date_uploaded.desc()).all()
     photo_data = [photo.to_dict() for photo in photos]
     return render_template('gallery.html', pet=pet,  photos=photo_data)
@@ -24,6 +25,7 @@ def upload_photo(pet_id):
     """Add a new photo of a pet"""
     form=PhotoForm()
     pet = Pet.query.get_or_404(pet_id)
+    owned_pet(pet)
     db = current_app.extensions['sqlalchemy']
     # User reaches via post
     if request.method == 'POST':
