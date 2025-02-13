@@ -159,9 +159,11 @@ def restore_password():
 
         if not user:
             return error_message("This email is not registered.", 400)
-
-        if session['user_id']:
-            if session['user_id'] != user.id:
+        
+        # Check if user_id exists in the session
+        user_id = session.get('user_id')
+        if user_id:
+            if user_id != user.id:
                 return error_message("This is not your email. Try again", 403)
         
         # Generate reset token
