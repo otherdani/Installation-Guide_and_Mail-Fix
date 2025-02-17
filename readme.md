@@ -1,6 +1,6 @@
 # 🐾 PetPal – Your Pet’s Digital Companion  
 
-### 🎥 Video Demo: [Video URL Here]  
+### 🎥 Video Demo: https://youtu.be/3xJQLtmwenM?feature=shared
 
 ## 📌 About PetPal  
 PetPal is a **web application** designed to make pet care easier by helping owners **organize and track** essential information about their furry friends. From **medical records and weight tracking** to **photo galleries and logs**, PetPal brings everything into **one convenient platform**.  
