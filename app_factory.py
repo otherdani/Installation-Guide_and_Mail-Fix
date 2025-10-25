@@ -25,7 +25,7 @@ def init_app():
     app.config['MAX_CONTENT_LENGTH'] = 6 * 1024 * 1024  # Max size: 6MB
 
     # Configurations
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///petpal.db"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///instance/petpal.db"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SESSION_PERMANENT"] = False
     app.config["SESSION_TYPE"] = "filesystem"
@@ -48,7 +48,6 @@ def init_app():
 
     # CRITICAL FIX: Ensure the default sender is read
     app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER')
-
     mail = Mail(app)
 
     # Register blueprints inside app context
