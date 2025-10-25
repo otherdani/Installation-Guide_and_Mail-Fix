@@ -15,11 +15,12 @@
         you have to paste the **_entire string_** in.
 7. **Set the flask app variable** `set FLASK_APP=app.py`
 8. **Start the app wait to load and stop** `python app.py`_(using this also enables debug mode)_. It will generate the db shema and everything you need. **to stop use Ctrl + C**
-9. **You have to build up the db**
+9. **You have to build up the db** (you don't have to paste the >>>, and the ... its just for the look)
     ```
-    >>> from app_factory import db
+    falsk shell
+    >>>from app_factory import db
     >>>from app import app
-    >>> with app.app_context():
+    >>>with app.app_context():
     ...     db.create_all()
     ...
     >>> exit()
