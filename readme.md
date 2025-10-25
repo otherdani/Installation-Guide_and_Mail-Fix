@@ -210,8 +210,3 @@ Organizing routes into separate files helps keep the code organized, easy to man
 **🔍Explore the code, check out the video demo, and perhaps even try running the app yourself!**
 
 🐾 Thank you for checking out PetPal! I hope it becomes a valuable tool for pet lovers everywhere. 🚀  
-
-### Otherdani
->*Tasks*
-- [] fix the mailing code
-- [] fix enviroment variables
