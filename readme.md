@@ -48,6 +48,8 @@ There are multiple trackers available, including:
 - Input validation to prevent **malicious entries**.  
 
 ---
+## 🛠️ **Installation**
+**➡️ [Installation and Setup Guide](Installation%20Guide.md) ⬅️**
 
 ## 📂 Project Structure  
 
