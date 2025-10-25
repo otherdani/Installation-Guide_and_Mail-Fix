@@ -36,14 +36,19 @@ def init_app():
     session_ext.init_app(app)
     csrf.init_app(app)
 
-    # Configure Flask-Mail
-    # Sentitive data is in a .env file to improve security
-    app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-    app.config['MAIL_PORT'] = 465
-    app.config['MAIL_USERNAME'] = os.getenv("PETPAL_EMAIL")
-    app.config['MAIL_PASSWORD'] = os.getenv("PETPAL_EMAIL_PW")
-    app.config['MAIL_USE_TLS'] = False
-    app.config['MAIL_USE_SSL'] = True
+    # Configure Flask-Mail: ALL settings are pulled from environment variables (your .env file)
+    app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
+    app.config['MAIL_PORT'] = os.getenv('MAIL_PORT')
+    app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+    app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+
+    # Use Python's bool conversion for MAIL_USE_TLS (since os.getenv returns a string)
+    app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS', 'False').lower() in ('true', '1', 't')
+    app.config['MAIL_USE_SSL'] = os.getenv('MAIL_USE_SSL', 'False').lower() in ('true', '1', 't')
+
+    # CRITICAL FIX: Ensure the default sender is read
+    app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER')
+
     mail = Mail(app)
 
     # Register blueprints inside app context
