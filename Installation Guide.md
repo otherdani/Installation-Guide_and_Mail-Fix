@@ -8,6 +8,7 @@
 >[!NOTE]
 >### *Prerequisite for Compiled Packages*
 >If you encounter an *error* like `Microsoft Visual C++ 14.0 or greater is required`, you must install the **Microsoft C++ Build Tools**. Download and install the **"Desktop development with C++"** workload from the [Visual Studio Build Tools website](https://visualstudio.microsoft.com/visual-cpp-build-tools/). Then try to reinstall requirements see [Installation]
+
 6.**Modify the `.env` File:** add the necessary configuration (Database URI, Flask-Mail credentials, and `SECRET_KEY`).
 7. **Set the flask app variable** `set FLASK_APP=app.py`
 8. **Start the app** `python app.py`_(using this also enables debug mode)_.
